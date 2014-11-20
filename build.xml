@@ -76,7 +76,6 @@
     <phpunitreport todir="target"/>
   </target>
 
-  <!--
   <target name="package">
     <echo msg="packaging application..."/>
     
@@ -90,27 +89,27 @@
     </copy>
 
     <copy file="src/main/php/config.php" tofile="tmp/config.php" />
-    <copy file="src/main/php/route.php" tofile="tmp/route.php" />
+    <copy file="src/main/php/index.php" tofile="tmp/index.php" />
     <copy file="src/main/apache/.htaccess" tofile="tmp/.htaccess" />
 
     <echo msg="applying environment filters..."/>
     <reflexive>
       <fileset dir="tmp/">
-          <include pattern="config.php" />
+        <include pattern="config.php" />
       </fileset>
         <filterchain>
-            <expandproperties/>
+          <expandproperties/>
         </filterchain>
     </reflexive>
 
     <echo msg="moving build files..."/>
     <move file="tmp/config.php" tofile="target/config.php" />
-    <move file="tmp/route.php" tofile="target/route.php" />
+    <move file="tmp/index.php" tofile="target/index.php" />
     <move file="tmp/.htaccess" tofile="target/.htaccess" />
 
     <echo msg="creating phar archive..."/>
     <pharpackage
-      destfile="target/bc-api-${project.version}.phar"
+      destfile="target/as-api-${project.version}.phar"
       basedir="tmp/"
       compression="gzip"
       stub="src/main/php/stub.php"
@@ -127,9 +126,8 @@
         </element>
       </metadata>
     </pharpackage>
-    <move file="myproject.phar" tofile="target/myproject.phar" />
+    <!--<move file="as-api-${project.version}.phar" tofile="target/as-api-${project.version}.phar" />-->
   </target>
-  -->
 
   <target name="build" description="executes a build">
     <echo msg="starting a build..."/>
@@ -137,7 +135,7 @@
     <phingcall target="clean" />
     <phingcall target="lint" />
     <phingcall target="test" />
-    <!-- <phingcall target="package" /> -->
+     <phingcall target="package" />
   </target>
 
 </project>

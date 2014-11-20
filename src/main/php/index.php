@@ -32,9 +32,6 @@ $slim->add(new \Slim\Middleware\SessionCookie(array(
 /* common response headers */
 $slim->response->headers->set('Content-Type', 'application/json');
 
-/* instantiate controllers */
-$eventsController  = new \net\analogstudios\controllers\EventsController($db);
-
 /* get session status */
 //$sessionResponse  = $sessionCtrl->get();
 //$sessionInfo      = array(

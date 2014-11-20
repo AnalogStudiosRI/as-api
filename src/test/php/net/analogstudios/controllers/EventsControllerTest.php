@@ -29,7 +29,7 @@ class EventsContollerTest extends PHPUnit_Framework_TestCase{
   //GET
   public function testGetAllEventsSuccess(){
     //get response
-    $response = $this->eventsCtrl->get(1);
+    $response = $this->eventsCtrl->get();
     $status = $response["status"];
     $data = $response["body"];
 
@@ -60,7 +60,7 @@ class EventsContollerTest extends PHPUnit_Framework_TestCase{
     }
   }
 
-  public function testGetEventSuccess(){
+  public function testGetSingleEventSuccess(){
     //get response
     $response = $this->eventsCtrl->get(1);
     $status = $response["status"];

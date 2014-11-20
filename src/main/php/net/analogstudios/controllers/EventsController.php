@@ -52,13 +52,19 @@ class EventsController implements ControllerInterface{
     $stmt->execute();
     $result = $stmt->fetchAll($db::FETCH_ASSOC);
 
-    if($validEventId && !$result){
-      $status = 404;
-      $body["message"] = "Not Found";
-    }else if(!$validEventId){
-      $status = 400;
-      $body["message"] = "Bad Request";
-    }else if($validEventId && $result) {
+    //check by Id
+    if($eventId){
+      if(!$validEventId){
+        $status = 400;
+        $body["message"] = "Bad Request";
+      }else if($validEventId && !$result) {
+        $status = 404;
+        $body["message"] = "Not Found";
+      }else if($validEventId && $result){
+        $status = 200;
+        $body = $result;
+      }
+    }else if($result){
       $status = 200;
       $body = $result;
     }
