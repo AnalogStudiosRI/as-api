@@ -9,4 +9,4 @@ echo "deploying project..."
 sudo cp -v target/.htaccess /var/www/html/analogstudios.net/
 sudo cp -v target/*.phar /var/www/html/analogstudios.net/
 sudo cp -v target/config.php /var/www/html/analogstudios.net/
-sudo cp -v target/route.php /var/www/html/analogstudios.net/
+sudo cp -v target/index.php /var/www/html/analogstudios.net/
