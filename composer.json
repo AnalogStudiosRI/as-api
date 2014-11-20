@@ -10,10 +10,7 @@
   },
   "autoload":{
     "psr-4": {
-      "bc\\" : "/src/main/php/com/bc/",
-      "io\\" : "/src/main/php/com/io/"
+      "bc\\" : "/src/main/php/com/analogstudios/"
     }
   }
-
-
 }

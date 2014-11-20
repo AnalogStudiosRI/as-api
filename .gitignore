@@ -2,3 +2,5 @@ src/main/php/vendor/
 tmp/
 target/
 nbproject/
+.idea/
+testsuites.xml

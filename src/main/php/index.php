@@ -32,33 +32,24 @@ $slim->add(new \Slim\Middleware\SessionCookie(array(
 /* common response headers */
 $slim->response->headers->set('Content-Type', 'application/json');
 
-/* instanticiate controllers */
-$imageUploader  = new \io\thegreenhouse\lib\ImageUploadManager($CONFIG["uploadPaths"]);
-$sessionCtrl    = new \com\bc\controllers\SessionController($db);
-$categoryCtrl   = new \com\bc\controllers\CategoryController($db);
-$productCtrl    = new \com\bc\controllers\ProductController($db);
-$settingCtrl    = new \com\bc\controllers\SettingController($db);
+/* instantiate controllers */
+$eventsController  = new \net\analogstudios\controllers\EventsController($db);
 
-/* determine session status */
-$sessionResponse  = $sessionCtrl->get();
-$sessionInfo      = array(
-  "hasSession"          =>  $sessionResponse["body"]["hasSession"],
-  "username"            =>  isset($sessionResponse["body"]["username"]) ? $sessionResponse["body"]["username"] : null,
-  "noSessionResponse"   =>  array(
-    "status"              => 401,
-    "body"                => array(
-      "message"           => "No active session"
-    )
-  )
-);
+/* get session status */
+//$sessionResponse  = $sessionCtrl->get();
+//$sessionInfo      = array(
+//  "hasSession"          =>  $sessionResponse["body"]["hasSession"],
+//  "username"            =>  isset($sessionResponse["body"]["username"]) ? $sessionResponse["body"]["username"] : null,
+//  "noSessionResponse"   =>  array(
+//    "status"              => 401,
+//    "body"                => array(
+//      "message"           => "No active session"
+//    )
+//  )
+//);
 
 //include routes
-require_once "phar://" . $CONFIG["pharfile"] . "/com/bc/routes/contact.php";
-require_once "phar://" . $CONFIG["pharfile"] . "/com/bc/routes/category.php";
-require_once "phar://" . $CONFIG["pharfile"] . "/com/bc/routes/order.php";
-require_once "phar://" . $CONFIG["pharfile"] . "/com/bc/routes/product.php";
-require_once "phar://" . $CONFIG["pharfile"] . "/com/bc/routes/session.php";
-require_once "phar://" . $CONFIG["pharfile"] . "/com/bc/routes/setting.php";
+require_once "phar://" . $CONFIG["pharfile"] . "/net/analogstudios/routes/events-route.php";
 
 //start slim
 $slim->run();

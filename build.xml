@@ -3,12 +3,11 @@
 
 <php expression="include('src/main/php/vendor/autoload.php')"/>
 <property name="project.version" value="0.1.0-SNAPSHOT" />
-<property file="build/properties/local.properties" />
+<property file="./properties/local.properties" />
 
-  <!--
   <fileset dir="src/main/php" id="projectFiles">
-    <include name="com/bc/**/*.php" />
-    <include name="io/thegreenhouse/**/*.php" />
+    <include name="net/analogstudios/**/*.php" />
+    <!--<include name="io/thegreenhouse/**/*.php" />-->
     <include name="vendor/composer/**/*.php" />
     <include name="vendor/autoload.php" />
     <include name="vendor/slim/slim/Slim/**/*.php" />
@@ -18,10 +17,9 @@
     <isset property="env" />
     <then>
       <echo message="Overwriting default.properties with ${env}.properties" />
-      <property file="build/properties/${env}.properties" override="true" />
+      <property file="./properties/${env}.properties" override="true" />
     </then>
   </if>
-  -->
 
   <target name="info" description="Displays basic project information">
     <echo message="This is project ${phing.project.name}" />
@@ -124,7 +122,7 @@
         <element name="version" value="bc-api-${project.version}" />
         <element name="authors">
           <element name="Owen Buckley">
-            <element name="email" value="owen@analogstudios.net" />
+            <element name="email" value="owen@analogstudios" />
           </element>
         </element>
       </metadata>
@@ -138,7 +136,7 @@
     <phingcall target="info" /> 
     <phingcall target="clean" />
     <phingcall target="lint" />
-    <!-- <phingcall target="test" /> -->
+    <phingcall target="test" />
     <!-- <phingcall target="package" /> -->
   </target>
 
