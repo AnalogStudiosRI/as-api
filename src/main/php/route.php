@@ -32,21 +32,23 @@ $slim->add(new \Slim\Middleware\SessionCookie(array(
 /* common response headers */
 $slim->response->headers->set('Content-Type', 'application/json');
 
-/* get session status */
-//$sessionResponse  = $sessionCtrl->get();
-//$sessionInfo      = array(
-//  "hasSession"          =>  $sessionResponse["body"]["hasSession"],
-//  "username"            =>  isset($sessionResponse["body"]["username"]) ? $sessionResponse["body"]["username"] : null,
-//  "noSessionResponse"   =>  array(
-//    "status"              => 401,
-//    "body"                => array(
-//      "message"           => "No active session"
-//    )
-//  )
-//);
+/* get login status */
+$loginCtrl    = new \net\analogstudios\controllers\LoginController($db);
+$sessionResponse  = $loginCtrl->get();
+$sessionInfo      = array(
+  "hasSession"          =>  $sessionResponse["body"]["hasSession"],
+  "username"            =>  isset($sessionResponse["body"]["username"]) ? $sessionResponse["body"]["username"] : null,
+  "noSessionResponse"   =>  array(
+    "status"              => 401,
+    "body"                => array(
+      "message"           => "No active session"
+    )
+  )
+);
 
 //include routes
-require_once "phar://" . $CONFIG["pharfile"] . "/net/analogstudios/routes/events-config.php";
+require_once "phar://" . $CONFIG["pharfile"] . "/net/analogstudios/routes/login-route.php";
+require_once "phar://" . $CONFIG["pharfile"] . "/net/analogstudios/routes/events-route.php";
 
 //start slim
 $slim->run();
