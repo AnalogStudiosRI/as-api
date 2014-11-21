@@ -33,40 +33,40 @@ class LoginController implements ControllerInterface{
 
   /**
    *
-   * LoginController->getSession()
+   * LoginController->get()
    *
    * @return array $response;
    */
   public function get($id = null, $filters = array()) {
-//    $response = array();
-//    $body = array();
-//    $status = 0;
-//
-//    if(isset($_SESSION["hasSession"])){
-//      $status = 200;
-//
-//      $body = self::generateLoggedInUserResponse();
-//    }else{
-//      $status = 401;
-//      $body = array(
-//        "hasSession" => false,
-//        "message" => self::$NO_ACTIVE_SESSION
-//      );
-//    }
-//
-//    //construct response
-//    $response["status"] = $status;
-//    $response["body"] = $body;
-//
-//    return $response;
+    $response = array();
+    $body = array();
+    $status = 0;
+
+    if(isset($_SESSION["hasSession"])){
+      $status = 200;
+
+      $body = self::generateLoggedInUserResponse();
+    }else{
+      $status = 401;
+      $body = array(
+        "hasSession" => false,
+        "message" => self::$NO_ACTIVE_SESSION
+      );
+    }
+
+    //construct response
+    $response["status"] = $status;
+    $response["body"] = $body;
+
+    return $response;
   }
 
   /**
    *
    * LoginController->create()
    *
-   * @param sting $username
-   * @param sting $password
+   * @param string $username
+   * @param string $password
    *
    * @return array $response;
    */
@@ -109,7 +109,7 @@ class LoginController implements ControllerInterface{
 
   /**
    *
-   * SessionController->update()
+   * LoginController->update()
    *
    * @return array $response;
    */
@@ -151,22 +151,5 @@ class LoginController implements ControllerInterface{
   }
 
 }
-
-// $response = array(
-//     "count" => $stmt->rowCount(),
-//     "match" => $passMatch,
-//     "hashed" => $result['password'],
-//     "match-hash" => (crypt($params->password, $result['password']))
-// );
-// create hash
-// These only work for CRYPT_SHA512, but it should give you an idea of how crypt() works.
-// $Salt = uniqid(); // Could use the second parameter to give it more entropy.
-// $Algo = '6'; // This is CRYPT_SHA512 as shown on http://php.net/crypt
-// $Rounds = '5000'; // The more, the more secure it is!
-
-// // This is the "salt" string we give to crypt().
-// $CryptSalt = '$' . $Algo . '$rounds=' . $Rounds . '$' . $Salt;
-
-// $HashedPassword = crypt($params->password, $CryptSalt);
 
 ?>

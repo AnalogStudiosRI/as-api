@@ -38,34 +38,34 @@ class LoginContollerTest extends PHPUnit_Framework_TestCase {
     $_SESSION = array();
   }
 
-//  public function testGetSessionSuccess(){
-//    //set session
-//    $_SESSION = self::getMockSession();
-//
-//    //get response
-//    $response = $this->loginCtrl->get();
-//    $status = $response["status"];
-//    $body = $response["body"];
-//
-//    //assert
-//    $this->assertEquals(self::$SUCCESS, $status);
-//    $this->assertTrue($body["hasSession"]);
-//    $this->assertEquals(self::$USERNAME, $body["username"]);
-//    $this->assertEquals(self::$DISPLAY_NAME, $body["displayName"]);
-//  }
-//
-//  public function testGetSessionFailure(){
-//    //get response
-//    $response = $this->sessionCtrl->get();
-//    $status = $response["status"];
-//    $body = $response["body"];
-//
-//    //assert
-//    $this->assertEquals(self::$UNUATHORIZED, $status);
-//    $this->assertFalse($body["hasSession"]);
-//    $this->assertEquals(self::$NO_ACTIVE_SESSION, $body["message"]);
-//  }
-//
+  public function testGetLoginSuccess(){
+    //set session
+    $_SESSION = self::getMockSession();
+
+    //get response
+    $response = $this->loginCtrl->get();
+    $status = $response["status"];
+    $body = $response["body"];
+
+    //assert
+    $this->assertEquals(self::$SUCCESS, $status);
+    $this->assertTrue($body["hasSession"]);
+    $this->assertEquals(self::$USERNAME, $body["username"]);
+    $this->assertEquals(self::$DISPLAY_NAME, $body["displayName"]);
+  }
+
+  public function testGetLoginFailure(){
+    //get response
+    $response = $this->loginCtrl->get();
+    $status = $response["status"];
+    $body = $response["body"];
+
+    //assert
+    $this->assertEquals(self::$UNUATHORIZED, $status);
+    $this->assertFalse($body["hasSession"]);
+    $this->assertEquals(self::$NO_ACTIVE_SESSION, $body["message"]);
+  }
+
   public function testCreateSessionSuccess(){
     //get response
     $response = $this->loginCtrl->create(array("username" => self::$USERNAME, "password" => self::$PASSWORD));
