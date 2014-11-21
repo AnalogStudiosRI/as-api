@@ -1,6 +1,6 @@
 <?php
 
-//required in index.php
+//required in route.php
 
 /****************/
 /* Events Routes */

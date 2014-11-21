@@ -46,7 +46,7 @@ $slim->response->headers->set('Content-Type', 'application/json');
 //);
 
 //include routes
-require_once "phar://" . $CONFIG["pharfile"] . "/net/analogstudios/routes/events-route.php";
+require_once "phar://" . $CONFIG["pharfile"] . "/net/analogstudios/routes/events-config.php";
 
 //start slim
 $slim->run();
