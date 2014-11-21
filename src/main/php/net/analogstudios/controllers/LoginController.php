@@ -125,29 +125,29 @@ class LoginController implements ControllerInterface{
    * @return array $response;
    */
   public function delete($ids = array()) {
-//    $response = array();
-//    $body = array();
-//    $status = 0;
-//
-//    if(isset($_SESSION["hasSession"])){
-//      $_SESSION = array();
-//      $status = 200;
-//      $body = array(
-//        "hasSession" => false
-//      );
-//    }else{
-//      $status = 401;
-//      $body = array(
-//        "hasSession" => false,
-//        "message" => self::$NO_ACTIVE_SESSION
-//      );
-//    }
-//
-//    //construct response
-//    $response["status"] = $status;
-//    $response["body"] = $body;
-//
-//    return $response;
+    $response = array();
+    $body = array();
+    $status = 0;
+
+    if(isset($_SESSION["hasSession"])){
+      $_SESSION = array();
+      $status = 200;
+      $body = array(
+        "hasSession" => false
+      );
+    }else{
+      $status = 401;
+      $body = array(
+        "hasSession" => false,
+        "message" => self::$NO_ACTIVE_SESSION
+      );
+    }
+
+    //construct response
+    $response["status"] = $status;
+    $response["body"] = $body;
+
+    return $response;
   }
 
 }

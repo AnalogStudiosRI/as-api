@@ -66,7 +66,7 @@ class LoginContollerTest extends PHPUnit_Framework_TestCase {
     $this->assertEquals(self::$NO_ACTIVE_SESSION, $body["message"]);
   }
 
-  public function testCreateSessionSuccess(){
+  public function testCreateLoginSuccess(){
     //get response
     $response = $this->loginCtrl->create(array("username" => self::$USERNAME, "password" => self::$PASSWORD));
     $status = $response["status"];
@@ -78,42 +78,42 @@ class LoginContollerTest extends PHPUnit_Framework_TestCase {
     $this->assertEquals(self::$USERNAME, $body["username"]);
     $this->assertEquals(self::$DISPLAY_NAME, $body["displayName"]);
   }
-//
-//  public function testCreateSessionFailure(){
-//    //get response
-//    $response = $this->sessionCtrl->create(array("username" => self::$USERNAME, "password" => "xxxxxx"));
-//    $status = $response["status"];
-//    $body = $response["body"];
-//
-//    //assert
-//    $this->assertEquals(self::$BAD_REQUEST, $status);
-//    $this->assertFalse($body["hasSession"]);
-//    $this->assertEquals(self::$INVALD_LOGIN, $body["message"]);
-//  }
-//
-//  public function testDeleteSessionSuccess(){
-//    //set session
-//    $_SESSION = self::getMockSession();
-//
-//    //get response
-//    $response = $this->sessionCtrl->delete();
-//    $status = $response["status"];
-//    $body = $response["body"];
-//
-//    //assert
-//    $this->assertEquals(self::$SUCCESS, $status);
-//    $this->assertFalse($body["hasSession"]);
-//  }
-//
-//  public function testDeleteSessionFailure(){
-//    //get response
-//    $response = $this->sessionCtrl->delete();
-//    $status = $response["status"];
-//    $body = $response["body"];
-//
-//    //assert
-//    $this->assertEquals(self::$UNUATHORIZED, $status);
-//    $this->assertFalse($body["hasSession"]);
-//    $this->assertEquals(self::$NO_ACTIVE_SESSION, $body["message"]);
-//  }
+
+  public function testCreateLoginFailure(){
+    //get response
+    $response = $this->loginCtrl->create(array("username" => self::$USERNAME, "password" => "xxxxxx"));
+    $status = $response["status"];
+    $body = $response["body"];
+
+    //assert
+    $this->assertEquals(self::$BAD_REQUEST, $status);
+    $this->assertFalse($body["hasSession"]);
+    $this->assertEquals(self::$INVALD_LOGIN, $body["message"]);
+  }
+
+  public function testLogoutnSuccess(){
+    //set session
+    $_SESSION = self::getMockSession();
+
+    //get response
+    $response = $this->loginCtrl->delete();
+    $status = $response["status"];
+    $body = $response["body"];
+
+    //assert
+    $this->assertEquals(self::$SUCCESS, $status);
+    $this->assertFalse($body["hasSession"]);
+  }
+
+  public function testLogoutFailure(){
+    //get response
+    $response = $this->loginCtrl->delete();
+    $status = $response["status"];
+    $body = $response["body"];
+
+    //assert
+    $this->assertEquals(self::$UNUATHORIZED, $status);
+    $this->assertFalse($body["hasSession"]);
+    $this->assertEquals(self::$NO_ACTIVE_SESSION, $body["message"]);
+  }
 }
