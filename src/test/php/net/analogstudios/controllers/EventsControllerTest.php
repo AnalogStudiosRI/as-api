@@ -14,7 +14,6 @@ class EventsContollerTest extends PHPUnit_Framework_TestCase{
   private static $SUCCESS = 200;
   private static $CREATED = 201;
   private static $BAD_REQUEST = 400;
-  private static $UNUATHORIZED = 401;
   private static $NOT_FOUND = 404;
 
   public function setup(){
@@ -26,7 +25,9 @@ class EventsContollerTest extends PHPUnit_Framework_TestCase{
     $this->sessionCtrl = null;
   }
 
-  //GET
+  /********/
+  /* GET  */
+  /********/
   public function testGetAllEventsSuccess(){
     //get response
     $response = $this->eventsCtrl->get();
@@ -46,17 +47,12 @@ class EventsContollerTest extends PHPUnit_Framework_TestCase{
       $this->assertArrayHasKey("description", $event);
       $this->assertArrayHasKey("start_time", $event);
       $this->assertArrayHasKey("end_time", $event);
-      //$this->assertArrayHasKey("link", $event);
-      //$this->assertArrayHasKey("link_facebook", $event);
-
 
       $this->assertNotEmpty("id", $event);
       $this->assertNotEmpty("title", $event);
       $this->assertNotEmpty("description", $event);
       $this->assertNotEmpty("start_time", $event);
       $this->assertNotEmpty("end_time", $event);
-      //$this->assertNotEmpty("link", $event);
-      //$this->assertNotEmpty("link_facebook", $event);
     }
   }
 
@@ -65,20 +61,18 @@ class EventsContollerTest extends PHPUnit_Framework_TestCase{
     $response = $this->eventsCtrl->get(1);
     $status = $response["status"];
     $data = $response["body"];
+    $event = $data[0];
 
     //assert
     $this->assertEquals(self::$SUCCESS, $status);
     $this->assertNotEmpty($data);
     $this->assertEquals(1, count($data));
 
-    $event = $data[0];
-
     $this->assertArrayHasKey("id", $event);
     $this->assertArrayHasKey("title", $event);
     $this->assertArrayHasKey("description", $event);
     $this->assertArrayHasKey("start_time", $event);
     $this->assertArrayHasKey("end_time", $event);
-
 
     $this->assertNotEmpty("id", $event);
     $this->assertNotEmpty("title", $event);
@@ -91,7 +85,6 @@ class EventsContollerTest extends PHPUnit_Framework_TestCase{
     //get response
     $response = $this->eventsCtrl->get('abc');
     $status = $response["status"];
-    $data = $response["body"];
 
     //assert
     $this->assertEquals(self::$BAD_REQUEST, $status);
@@ -101,9 +94,130 @@ class EventsContollerTest extends PHPUnit_Framework_TestCase{
     //get response
     $response = $this->eventsCtrl->get(9999);
     $status = $response["status"];
-    $data = $response["body"];
 
     //assert
     $this->assertEquals(self::$NOT_FOUND, $status);
   }
+
+  /********/
+  /* POST */
+  /********/
+  public function testCreateEventSuccess(){
+    $now = time();
+    $newEvent = array(
+      "title" => "Event Title " . $now,
+      "description" => "Event Description " . $now,
+      "startTime" => $now,
+      "endTime" => $now + 10800000
+    );
+
+    //get response
+    $response = $this->eventsCtrl->create($newEvent);
+
+    $status = $response["status"];
+    $body = $response["body"];
+
+    //assert create
+    $this->assertNotEmpty($body["createdTime"]);
+    $this->assertNotEmpty($body["id"]);
+    $this->assertNotEmpty($body["url"]);
+
+    $this->assertEquals(self::$CREATED, $status);
+    $this->assertEquals("/api/events/" . $body["id"], $body["url"]);
+  }
+
+  public function testCreateEventNoTitleFailure(){
+    $now = time();
+    $newEvent = array(
+      "description" => "Event Description " . time(),
+      "startTime" => $now,
+      "endTime" => $now + 10800000
+    );
+
+    //get response
+    $response = $this->eventsCtrl->create($newEvent);
+    $status = $response["status"];
+
+    //assert
+    $this->assertEquals(self::$BAD_REQUEST, $status);
+    $this->assertEquals("There is an error.  Expected title param", $response["body"]["message"]);
+  }
+
+  public function testCreateEventNoDescriptionFailure(){
+    $now = time();
+    $newEvent = array(
+      "title" => "Event Title " . $now,
+      "startTime" => $now,
+      "endTime" => $now + 10800000
+    );
+
+    //get response
+    $response = $this->eventsCtrl->create($newEvent);
+    $status = $response["status"];
+
+    //assert
+    $this->assertEquals(self::$BAD_REQUEST, $status);
+    $this->assertEquals("There is an error.  Expected description param", $response["body"]["message"]);
+  }
+
+  public function testCreateEventNoStartTimeFailure(){
+    $now = time();
+    $newEvent = array(
+      "title" => "Event Title " . $now,
+      "description" => "Event Description  " . $now,
+      "endTime" => $now + 10800000
+    );
+
+    //get response
+    $response = $this->eventsCtrl->create($newEvent);
+    $status = $response["status"];
+
+    //assert
+    $this->assertEquals(self::$BAD_REQUEST, $status);
+    $this->assertEquals("There is an error.  Expected startTime param", $response["body"]["message"]);
+  }
+
+  public function testCreateEventNoEndTimeFailure(){
+    $now = time();
+    $newEvent = array(
+      "title" => "Event Title " . $now,
+      "description" => "Event Description  " . $now,
+      "startTime" => $now
+    );
+
+    //get response
+    $response = $this->eventsCtrl->create($newEvent);
+    $status = $response["status"];
+
+    //assert
+    $this->assertEquals(self::$BAD_REQUEST, $status);
+    $this->assertEquals("There is an error.  Expected endTime param", $response["body"]["message"]);
+  }
+
+//  public function testCreateCategoryBlacklisted(){
+//    //get response
+//    $response = $this->categoryCtrl->create(array("categoryName" => "Other"));
+//    $status = $response["status"];
+//
+//    //assert
+//    $this->assertEquals(self::$LOCKED, $status);
+//  }
+//
+//  public function testCreateCategoryInvalidName(){
+//    //get response
+//    $response = $this->categoryCtrl->create(array("categoryName" => "test###$$"));
+//    $status = $response["status"];
+//
+//    //assert
+//    $this->assertEquals(self::$BAD_REQUEST, $status);
+//  }
+//
+//  public function testCreateCategoryExisting(){
+//    //get response
+//    $response = $this->categoryCtrl->create(array("categoryName" => "testob-123"));
+//    $status = $response["status"];
+//
+//    //assert
+//    $this->assertEquals(self::$CONFLICT, $status);
+//  }
 }
