@@ -37,7 +37,17 @@ $slim->put("/api/events/:id", function($eventId) use ($slim, $db) {
   $params = json_decode($slim->request->getBody(), true);
 
   $response = $eventsController->update($eventId, $params);
-  //var_dump($params);
+
+  $slim->response->status($response['status']);
+  $slim->response->setBody(json_encode($response["body"]));
+});
+
+$slim->delete("/api/events/:id", function($eventId) use ($slim, $db) {
+  $eventsController  = new \net\analogstudios\controllers\EventsController($db);
+  $params = json_decode($slim->request->getBody(), true);
+
+  $response = $eventsController->delete($eventId);
+
   $slim->response->status($response['status']);
   $slim->response->setBody(json_encode($response["body"]));
 });
