@@ -15,6 +15,7 @@ class EventsContollerTest extends PHPUnit_Framework_TestCase{
   private static $CREATED = 201;
   private static $BAD_REQUEST = 400;
   private static $NOT_FOUND = 404;
+  private static $NOW_OFFSET = 10800000;
 
   public function setup(){
     $db = new PDO("mysql:host=127.0.0.1;dbname=asadmin_analogstudios_2.0_test", "astester", "t3st3r");
@@ -45,14 +46,14 @@ class EventsContollerTest extends PHPUnit_Framework_TestCase{
       $this->assertArrayHasKey("id", $event);
       $this->assertArrayHasKey("title", $event);
       $this->assertArrayHasKey("description", $event);
-      $this->assertArrayHasKey("start_time", $event);
-      $this->assertArrayHasKey("end_time", $event);
+      $this->assertArrayHasKey("startTime", $event);
+      $this->assertArrayHasKey("endTime", $event);
 
       $this->assertNotEmpty("id", $event);
       $this->assertNotEmpty("title", $event);
       $this->assertNotEmpty("description", $event);
-      $this->assertNotEmpty("start_time", $event);
-      $this->assertNotEmpty("end_time", $event);
+      $this->assertNotEmpty("startTime", $event);
+      $this->assertNotEmpty("endTime", $event);
     }
   }
 
@@ -71,14 +72,14 @@ class EventsContollerTest extends PHPUnit_Framework_TestCase{
     $this->assertArrayHasKey("id", $event);
     $this->assertArrayHasKey("title", $event);
     $this->assertArrayHasKey("description", $event);
-    $this->assertArrayHasKey("start_time", $event);
-    $this->assertArrayHasKey("end_time", $event);
+    $this->assertArrayHasKey("startTime", $event);
+    $this->assertArrayHasKey("endTime", $event);
 
     $this->assertNotEmpty("id", $event);
     $this->assertNotEmpty("title", $event);
     $this->assertNotEmpty("description", $event);
-    $this->assertNotEmpty("start_time", $event);
-    $this->assertNotEmpty("end_time", $event);
+    $this->assertNotEmpty("startTime", $event);
+    $this->assertNotEmpty("endTime", $event);
   }
 
   public function testGetEventsBadRequestFailure(){
@@ -194,30 +195,72 @@ class EventsContollerTest extends PHPUnit_Framework_TestCase{
     $this->assertEquals("There is an error.  Expected endTime param", $response["body"]["message"]);
   }
 
-//  public function testCreateCategoryBlacklisted(){
-//    //get response
-//    $response = $this->categoryCtrl->create(array("categoryName" => "Other"));
-//    $status = $response["status"];
-//
-//    //assert
-//    $this->assertEquals(self::$LOCKED, $status);
-//  }
-//
-//  public function testCreateCategoryInvalidName(){
-//    //get response
-//    $response = $this->categoryCtrl->create(array("categoryName" => "test###$$"));
-//    $status = $response["status"];
-//
-//    //assert
-//    $this->assertEquals(self::$BAD_REQUEST, $status);
-//  }
-//
-//  public function testCreateCategoryExisting(){
-//    //get response
-//    $response = $this->categoryCtrl->create(array("categoryName" => "testob-123"));
-//    $status = $response["status"];
-//
-//    //assert
-//    $this->assertEquals(self::$CONFLICT, $status);
-//  }
+  /********/
+  /* PUT */
+  /********/
+  public function testUpdateEventSuccess(){
+    $now = time();
+    $eventsResponse = $this->eventsCtrl->get();
+    $randIndex = rand(0, count($eventsResponse["body"]));
+    $event = $eventsResponse["body"][$randIndex];
+
+    //get response
+    $response = $this->eventsCtrl->update($event["id"], array(
+      "title" => "some new title" . $now,
+      "description" => "some new description" . $now,
+      "startTime" => $now,
+      "endTime" =>  $now + self::$NOW_OFFSET
+    ));
+    $status = $response["status"];
+    $body = $response["body"];
+
+    //assert
+    $this->assertEquals(self::$SUCCESS, $status);
+    $this->assertEquals("/api/events/" . $body["id"], $body["url"]);
+  }
+
+  public function testUpdateNoEventIdFailure(){
+    //get response
+    $response = $this->eventsCtrl->update();
+    $status = $response["status"];
+    $body = $response["body"];
+
+    //assert
+    $this->assertEquals(self::$BAD_REQUEST, $status);
+    $this->assertEquals("Bad Request.  No id provided", $body["message"]);
+  }
+
+  public function testUpdateEventNoParamsFailure(){
+    //get response
+    $response = $this->eventsCtrl->update(12);
+    $status = $response["status"];
+    $body = $response["body"];
+
+    //assert
+    $this->assertEquals(self::$BAD_REQUEST, $status);
+    $this->assertEquals("Bad Request.  No params provided", $body["message"]);
+  }
+
+  public function testUpdateEventNoSupportingParamsFailure(){
+    //get response
+    $response = $this->eventsCtrl->update(12, array("foo" => "bar"));
+    $status = $response["status"];
+    $body = $response["body"];
+
+    //assert
+    $this->assertEquals(self::$BAD_REQUEST, $status);
+    $this->assertEquals("Bad Request.  No valid params provided", $body["message"]);
+  }
+
+  public function testUpdateEventNotFoundFailure(){
+    //get response
+    $response = $this->eventsCtrl->update(99999999999999, array("title" => "some new title"));
+    $status = $response["status"];
+    $body = $response["body"];
+
+    //assert
+    $this->assertEquals(self::$NOT_FOUND, $status);
+    $this->assertEquals("Event Not Found", $body["message"]);
+  }
+
 }
