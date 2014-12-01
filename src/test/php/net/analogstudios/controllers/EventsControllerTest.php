@@ -93,7 +93,7 @@ class EventsContollerTest extends PHPUnit_Framework_TestCase{
 
   public function testGetEventNotFoundFailure(){
     //get response
-    $response = $this->eventsCtrl->get(9999);
+    $response = $this->eventsCtrl->get(99999999999);
     $status = $response["status"];
 
     //assert
@@ -201,7 +201,7 @@ class EventsContollerTest extends PHPUnit_Framework_TestCase{
   public function testUpdateEventSuccess(){
     $now = time();
     $eventsResponse = $this->eventsCtrl->get();
-    $randIndex = rand(0, (count($eventsResponse["body"]) - 1));
+    $randIndex = rand(1, (count($eventsResponse["body"]) - 1));
     $event = $eventsResponse["body"][$randIndex];
 
     //get response
@@ -269,7 +269,7 @@ class EventsContollerTest extends PHPUnit_Framework_TestCase{
   public function testDeleteEventSuccess(){
     //get event
     $eventsResponse = $this->eventsCtrl->get();
-    $randIndex = rand(0, (count($eventsResponse["body"]) - 1));
+    $randIndex = rand(1, (count($eventsResponse["body"]) - 1));
     $event = $eventsResponse["body"][$randIndex];
 
     //get response
