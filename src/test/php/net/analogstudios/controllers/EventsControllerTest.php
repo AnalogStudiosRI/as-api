@@ -57,7 +57,7 @@ class EventsContollerTest extends PHPUnit_Framework_TestCase{
     }
   }
 
-  public function testGetSingleEventSuccess(){
+  public function testGetEventByIdSuccess(){
     //get response
     $response = $this->eventsCtrl->get(1);
     $status = $response["status"];
@@ -82,7 +82,7 @@ class EventsContollerTest extends PHPUnit_Framework_TestCase{
     $this->assertNotEmpty("endTime", $event);
   }
 
-  public function testGetEventsBadRequestFailure(){
+  public function testGetEventBadRequestFailure(){
     //get response
     $response = $this->eventsCtrl->get('abc');
     $status = $response["status"];
@@ -196,7 +196,7 @@ class EventsContollerTest extends PHPUnit_Framework_TestCase{
   }
 
   /********/
-  /* PUT */
+  /* PUT  */
   /********/
   public function testUpdateEventSuccess(){
     $now = time();
@@ -232,7 +232,7 @@ class EventsContollerTest extends PHPUnit_Framework_TestCase{
 
   public function testUpdateEventNoParamsFailure(){
     //get response
-    $response = $this->eventsCtrl->update(12);
+    $response = $this->eventsCtrl->update(1);
     $status = $response["status"];
     $body = $response["body"];
 
@@ -241,9 +241,9 @@ class EventsContollerTest extends PHPUnit_Framework_TestCase{
     $this->assertEquals("Bad Request.  No params provided", $body["message"]);
   }
 
-  public function testUpdateEventNoSupportingParamsFailure(){
+  public function testUpdateEventNoValidParamsFailure(){
     //get response
-    $response = $this->eventsCtrl->update(12, array("foo" => "bar"));
+    $response = $this->eventsCtrl->update(1, array("foo" => "bar"));
     $status = $response["status"];
     $body = $response["body"];
 

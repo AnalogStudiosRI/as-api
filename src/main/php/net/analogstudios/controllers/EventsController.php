@@ -111,7 +111,6 @@ class EventsController implements ControllerInterface{
       $stmt->bindValue(":startTime", $params["startTime"], $db::PARAM_INT);
       $stmt->bindValue(":endTime", $params["endTime"], $db::PARAM_INT);
       $stmt->bindValue(":createdTime", $now, $db::PARAM_INT);
-
       $stmt->execute();
 
       //var_dump($stmt->errorInfo());
@@ -156,18 +155,15 @@ class EventsController implements ControllerInterface{
 
       foreach ($params as $key => $value) {
         if (in_array($key, self::$REQUIRED_CREATE_PARAMS)) {
-          $query .= $key . "=:" . $key . ",";
+          $query .= $key . "=:" . $key . ", ";
           $queryParams[':' . $key] = $value;
         }
       };
 
       if(count($queryParams) > 0) {
-        $query = rtrim($query, ",");
+        $query = rtrim($query, ", ");
         $query .= " WHERE id=:eventId";
         $queryParams[':eventId'] = $eventId;
-
-        var_dump($query);
-        var_dump($queryParams);
 
         $stmt = $db->prepare($query);
         $stmt->execute($queryParams);
@@ -212,5 +208,7 @@ class EventsController implements ControllerInterface{
 
   }
 }
+
+//1h
 
 ?>
