@@ -204,11 +204,40 @@ class EventsController implements ControllerInterface{
    *
    * @return array $response;
    */
-  public function delete($id = null){
+  public function delete($eventId = null){
+    $db = $this->db;
+    $response = array();
+    $body = array();
+    $status = 0;
 
+    if(preg_match(self::$ID_PATTERN, $eventId)) {
+      $stmt = $db->prepare('DELETE FROM events WHERE id=:id');
+      $stmt->bindValue(":id", $eventId, $db::PARAM_INT);
+      $stmt->execute();
+
+      if ($stmt->rowCount() === 1) {
+        $status = 200;
+        $body["message"] = "Event deleted successfully";
+      } else if ($stmt->rowCount() === 0) {
+        $status = 404;
+        $body["message"] = "Event not found";
+      } else {
+        $status = 500;
+        $body["message"] = $stmt->errorInfo();
+      }
+    }else{
+      $status = 400;
+      $body["message"] = "Bad Request.  No valid event id provided";
+    }
+
+    //construct response
+    $response["status"] = $status;
+    $response["body"] = $body;
+
+    return $response;
   }
 }
 
-//1h
+//1.5h - update
 
 ?>

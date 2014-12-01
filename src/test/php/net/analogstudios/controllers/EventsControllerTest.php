@@ -201,7 +201,7 @@ class EventsContollerTest extends PHPUnit_Framework_TestCase{
   public function testUpdateEventSuccess(){
     $now = time();
     $eventsResponse = $this->eventsCtrl->get();
-    $randIndex = rand(0, count($eventsResponse["body"]));
+    $randIndex = rand(0, (count($eventsResponse["body"]) - 1));
     $event = $eventsResponse["body"][$randIndex];
 
     //get response
@@ -263,4 +263,55 @@ class EventsContollerTest extends PHPUnit_Framework_TestCase{
     $this->assertEquals("Event Not Found", $body["message"]);
   }
 
+  /**********/
+  /* DELETE */
+  /**********/
+  public function testDeleteEventSuccess(){
+    //get event
+    $eventsResponse = $this->eventsCtrl->get();
+    $randIndex = rand(0, (count($eventsResponse["body"]) - 1));
+    $event = $eventsResponse["body"][$randIndex];
+
+    //get response
+    $response = $this->eventsCtrl->delete($event["id"]);
+    $status = $response["status"];
+    $body = $response["body"];
+
+    //assert
+    $this->assertEquals(self::$SUCCESS, $status);
+    $this->assertEquals("Event deleted successfully", $body["message"]);
+  }
+
+  public function testDeleteNoEventIdFailure(){
+    //get response
+    $response = $this->eventsCtrl->delete();
+    $status = $response["status"];
+    $body = $response["body"];
+
+    //assert
+    $this->assertEquals(self::$BAD_REQUEST, $status);
+    $this->assertEquals("Bad Request.  No valid event id provided", $body["message"]);
+  }
+
+  public function testDeleteInvalidEventIdFailure(){
+    //get response
+    $response = $this->eventsCtrl->delete("abc");
+    $status = $response["status"];
+    $body = $response["body"];
+
+    //assert
+    $this->assertEquals(self::$BAD_REQUEST, $status);
+    $this->assertEquals("Bad Request.  No valid event id provided", $body["message"]);
+  }
+
+  public function testDeleteEventNotFoundFailure(){
+    //get response
+    $response = $this->eventsCtrl->delete(9999999999999999);
+    $status = $response["status"];
+    $body = $response["body"];
+
+    //assert
+    $this->assertEquals(self::$NOT_FOUND, $status);
+    $this->assertEquals("Event not found", $body["message"]);
+  }
 }
