@@ -13,6 +13,7 @@ class EventsContollerTest extends PHPUnit_Framework_TestCase{
   private $eventsCtrl;
   private static $SUCCESS = 200;
   private static $CREATED = 201;
+  private static $NOT_MODIFIED = 304;
   private static $BAD_REQUEST = 400;
   private static $NOT_FOUND = 404;
   private static $NOW_OFFSET = 10800000;
@@ -217,6 +218,20 @@ class EventsContollerTest extends PHPUnit_Framework_TestCase{
     //assert
     $this->assertEquals(self::$SUCCESS, $status);
     $this->assertEquals("/api/events/" . $body["id"], $body["url"]);
+  }
+
+  public function testCreateEventDataNotChangedFailure(){
+    $eventsResponse = $this->eventsCtrl->get();
+    $randIndex = rand(1, (count($eventsResponse["body"]) - 1));
+    $event = $eventsResponse["body"][$randIndex];
+
+    //get response
+    $response = $this->eventsCtrl->update($event["id"], array("title" => $event["title"]));
+    $status = $response["status"];
+
+    //assert
+    $this->assertEquals(self::$NOT_MODIFIED, $status);
+    $this->assertEquals("Duplicate data, event not modified", $response["body"]["message"]);
   }
 
   public function testUpdateNoEventIdFailure(){

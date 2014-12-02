@@ -175,8 +175,14 @@ class EventsController implements ControllerInterface{
             "id" => $eventId
           );
         } else if ($stmt->rowCount() === 0) {
-          $status = 404;
-          $body["message"] = "Event Not Found";
+          $stm = $db->prepare('SELECT * FROM events WHERE id=:id');
+          $stm->bindValue(':id', $eventId, $db::PARAM_INT);
+          $stm->execute();
+
+          $found = $stm->fetch($db::FETCH_NUM) > 0;
+          
+          $status = $found ? 304 : 404;
+          $body["message"] = $found ? "Duplicate data, event not modified" : "Event Not Found";
         } else {
           $status = 500;
           $body["message"] = $stmt->errorInfo();
@@ -237,7 +243,5 @@ class EventsController implements ControllerInterface{
     return $response;
   }
 }
-
-//1.5h - update
 
 ?>
