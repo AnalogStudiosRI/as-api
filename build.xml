@@ -2,7 +2,7 @@
 <project name="as-api" default="info" basedir="." description="analogstudios API" phingVersion="2.7.0">
 
 <php expression="include('src/main/php/vendor/autoload.php')"/>
-<property name="project.version" value="0.1.0-SNAPSHOT" />
+<property name="project.version" value="0.2.0-SNAPSHOT" />
 <property file="./properties/local.properties" />
 
   <fileset dir="src/main/php" id="projectFiles">
