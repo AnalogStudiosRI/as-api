@@ -55,8 +55,7 @@
     <echo msg="linting project..."/>
     <phplint haltonfailure="true" level="verbose" deprecatedAsError="true">
       <fileset dir="src/main/php/" >
-<!--        <include name="com/**/*.php"/>
-        <include name="io/**/*.php"/>-->
+        <include name="com/**/*.php"/>
         <exclude name="vendor/**/*"/>
       </fileset> 
     </phplint>
@@ -121,7 +120,7 @@
         <element name="version" value="bc-api-${project.version}" />
         <element name="authors">
           <element name="Owen Buckley">
-            <element name="email" value="owen@analogstudios" />
+            <element name="email" value="owen@analogstudios.net" />
           </element>
         </element>
       </metadata>
