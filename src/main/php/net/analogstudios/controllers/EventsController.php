@@ -65,6 +65,12 @@ class EventsController implements ControllerInterface{
       }
     }else if($result){
       $status = 200;
+
+      for($i = 0, $l = count($result); $i < $l; $i++){
+        $result[$i]["startTime"] = (int) $result[$i]["startTime"];
+        $result[$i]["endTime"] = (int) $result[$i]["endTime"];
+        $result[$i]["createdTime"] = (int) $result[$i]["createdTime"];
+      }
       $body = $result;
     }
 
