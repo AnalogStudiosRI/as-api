@@ -2,7 +2,7 @@
 
 namespace net\analogstudios\controllers;
 
-require_once "ControllerInterface.php";
+//require_once "ControllerInterface.php";
 
 /**
  * name: LoginController
@@ -10,7 +10,7 @@ require_once "ControllerInterface.php";
  *
  * @author Owen Buckley
  */
-class LoginController implements ControllerInterface{
+class LoginController {
 
   private $db;
   private static $NO_ACTIVE_SESSION = "No active session";

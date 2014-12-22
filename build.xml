@@ -55,7 +55,7 @@
     <echo msg="linting project..."/>
     <phplint haltonfailure="true" level="verbose" deprecatedAsError="true">
       <fileset dir="src/main/php/" >
-        <include name="com/**/*.php"/>
+        <include name="net/**/*.php"/>
         <exclude name="vendor/**/*"/>
       </fileset> 
     </phplint>
@@ -88,7 +88,7 @@
     </copy>
 
     <copy file="src/main/php/config.php" tofile="tmp/config.php" />
-    <copy file="src/main/php/route.php" tofile="tmp/route.php" />
+    <copy file="src/main/php/controller.php" tofile="tmp/controller.php" />
     <copy file="src/main/apache/.htaccess" tofile="tmp/.htaccess" />
 
     <echo msg="applying environment filters..."/>
@@ -103,7 +103,7 @@
 
     <echo msg="moving build files..."/>
     <move file="tmp/config.php" tofile="target/config.php" />
-    <move file="tmp/route.php" tofile="target/route.php" />
+    <move file="tmp/controller.php" tofile="target/controller.php" />
     <move file="tmp/.htaccess" tofile="target/.htaccess" />
 
     <echo msg="creating phar archive..."/>
@@ -125,7 +125,6 @@
         </element>
       </metadata>
     </pharpackage>
-    <!--<move file="as-api-${project.version}.phar" tofile="target/as-api-${project.version}.phar" />-->
   </target>
 
   <target name="build" description="executes a build">

@@ -14,12 +14,7 @@ session_cache_limiter(false);
 session_start();  
     
 /* DB connect */
-try {  
-  $dbConfig = $CONFIG["db"];
-  $db = new PDO($dbConfig["dsn"], $dbConfig["user"], $dbConfig["password"]);  
-} catch(PDOException $e) {  
-  echo $e->getMessage();  
-}  
+$pdoDB = new \net\analogstudios\core\Database('PDO', $CONFIG["db"]);  
 
 /* instanciate slim */
 $slim = new \Slim\Slim();
@@ -33,7 +28,7 @@ $slim->add(new \Slim\Middleware\SessionCookie(array(
 $slim->response->headers->set('Content-Type', 'application/json');
 
 /* get login status */
-$loginCtrl    = new \net\analogstudios\controllers\LoginController($db);
+$loginCtrl    = new \net\analogstudios\controllers\LoginController($pdoDB);
 $sessionResponse  = $loginCtrl->get();
 $sessionInfo      = array(
   "hasSession"          =>  $sessionResponse["body"]["hasSession"],
@@ -46,9 +41,21 @@ $sessionInfo      = array(
   )
 );
 
-//include routes
-require_once "phar://" . $CONFIG["pharfile"] . "/net/analogstudios/routes/login-route.php";
-require_once "phar://" . $CONFIG["pharfile"] . "/net/analogstudios/routes/events-route.php";
+/* routing */
+$request = $slim->request;
+$path = $request->getResourceUri();
+$route = '';
+
+switch ($path){
+  case strpos($path, events) !== FALSE:
+    $route = 'events';
+    break;
+}
+
+$builder = new \net\analogstudios\builders\EntityBuilder($pdoDB);
+$entity = $builder->getEntity(\net\analogstudios\builders\EntityBuilder::$ENTITY_ROUTE_MAPPER[strtoupper($route)]["TYPE"]);
+
+require_once "phar://" . $CONFIG["pharfile"] . "/net/analogstudios/routes/" . $route . "-route.php";
 
 //start slim
 $slim->run();
