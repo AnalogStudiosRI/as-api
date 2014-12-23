@@ -69,7 +69,9 @@ class EventsModel {
     return $result;
   }
   
-  public function deleteEvent($ids){
+  public function deleteEvent($id = null){
+    $result = $this->db->delete(self::$TABLE_NAME, $id);
     
+    return $result;
   }
 }

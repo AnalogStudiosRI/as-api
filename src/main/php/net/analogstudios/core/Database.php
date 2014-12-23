@@ -198,38 +198,34 @@ class Database {
 
     return $this->generateResponse($code, $result, $invalidParamError);
   }
-//  
-//  public function delete ($table, $ids) {
-//    $db = $this->db;
-//    $response = array();
-//    $body = array();
-//    $status = 0;
-//
-//    if(preg_match(self::$ID_PATTERN, $eventId)) {
-//      $stmt = $db->prepare('DELETE FROM events WHERE id=:id');
-//      $stmt->bindValue(":id", $eventId, $db::PARAM_INT);
-//      $stmt->execute();
-//
-//      if ($stmt->rowCount() === 1) {
-//        $status = 200;
-//        $body["message"] = "Event deleted successfully";
-//      } else if ($stmt->rowCount() === 0) {
-//        $status = 404;
-//        $body["message"] = "Event not found";
-//      } else {
-//        $status = 500;
-//        $body["message"] = $stmt->errorInfo();
-//      }
-//    }else{
-//      $status = 400;
-//      $body["message"] = "Bad Request.  No valid event id provided";
-//    }
-//
-//    //construct response
-//    $response["status"] = $status;
-//    $response["body"] = $body;
-//
-//    return $response;
-//  }
+  
+  public function delete ($tableName, $id) {
+    $db = $this->db;
+    $response = array();
+    $result = array();
+    $invalidParamError = "";
+
+    if(preg_match(self::$PATTERN["ID"], $id)) {
+      $stmt = $db->prepare("DELETE FROM " . $tableName . " WHERE id=:id");
+      $stmt->bindValue(":id", $id, $db::PARAM_INT);
+      $stmt->execute();
+
+      if ($stmt->rowCount() === 1) {
+        $code = self::$STATUS_CODE["SUCCESS"];
+        $invalidParamError = "Event deleted successfully";
+      } else if ($stmt->rowCount() === 0) {
+        $code = self::$STATUS_CODE["NOT_FOUND"];
+        $invalidParamError = "Event not found";
+      } else {
+        $status = self::$STATUS_CODE["ERROR"];
+        $invalidParamError = "Unknown Database Error";
+      }
+    }else{
+      $code = self::$STATUS_CODE["BAD_REQUEST"];
+      $invalidParamError = "Bad Request.  No valid event id provided";
+    }
+
+    return $this->generateResponse($code, $result, $invalidParamError);
+  }
     
 }
