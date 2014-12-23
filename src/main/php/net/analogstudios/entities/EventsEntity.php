@@ -6,7 +6,7 @@
  * and open the template in the editor.
  */
 
-namespace net\analogstudios\models;
+namespace net\analogstudios\entities;
 
 use \net\analogstudios\core as core;
 
@@ -15,18 +15,11 @@ use \net\analogstudios\core as core;
  *
  * @author obuckley
  */
-class EventsModel {
-  private static $TABLE_NAME = 'events';
-  private static $REQUIRED_CREATE_PARAMS = array("title", "description", "startTime", "endTime", "createdTime");
-  private static $UPDATE_PARAMS = array("title", "description", "startTime", "endTime");
-  public static $ENTITY_TYPE = 'Events';
-  
-  private $db;
-  
-  //put your code here
-  function __construct(core\Database $db) {
-    $this->db = $db;
-  }
+class EventsEntity extends core\RestfulEntity{
+  private $name = "event";
+  private $tableName = "events";
+  private $createParams = array("title", "description", "startTime", "endTime", "createdTime");
+  private $updateParams = array("title", "description", "startTime", "endTime");
   
   private function modelDatabaseResult ($data){
     $model = array();
@@ -42,15 +35,33 @@ class EventsModel {
     return $model;
   }
   
+  //abstract getters
+  public function getName(){
+    return $this->name;
+  }
+  
+  public function getTableName(){
+    return $this->tableName;
+  }
+  
+  public function getRequiredCreateParams(){
+    return $this->createParams;
+  }
+  
+  public function getAllowedUpdateParams(){
+    return $this->updateParams;
+  }
+  
+  //entity level methods
   public function getEvents(){
-    $result = $this->db->select(self::$TABLE_NAME);
+    $result = $this->db->select($this->tableName);
     $result["data"] = $this->modelDatabaseResult($result["data"]);
     
     return $result;
   }
   
   public function getEventById($id = null){
-    $result = $this->db->select(self::$TABLE_NAME, $id);
+    $result = $this->db->select($this->tableName, $id);
     $result["data"] = $this->modelDatabaseResult($result["data"]);
 
     return $result;
@@ -58,19 +69,19 @@ class EventsModel {
   
   public function createEvent($params = array()){
     $params["createdTime"] = time();
-    $result = $this->db->insert(self::$TABLE_NAME, self::$REQUIRED_CREATE_PARAMS, $params);
+    $result = $this->db->insert($this->tableName, $this->createParams, $params);
     
     return $result;
   }
   
   public function updateEvent($id = null, $params = array()){
-    $result = $this->db->update(self::$TABLE_NAME, $id, self::$UPDATE_PARAMS, $params);
+    $result = $this->db->update($this->tableName, $id, $this->updateParams, $params);
     
     return $result;
   }
   
   public function deleteEvent($id = null){
-    $result = $this->db->delete(self::$TABLE_NAME, $id);
+    $result = $this->db->delete($this->tableName, $id);
     
     return $result;
   }

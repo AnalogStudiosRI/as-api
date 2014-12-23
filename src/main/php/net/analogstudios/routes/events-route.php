@@ -24,7 +24,7 @@ $slim->post("/api/events", function() use ($slim, $entity) {
   $response = $entity->createEvent($params);
 
   $slim->response->status($response['status']);
-  $slim->response->setBody(json_encode($response["body"]));
+  $slim->response->setBody(json_encode($response["data"]));
 });
 
 $slim->put("/api/events/:id", function($eventId) use ($slim, $entity) {
