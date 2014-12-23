@@ -2,11 +2,11 @@
 
 namespace net\analogstudios\builders;
 
-use \net\analogstudios\models as models;
+use \net\analogstudios\entities as entity;
 use \net\analogstudios\core as core;
 
 /**
- * name: EntityBuilderr
+ * name: EntityBuilder
  * namespace: net\analogstudios\builders
  *
  * @author Owen Buckley
@@ -18,14 +18,14 @@ class EntityBuilder {
   public static $ENTITY_ROUTE_MAPPER = array(
     "EVENTS" => array(
       "TABLE_NAME" => "events",
-      "TYPE" => "events" 
+      "TYPE" => "events"
     )
   );
   
   /**
    * Constructor
    */
-  function __construct(core\Database $db) {
+  function __construct(core\RestfulDatabase $db) {
     if($db){
       $this->db = $db;
     }else{
@@ -39,7 +39,7 @@ class EntityBuilder {
     if(self::$ENTITY_ROUTE_MAPPER[strtoupper($entityType)]){
       switch ($entityType){
         case self::$ENTITY_ROUTE_MAPPER["EVENTS"]["TYPE"]:
-          $entity = new models\EventsModel($this->db);
+          $entity = new entity\EventsEntity($this->db);
           break;
       }
     }

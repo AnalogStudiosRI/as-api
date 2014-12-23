@@ -37,10 +37,12 @@ class RestfulDatabase extends base\Database{
     500 => "Internal Service Error"
   );
   
-  private function generateResponse ($code, $result = array(), $msg = ''){
+  private function generateResponse ($code = null, $result = array(), $msg = '') {
+    $normalizedCode = $code ? $code : 500;
+    $normalizedMessage = $msg ? $msg : self::$STATUS_MESSAGE[$normalizedCode];
     return array(
-      "status" => $code ? $code : self::$STATUS_CODE["ERROR"],
-      "message" => $msg ? $msg : self::$STATUS_MESSAGE[$code],
+      "status" => $normalizedCode,
+      "message" => $normalizedMessage,
       "data" => $result
     );
   }
@@ -50,6 +52,7 @@ class RestfulDatabase extends base\Database{
     $validEventId = preg_match(self::$PATTERN["ID"], $id) === 1 ? TRUE : FALSE;
     $validTableName = $tableName !== '' ? TRUE : FALSE;
     $sql = "SELECT * FROM " . $tableName;
+    $code = null;
 
     if($validTableName && $validEventId){
       $sql .=  " WHERE id=:id";
@@ -89,6 +92,7 @@ class RestfulDatabase extends base\Database{
     $result = array();
     $validParamsNeeded = count($requiredParams);
     $invalidParamError = "";
+    $code = null;
 
     for($i = 0, $l = $validParamsNeeded; $i < $l; $i++){
       $key = $requiredParams[$i];
@@ -134,6 +138,7 @@ class RestfulDatabase extends base\Database{
     $db = $this->db;
     $invalidParamError = '';
     $result = array();
+    $code = null;
 
     if(preg_match(self::$PATTERN["ID"], $id) && count($params) > 0) {
       $query = 'UPDATE events SET ';
@@ -188,9 +193,9 @@ class RestfulDatabase extends base\Database{
   
   public function delete ($tableName = '', $id = null) {
     $db = $this->db;
-    $response = array();
     $result = array();
     $invalidParamError = "";
+    $code = null;
 
     if(preg_match(self::$PATTERN["ID"], $id)) {
       $stmt = $db->prepare("DELETE FROM " . $tableName . " WHERE id=:id");
@@ -204,7 +209,7 @@ class RestfulDatabase extends base\Database{
         $code = self::$STATUS_CODE["NOT_FOUND"];
         $invalidParamError = "Event not found";
       } else {
-        $status = self::$STATUS_CODE["ERROR"];
+        $code = self::$STATUS_CODE["ERROR"];
         $invalidParamError = "Unknown Database Error";
       }
     }else{
