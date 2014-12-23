@@ -15,7 +15,7 @@ use \net\analogstudios\core as core;
  *
  * @author obuckley
  */
-class EventsEntity extends core\RestfulEntity{
+class RestfulEventsEntity extends core\RestfulEntity{
   private $name = "event";
   private $tableName = "events";
   private $createParams = array("title", "description", "startTime", "endTime", "createdTime");

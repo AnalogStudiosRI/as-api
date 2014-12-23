@@ -1,12 +1,12 @@
-<?php //
+<?php
 error_reporting(E_ALL | E_STRICT);
 
-require_once "src/main/php/net/analogstudios/base/Entity.php";
 require_once "src/main/php/net/analogstudios/base/Database.php";
+require_once "src/main/php/net/analogstudios/base/Entity.php";
+require_once "src/main/php/net/analogstudios/builders/RestfulEntityBuilder.php";
 require_once "src/main/php/net/analogstudios/core/RestfulDatabase.php";
 require_once "src/main/php/net/analogstudios/core/RestfulEntity.php";
-require_once "src/main/php/net/analogstudios/entities/EventsEntity.php";
-require_once "src/main/php/net/analogstudios/builders/EntityBuilder.php";
+require_once "src/main/php/net/analogstudios/entities/RestfulEventsEntity.php";
 
 use net\analogstudios\core as core;
 use net\analogstudios\builders as builder;
@@ -27,13 +27,13 @@ class EventsEntityBuilderTest extends PHPUnit_Framework_TestCase{
   private static $NOW_OFFSET = 10800000;
 
   public function setup(){
-    $db = new core\RestfulDatabase('PDO', array(
+    $dbConfig = array(
       "dsn" => "mysql:host=127.0.0.1;dbname=asadmin_analogstudios_2.0_test",
       "username" => "astester",
       "password" => "t3st3r"
-    ));
-    $builder = new builder\EntityBuilder($db);
-    $this->eventsEntity = $builder->getEntity(builder\EntityBuilder::$ENTITY_ROUTE_MAPPER["EVENTS"]["TYPE"]);
+    );
+    $builder = new builder\RestfulEntityBuilder($dbConfig, 'events');
+    $this->eventsEntity = $builder->getEntity();
   }
 
   public function tearDown(){
@@ -45,7 +45,6 @@ class EventsEntityBuilderTest extends PHPUnit_Framework_TestCase{
   /********/
   public function testGetAllEventsSuccess(){
     $response = $this->eventsEntity->getEvents();
-  
     $status = $response["status"];
     $data = $response["data"];
 

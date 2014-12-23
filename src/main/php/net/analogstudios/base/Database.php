@@ -15,9 +15,9 @@ namespace net\analogstudios\base;
  */
 abstract class Database {
   //put your code here
-  protected $db;
+  protected $db = null;
   
-  function __construct($dbType, $dbConfig){
+  function __construct($dbType = "", $dbConfig = array()){
     switch ($dbType) {
       case 'PDO':
         try {  

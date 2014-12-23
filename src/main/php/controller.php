@@ -11,12 +11,9 @@ date_default_timezone_set("America/New_York");
 
 //setup session handling
 session_cache_limiter(false);
-session_start();  
-    
-/* DB connect */
-$pdoDB = new \net\analogstudios\core\Database('PDO', $CONFIG["db"]);  
+session_start();
 
-/* instanciate slim */
+/* new slim */
 $slim = new \Slim\Slim();
 
 /* use slim session middleware */
@@ -28,20 +25,20 @@ $slim->add(new \Slim\Middleware\SessionCookie(array(
 $slim->response->headers->set('Content-Type', 'application/json');
 
 /* get login status */
-$loginCtrl    = new \net\analogstudios\controllers\LoginController($pdoDB);
-$sessionResponse  = $loginCtrl->get();
-$sessionInfo      = array(
-  "hasSession"          =>  $sessionResponse["body"]["hasSession"],
-  "username"            =>  isset($sessionResponse["body"]["username"]) ? $sessionResponse["body"]["username"] : null,
-  "noSessionResponse"   =>  array(
-    "status"              => 401,
-    "body"                => array(
-      "message"           => "No active session"
-    )
-  )
-);
+//$loginCtrl    = new \net\analogstudios\controllers\LoginController($pdoDB);
+//$sessionResponse  = $loginCtrl->get();
+//$sessionInfo      = array(
+//  "hasSession"          =>  $sessionResponse["body"]["hasSession"],
+//  "username"            =>  isset($sessionResponse["body"]["username"]) ? $sessionResponse["body"]["username"] : null,
+//  "noSessionResponse"   =>  array(
+//    "status"              => 401,
+//    "body"                => array(
+//      "message"           => "No active session"
+//    )
+//  )
+//);
 
-/* routing */
+/* routing and controlling */
 $request = $slim->request;
 $path = $request->getResourceUri();
 $route = '';
@@ -52,7 +49,7 @@ switch ($path){
     break;
 }
 
-$builder = new \net\analogstudios\builders\EntityBuilder($pdoDB);
+$builder = new \net\analogstudios\core\RestfulEntityBuilder($CONFIG["db"]);
 $entity = $builder->getEntity(\net\analogstudios\builders\EntityBuilder::$ENTITY_ROUTE_MAPPER[strtoupper($route)]["TYPE"]);
 
 require_once "phar://" . $CONFIG["pharfile"] . "/net/analogstudios/routes/" . $route . "-route.php";

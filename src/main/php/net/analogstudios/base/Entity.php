@@ -16,5 +16,5 @@ namespace net\analogstudios\base;
 abstract class Entity {
   private $name;
 
-  abstract public function getName ();
+  abstract protected function getName ();
 }
