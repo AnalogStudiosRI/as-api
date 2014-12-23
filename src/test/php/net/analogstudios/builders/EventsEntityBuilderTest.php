@@ -290,55 +290,52 @@ class EventsEntityBuilderTest extends PHPUnit_Framework_TestCase{
     $this->assertEquals("Event Not Found", $response["message"]);
   }
 
-//  /**********/
-//  /* DELETE */
-//  /**********/
-//  public function testDeleteEventSuccess(){
-//    //get event
-//    $eventsResponse = $this->eventsCtrl->get();
-//    $randIndex = rand(1, (count($eventsResponse["body"]) - 1));
-//    $event = $eventsResponse["body"][$randIndex];
-//
-//    //get response
-//    $response = $this->eventsCtrl->delete($event["id"]);
-//    $status = $response["status"];
-//    $body = $response["body"];
-//
-//    //assert
-//    $this->assertEquals(self::$SUCCESS, $status);
-//    $this->assertEquals("Event deleted successfully", $body["message"]);
-//  }
-//
-//  public function testDeleteNoEventIdFailure(){
-//    //get response
-//    $response = $this->eventsCtrl->delete();
-//    $status = $response["status"];
-//    $body = $response["body"];
-//
-//    //assert
-//    $this->assertEquals(self::$BAD_REQUEST, $status);
-//    $this->assertEquals("Bad Request.  No valid event id provided", $body["message"]);
-//  }
-//
-//  public function testDeleteInvalidEventIdFailure(){
-//    //get response
-//    $response = $this->eventsCtrl->delete("abc");
-//    $status = $response["status"];
-//    $body = $response["body"];
-//
-//    //assert
-//    $this->assertEquals(self::$BAD_REQUEST, $status);
-//    $this->assertEquals("Bad Request.  No valid event id provided", $body["message"]);
-//  }
-//
-//  public function testDeleteEventNotFoundFailure(){
-//    //get response
-//    $response = $this->eventsCtrl->delete(9999999999999999);
-//    $status = $response["status"];
-//    $body = $response["body"];
-//
-//    //assert
-//    $this->assertEquals(self::$NOT_FOUND, $status);
-//    $this->assertEquals("Event not found", $body["message"]);
-//  }
+  /**********/
+  /* DELETE */
+  /**********/
+  public function testDeleteEventSuccess(){
+    //get event
+    $eventsResponse = $this->eventsEntity->getEvents();
+    $randIndex = rand(1, (count($eventsResponse["data"]) - 1));
+    $event = $eventsResponse["data"][$randIndex];
+
+    //get response
+    $response = $this->eventsEntity->deleteEvent($event["id"]);
+
+    //assert
+    $this->assertEquals(self::$SUCCESS, $response["status"]);
+    $this->assertEquals(0, count($response["data"]));
+    $this->assertEquals("Event deleted successfully", $response["message"]);
+  }
+
+  public function testDeleteNoEventIdFailure(){
+    //get response
+    $response = $this->eventsEntity->deleteEvent();
+
+
+    //assert
+    $this->assertEquals(self::$BAD_REQUEST, $response["status"]);
+    $this->assertEquals(0, count($response["data"]));
+    $this->assertEquals("Bad Request.  No valid event id provided", $response["message"]);
+  }
+
+  public function testDeleteInvalidEventIdFailure(){
+    //get response
+    $response = $this->eventsEntity->deleteEvent("abc");
+
+    //assert
+    $this->assertEquals(self::$BAD_REQUEST, $response["status"]);
+    $this->assertEquals(0, count($response["data"]));
+    $this->assertEquals("Bad Request.  No valid event id provided", $response["message"]);
+  }
+
+  public function testDeleteEventNotFoundFailure(){
+    //get response
+    $response = $this->eventsEntity->deleteEvent(9999999999999999);
+
+    //assert
+    $this->assertEquals(self::$NOT_FOUND, $response["status"]);
+    $this->assertEquals(0, count($response["data"]));
+    $this->assertEquals("Event not found", $response["message"]);
+  }
 }
