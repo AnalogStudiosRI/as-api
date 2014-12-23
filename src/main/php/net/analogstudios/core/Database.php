@@ -17,15 +17,17 @@ class Database {
   private static $PATTERN = array(
     "ID" => "/^[0-9]+$/"
   );
-  //private static $DB_TYPES = array();
+
   private static $STATUS_CODE = array(
     "BAD_REQUEST" => 400,
+    "CREATED" => 201,
     "ERROR" => 500,
     "NOT_FOUND" => 404,
     "SUCCESS" => 200
   );
   private static $STATUS_MESSAGE = array(
     200 => "Success",
+    201 => "Created",
     400 => "Bad Request",
     404 => "Not Found",
     500 => "Internal Service Error"
@@ -46,10 +48,10 @@ class Database {
     }
   }
   
-  private function generateResponse ($code, $result){
+  private function generateResponse ($code, $result = array(), $msg = ''){
     return array(
-      "status" => $code || 500,
-      "message" => self::$STATUS_MESSAGE[$code],
+      "status" => $code ? $code : 500,
+      "message" => $msg ? $msg : self::$STATUS_MESSAGE[$code],
       "data" => $result
     );
   }
@@ -57,7 +59,7 @@ class Database {
   public function select ($tableName = '', $id = '') {
     $db = $this->db;
     $validEventId = preg_match(self::$PATTERN["ID"], $id) === 1 ? TRUE : FALSE;
-    $validTableName = $tableName !== '' ? true : false;
+    $validTableName = $tableName !== '' ? TRUE : FALSE;
     $sql = "SELECT * FROM " . $tableName;
 
     if($validTableName && $validEventId){
@@ -89,16 +91,151 @@ class Database {
     return $this->generateResponse($code, $result);
   }
   
-//  public function insert ($table, $params) {
-//
-//  }
+  public function insert ($tableName, $requiredParams, $params) {
+    $db = $this->db;
+    $queryParams = array();
+    $query = "INSERT INTO " . $tableName . " ";
+    $keys = "(";
+    $values = "(";
+    $result = array();
+    $validParamsNeeded = count($requiredParams);
+    $invalidParamError = "";
+
+    for($i = 0, $l = $validParamsNeeded; $i < $l; $i++){
+      $key = $requiredParams[$i];
+
+      if(!isset($params[$key])){
+        $invalidParamError .= self::$STATUS_MESSAGE[400] . ".  Expected " . $key . " param";
+        break;
+      }else{
+        $keys .= $key . ",";
+        $values .= ":" . $key . ", ";
+        $queryParams[':' . $key] = $params[$key];
+      }
+    };
+
+    if($validParamsNeeded === count($queryParams) && $invalidParamError === ""){
+      $now = time();
+      $query = rtrim($query, ", ");
+      $keys = rtrim($keys, ", ");
+      $values = trim($values, ", ");      
+      $query .= ($keys . ") VALUES " . $values . ") ");
+      
+      $stmt = $db->prepare($query);
+      $stmt->execute($queryParams);
+
+      if($stmt->rowCount() === 1){
+        $code = self::$STATUS_CODE["CREATED"];
+        $result = array(
+          "url" => "/api/" . $tableName . "/" . $db->lastInsertId(),
+          "id" => $db->lastInsertId(),
+          "createdTime" => $now
+        );
+      }else{
+        $code = self::$STATUS_CODE["ERROR"];
+        //var_dump($stmt->errorInfo());
+        $invalidParamError = "Unknown Database error.";
+      }
+    }else{
+      $code = self::$STATUS_CODE["BAD_REQUEST"];
+    }
+    
+    return $this->generateResponse($code, $result, $invalidParamError);
+  }
 //  
 //  public function update ($table, $params) {
 //    
+//        $db = $this->db;
+//    $response = array();
+//    $body = array();
+//    $status = 0;
+//
+//    if(preg_match(self::$ID_PATTERN, $eventId) && count($params) > 0) {
+//      $query = 'UPDATE events SET ';
+//      $queryParams = array();
+//
+//      foreach ($params as $key => $value) {
+//        if (in_array($key, self::$REQUIRED_CREATE_PARAMS)) {
+//          $query .= $key . "=:" . $key . ", ";
+//          $queryParams[':' . $key] = $value;
+//        }
+//      };
+//
+//      if(count($queryParams) > 0) {
+//        $query = rtrim($query, ", ");
+//        $query .= " WHERE id=:eventId";
+//        $queryParams[':eventId'] = $eventId;
+//
+//        $stmt = $db->prepare($query);
+//        $stmt->execute($queryParams);
+//
+//        if ($stmt->rowCount() === 1) {
+//          $status = 200;
+//          $body = array(
+//            "url" => '/api/events/' . $eventId,
+//            "id" => $eventId
+//          );
+//        } else if ($stmt->rowCount() === 0) {
+//          $stm = $db->prepare('SELECT * FROM events WHERE id=:id');
+//          $stm->bindValue(':id', $eventId, $db::PARAM_INT);
+//          $stm->execute();
+//
+//          $found = $stm->fetch($db::FETCH_NUM) > 0;
+//          
+//          $status = $found ? 304 : 404;
+//          $body["message"] = $found ? "Duplicate data, event not modified" : "Event Not Found";
+//        } else {
+//          $status = 500;
+//          $body["message"] = $stmt->errorInfo();
+//        }
+//      }else {
+//        $status = 400;
+//        $body["message"] = "Bad Request.  No valid params provided";
+//      }
+//    }else{
+//      $status = 400;
+//      $missing = !$eventId ? "id" : "params";
+//      $body["message"] = "Bad Request.  No " . $missing . " provided";
+//    }
+//
+//    //construct response
+//    $response["status"] = $status;
+//    $response["body"] = $body;
+//
+//    return $response;
 //  }
 //  
 //  public function delete ($table, $ids) {
-//  
+//    $db = $this->db;
+//    $response = array();
+//    $body = array();
+//    $status = 0;
+//
+//    if(preg_match(self::$ID_PATTERN, $eventId)) {
+//      $stmt = $db->prepare('DELETE FROM events WHERE id=:id');
+//      $stmt->bindValue(":id", $eventId, $db::PARAM_INT);
+//      $stmt->execute();
+//
+//      if ($stmt->rowCount() === 1) {
+//        $status = 200;
+//        $body["message"] = "Event deleted successfully";
+//      } else if ($stmt->rowCount() === 0) {
+//        $status = 404;
+//        $body["message"] = "Event not found";
+//      } else {
+//        $status = 500;
+//        $body["message"] = $stmt->errorInfo();
+//      }
+//    }else{
+//      $status = 400;
+//      $body["message"] = "Bad Request.  No valid event id provided";
+//    }
+//
+//    //construct response
+//    $response["status"] = $status;
+//    $response["body"] = $body;
+//
+//    return $response;
 //  }
     
 }

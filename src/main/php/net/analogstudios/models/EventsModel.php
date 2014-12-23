@@ -17,7 +17,7 @@ use \net\analogstudios\core as core;
  */
 class EventsModel {
   private static $TABLE_NAME = 'events';
-  private static $REQUIRED_CREATE_PARAMS = array("title", "description", "startTime", "endTime");
+  private static $REQUIRED_CREATE_PARAMS = array("title", "description", "startTime", "endTime", "createdTime");
   public static $ENTITY_TYPE = 'Events';
   
   private $db;
@@ -56,7 +56,10 @@ class EventsModel {
   }
   
   public function createEvent($params){
+    $params["createdTime"] = time();
+    $result = $this->db->insert(self::$TABLE_NAME, self::$REQUIRED_CREATE_PARAMS, $params);
     
+    return $result;
   }
   
   public function updateEvent($params){
