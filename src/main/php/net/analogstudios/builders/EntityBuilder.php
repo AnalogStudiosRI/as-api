@@ -5,12 +5,9 @@ namespace net\analogstudios\builders;
 use \net\analogstudios\models as models;
 use \net\analogstudios\core as core;
 
-
-date_default_timezone_set("America/New_York");
-
 /**
- * name: EventsController
- * namespace: net\analogstudios\controllers
+ * name: EntityBuilderr
+ * namespace: net\analogstudios\builders
  *
  * @author Owen Buckley
  */
@@ -52,9 +49,9 @@ class EntityBuilder {
   
   /**
    *
-   * EventsController->get($eventId)
+   * EntityBuilder->getEntity($eventId)
    *
-   * @return array $response;
+   * @return Entity $response;
    */
   public function getEntity ($entityType) {
     return $this->buildEntity($entityType);

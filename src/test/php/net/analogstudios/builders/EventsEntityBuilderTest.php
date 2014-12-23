@@ -111,100 +111,104 @@ class EventsEntityBuilderTest extends PHPUnit_Framework_TestCase{
     $this->assertEquals(self::$NOT_FOUND, $status);
   }
 
-  /********/
-  /* POST */
-  /********/
-//  public function testCreateEventSuccess(){
-//    $now = time();
-//    $newEvent = array(
-//      "title" => "Event Title " . $now,
-//      "description" => "Event Description " . $now,
-//      "startTime" => $now,
-//      "endTime" => $now + 10800000
-//    );
-//
-//    //get response
-//    $response = $this->eventsCtrl->create($newEvent);
-//
-//    $status = $response["status"];
-//    $body = $response["body"];
-//
-//    //assert create
-//    $this->assertNotEmpty($body["createdTime"]);
-//    $this->assertNotEmpty($body["id"]);
-//    $this->assertNotEmpty($body["url"]);
-//
-//    $this->assertEquals(self::$CREATED, $status);
-//    $this->assertEquals("/api/events/" . $body["id"], $body["url"]);
-//  }
-//
-//  public function testCreateEventNoTitleFailure(){
-//    $now = time();
-//    $newEvent = array(
-//      "description" => "Event Description " . time(),
-//      "startTime" => $now,
-//      "endTime" => $now + 10800000
-//    );
-//
-//    //get response
-//    $response = $this->eventsCtrl->create($newEvent);
-//    $status = $response["status"];
-//
-//    //assert
-//    $this->assertEquals(self::$BAD_REQUEST, $status);
-//    $this->assertEquals("There is an error.  Expected title param", $response["body"]["message"]);
-//  }
-//
-//  public function testCreateEventNoDescriptionFailure(){
-//    $now = time();
-//    $newEvent = array(
-//      "title" => "Event Title " . $now,
-//      "startTime" => $now,
-//      "endTime" => $now + 10800000
-//    );
-//
-//    //get response
-//    $response = $this->eventsCtrl->create($newEvent);
-//    $status = $response["status"];
-//
-//    //assert
-//    $this->assertEquals(self::$BAD_REQUEST, $status);
-//    $this->assertEquals("There is an error.  Expected description param", $response["body"]["message"]);
-//  }
-//
-//  public function testCreateEventNoStartTimeFailure(){
-//    $now = time();
-//    $newEvent = array(
-//      "title" => "Event Title " . $now,
-//      "description" => "Event Description  " . $now,
-//      "endTime" => $now + 10800000
-//    );
-//
-//    //get response
-//    $response = $this->eventsCtrl->create($newEvent);
-//    $status = $response["status"];
-//
-//    //assert
-//    $this->assertEquals(self::$BAD_REQUEST, $status);
-//    $this->assertEquals("There is an error.  Expected startTime param", $response["body"]["message"]);
-//  }
-//
-//  public function testCreateEventNoEndTimeFailure(){
-//    $now = time();
-//    $newEvent = array(
-//      "title" => "Event Title " . $now,
-//      "description" => "Event Description  " . $now,
-//      "startTime" => $now
-//    );
-//
-//    //get response
-//    $response = $this->eventsCtrl->create($newEvent);
-//    $status = $response["status"];
-//
-//    //assert
-//    $this->assertEquals(self::$BAD_REQUEST, $status);
-//    $this->assertEquals("There is an error.  Expected endTime param", $response["body"]["message"]);
-//  }
+  /**********/
+  /* CREATE */
+  /**********/
+  public function testCreateEventSuccess(){
+    $now = time();
+    $newEvent = array(
+      "title" => "Event Title " . $now,
+      "description" => "Event Description " . $now,
+      "startTime" => $now,
+      "endTime" => $now + 10800000
+    );
+
+    //get response
+    $response = $this->eventsEntity->createEvent($newEvent);
+
+    $status = $response["status"];
+    $body = $response["data"];
+
+    //assert create
+    $this->assertNotEmpty($body["createdTime"]);
+    $this->assertNotEmpty($body["id"]);
+    $this->assertNotEmpty($body["url"]);
+
+    $this->assertEquals(self::$CREATED, $status);
+    $this->assertEquals("/api/events/" . $body["id"], $body["url"]);
+  }
+
+  public function testCreateEventNoTitleFailure(){
+    $now = time();
+    $newEvent = array(
+      "description" => "Event Description " . time(),
+      "startTime" => $now,
+      "endTime" => $now + 10800000
+    );
+
+    //get response
+    $response = $this->eventsEntity->createEvent($newEvent);
+    $status = $response["status"];
+
+    //assert
+    $this->assertEquals(self::$BAD_REQUEST, $status);
+    $this->assertEquals(0, count($response["data"]));
+    $this->assertEquals("Bad Request.  Expected title param", $response["message"]);
+  }
+
+  public function testCreateEventNoDescriptionFailure(){
+    $now = time();
+    $newEvent = array(
+      "title" => "Event Title " . $now,
+      "startTime" => $now,
+      "endTime" => $now + 10800000
+    );
+
+    //get response
+    $response = $this->eventsEntity->createEvent($newEvent);
+    $status = $response["status"];
+
+    //assert
+    $this->assertEquals(self::$BAD_REQUEST, $status);
+    $this->assertEquals(0, count($response["data"]));
+    $this->assertEquals("Bad Request.  Expected description param", $response["message"]);
+  }
+
+  public function testCreateEventNoStartTimeFailure(){
+    $now = time();
+    $newEvent = array(
+      "title" => "Event Title " . $now,
+      "description" => "Event Description  " . $now,
+      "endTime" => $now + 10800000
+    );
+
+    //get response
+    $response = $this->eventsEntity->createEvent($newEvent);
+    $status = $response["status"];
+
+    //assert
+    $this->assertEquals(self::$BAD_REQUEST, $status);
+    $this->assertEquals(0, count($response["data"]));
+    $this->assertEquals("Bad Request.  Expected startTime param", $response["message"]);
+  }
+
+  public function testCreateEventNoEndTimeFailure(){
+    $now = time();
+    $newEvent = array(
+      "title" => "Event Title " . $now,
+      "description" => "Event Description  " . $now,
+      "startTime" => $now
+    );
+
+    //get response
+    $response = $this->eventsEntity->createEvent($newEvent);
+    $status = $response["status"];
+
+    //assert
+    $this->assertEquals(self::$BAD_REQUEST, $status);
+    $this->assertEquals(0, count($response["data"]));
+    $this->assertEquals("Bad Request.  Expected endTime param", $response["message"]);
+  }
 //
 //  /********/
 //  /* PUT  */
