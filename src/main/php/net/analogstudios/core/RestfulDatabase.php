@@ -1,11 +1,5 @@
 <?php
 
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
-
 namespace net\analogstudios\core;
 
 use net\analogstudios\base as base;
@@ -37,9 +31,14 @@ class RestfulDatabase extends base\Database{
     500 => "Internal Service Error"
   );
   
+  function __construct($dbConfig) {
+    parent::__construct('PDO', $dbConfig);
+  }
+  
   private function generateResponse ($code = null, $result = array(), $msg = '') {
     $normalizedCode = $code ? $code : 500;
     $normalizedMessage = $msg ? $msg : self::$STATUS_MESSAGE[$normalizedCode];
+    
     return array(
       "status" => $normalizedCode,
       "message" => $normalizedMessage,
