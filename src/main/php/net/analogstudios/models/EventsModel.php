@@ -18,6 +18,7 @@ use \net\analogstudios\core as core;
 class EventsModel {
   private static $TABLE_NAME = 'events';
   private static $REQUIRED_CREATE_PARAMS = array("title", "description", "startTime", "endTime", "createdTime");
+  private static $UPDATE_PARAMS = array("title", "description", "startTime", "endTime");
   public static $ENTITY_TYPE = 'Events';
   
   private $db;
@@ -48,22 +49,24 @@ class EventsModel {
     return $result;
   }
   
-  public function getEventById($id){
+  public function getEventById($id = null){
     $result = $this->db->select(self::$TABLE_NAME, $id);
     $result["data"] = $this->modelDatabaseResult($result["data"]);
 
     return $result;
   }
   
-  public function createEvent($params){
+  public function createEvent($params = array()){
     $params["createdTime"] = time();
     $result = $this->db->insert(self::$TABLE_NAME, self::$REQUIRED_CREATE_PARAMS, $params);
     
     return $result;
   }
   
-  public function updateEvent($params){
+  public function updateEvent($id = null, $params = array()){
+    $result = $this->db->update(self::$TABLE_NAME, $id, self::$UPDATE_PARAMS, $params);
     
+    return $result;
   }
   
   public function deleteEvent($ids){
