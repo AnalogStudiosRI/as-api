@@ -1,4 +1,4 @@
-q<?php
+<?php
 error_reporting(E_ALL | E_STRICT);
 
 require_once 'src/main/php/net/analogstudios/controllers/LoginController.php';
