@@ -1,11 +1,19 @@
 <?php
 
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
-
+ /**
+  * 
+  * @author Owen Buckley
+  * @email owen@analogstudios.net
+  * @api as-api
+  * @package net\analogstudios\base
+  * @class Entity
+  * @internal
+  * 
+  * @since 0.3.0
+  * 
+  * @copyright 2014
+  * 
+  */
 namespace net\analogstudios\base;
 
 /**

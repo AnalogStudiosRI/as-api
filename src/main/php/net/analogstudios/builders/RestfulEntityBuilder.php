@@ -2,17 +2,25 @@
 
 namespace net\analogstudios\builders;
 
-use \net\analogstudios\core as core;
-use \net\analogstudios\models as model;
+use net\analogstudios\core as core;
+use net\analogstudios\models as model;
 
 
-/**
- * name: RestfulEntityBuilder
- * namespace: net\analogstudios\builders
- *
- * @author Owen Buckley
- */
-
+ /**
+  * 
+  * @author Owen Buckley
+  * @email owen@analogstudios.net
+  * @api as-api
+  * @package net\analogstudios\builders
+  * @uses net\analogstudios\core net\analogstudios\core
+  * @uses net\analogstudios\models net\analogstudios\models
+  * @class RestfulEntityBuilder
+  * 
+  * @since 0.3.0
+  * 
+  * @copyright 2014
+  * 
+  */
 class RestfulEntityBuilder {
   private $entityType;
 
@@ -22,10 +30,7 @@ class RestfulEntityBuilder {
       "TYPE" => "events"
     )
   );
-  
-  /**
-   * Constructor
-   */
+
   function __construct($dbConfig = array(), $entityType = "") {
     if($dbConfig && count($dbConfig) === 3 && $entityType !== ""){
       $this->entityType = $entityType;
@@ -38,9 +43,9 @@ class RestfulEntityBuilder {
 
   /**
    *
-   * EntityBuilder->buildEntity()
+   * @method buildEntity
    *
-   * @return Entity;
+   * @return RestfulEntity RestfulEntity model
    */
   private function buildEntity(){
     $entity = NULL;
@@ -58,9 +63,9 @@ class RestfulEntityBuilder {
   
   /**
    *
-   * EntityBuilder->getEntity()
+   * @method getEntity
    *
-   * @return Entity;
+   * @return RestfulEntity;
    */
   public function getEntity () {
     return $this->buildEntity();
