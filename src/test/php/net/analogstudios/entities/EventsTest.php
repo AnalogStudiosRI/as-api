@@ -1,4 +1,5 @@
 <?php
+
 error_reporting(E_ALL | E_STRICT);
 
 require_once "src/main/php/net/analogstudios/base/Database.php";
@@ -6,9 +7,8 @@ require_once "src/main/php/net/analogstudios/base/Entity.php";
 require_once "src/main/php/net/analogstudios/builders/RestfulEntityBuilder.php";
 require_once "src/main/php/net/analogstudios/core/RestfulDatabase.php";
 require_once "src/main/php/net/analogstudios/core/RestfulEntity.php";
-require_once "src/main/php/net/analogstudios/entities/RestfulEventsEntity.php";
+require_once "src/main/php/net/analogstudios/entities/Events.php";
 
-use net\analogstudios\core as core;
 use net\analogstudios\builders as builder;
 
 /**
@@ -17,7 +17,7 @@ use net\analogstudios\builders as builder;
  *
  * @author Owen Buckley
  */
-class EventsEntityBuilderTest extends PHPUnit_Framework_TestCase{
+class EventsTest extends PHPUnit_Framework_TestCase{
   private $eventsEntity;
   private static $SUCCESS = 200;
   private static $CREATED = 201;
@@ -25,14 +25,14 @@ class EventsEntityBuilderTest extends PHPUnit_Framework_TestCase{
   private static $BAD_REQUEST = 400;
   private static $NOT_FOUND = 404;
   private static $NOW_OFFSET = 10800000;
+  private static $DB_CONFIG = array(
+    "dsn" => "mysql:host=127.0.0.1;dbname=asadmin_analogstudios_2.0_test",
+    "username" => "astester",
+    "password" => "t3st3r"
+  );
 
   public function setup(){
-    $dbConfig = array(
-      "dsn" => "mysql:host=127.0.0.1;dbname=asadmin_analogstudios_2.0_test",
-      "username" => "astester",
-      "password" => "t3st3r"
-    );
-    $builder = new builder\RestfulEntityBuilder($dbConfig, 'events');
+    $builder = new builder\RestfulEntityBuilder(self::$DB_CONFIG, 'events');
     $this->eventsEntity = $builder->getEntity();
   }
 
