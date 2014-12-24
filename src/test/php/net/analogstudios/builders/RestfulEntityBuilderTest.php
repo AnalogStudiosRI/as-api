@@ -9,10 +9,9 @@ require_once "src/main/php/net/analogstudios/core/RestfulDatabase.php";
 require_once "src/main/php/net/analogstudios/core/RestfulEntity.php";
 require_once "src/main/php/net/analogstudios/models/Events.php";
 
-//use net\analogstudios\base as base;
-//use net\analogstudios\builders as builder;
-//use net\analogstudios\core as core;
-//use net\analogstudios\entities as entity;
+use net\analogstudios\builders as builder;
+use net\analogstudios\core as core;
+use net\analogstudios\models as model;
 
 class RestfulEntityBuilder extends PHPUnit_Framework_TestCase{
   private $DB_CONFIG = array(
@@ -29,13 +28,12 @@ class RestfulEntityBuilder extends PHPUnit_Framework_TestCase{
 
   }
   
-  public function testBuildRestfulEntityEvents(){
-//    $builder = new builder\RestfulEntityBuilder($this->DB_CONFIG, 'events');
-//    $entity = $builder->getEntity();
-//    
-//    $this->assertTrue($entity instanceof entity\Events);
-//    $this->assertTrue(is_subclass_of($entity, core\RestfulEntity::class, false));
+  public function testBuildRestfulEventsEntity(){
+    $builder = new builder\RestfulEntityBuilder($this->DB_CONFIG, 'events');
+    $entity = $builder->getEntity();
     
+    $this->assertTrue($entity instanceof model\Events);
+    $this->assertTrue(is_subclass_of($entity, core\RestfulEntity::class, false));
   }
 
 }
