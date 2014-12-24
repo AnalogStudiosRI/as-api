@@ -4,11 +4,20 @@ namespace net\analogstudios\core;
 
 use net\analogstudios\base as base;
 
-/**
- * Description of RestfulDatabase
- *
- * @author obuckley
- */
+ /**
+  * 
+  * @author Owen Buckley
+  * @email owen@analogstudios.net
+  * @api as-api
+  * @package net\analogstudios\core
+  * @uses net\analogstudios\base net\analogstudios\base
+  * @class RestfulDatabase
+  * 
+  * @since 0.3.0
+  * 
+  * @copyright 2014
+  * 
+  */
 class RestfulDatabase extends base\Database{
   private static $PATTERN = array(
     "ID" => "/^[0-9]+$/"
@@ -49,7 +58,7 @@ class RestfulDatabase extends base\Database{
     );
   }
   
-  public function select ($tableName = '', $id = '') {
+  public function select ($tableName = "", $id = null) {
     $db = $this->db;
     $validEventId = preg_match(self::$PATTERN["ID"], $id) === 1 ? TRUE : FALSE;
     $validTableName = $tableName !== '' ? TRUE : FALSE;
@@ -85,7 +94,7 @@ class RestfulDatabase extends base\Database{
     return $this->generateResponse($code, $result);
   }
   
-  public function insert ($tableName = '', $requiredParams = array(), $params = array()) {
+  public function insert ($tableName = "", $requiredParams = array(), $params = array()) {
     $db = $this->db;
     $queryParams = array();
     $query = "INSERT INTO " . $tableName . " ";
@@ -136,7 +145,7 @@ class RestfulDatabase extends base\Database{
     return $this->generateResponse($code, $result, $invalidParamError);
   }
   
-  public function update ($tableName = '', $id = null, $updateParams = array(), $params = array()) {
+  public function update ($tableName = "", $id = null, $updateParams = array(), $params = array()) {
     $db = $this->db;
     $invalidParamError = '';
     $result = array();
@@ -193,7 +202,7 @@ class RestfulDatabase extends base\Database{
     return $this->generateResponse($code, $result, $invalidParamError);
   }
   
-  public function delete ($tableName = '', $id = null) {
+  public function delete ($tableName = "", $id = null) {
     $db = $this->db;
     $result = array();
     $invalidParamError = "";

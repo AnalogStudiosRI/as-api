@@ -3,13 +3,23 @@
 namespace net\analogstudios\models;
 
 use net\analogstudios\core as core;
-use net\analogstudios\base as base;
 
-/**
- * Description of Events
- *
- * @author obuckley
- */
+
+ /**
+  * 
+  * @author Owen Buckley
+  * @email owen@analogstudios.net
+  * @api as-api
+  * @package net\analogstudios\models
+  * @uses net\analogstudios\core net\analogstudios\core
+  * @class Events
+  * @internal
+  * 
+  * @since 0.3.0
+  * 
+  * @copyright 2014
+  * 
+  */
 class Events extends core\RestfulEntity{
   private $name = "event";
   private $tableName = "events";
