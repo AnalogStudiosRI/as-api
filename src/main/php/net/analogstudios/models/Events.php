@@ -1,8 +1,9 @@
 <?php
 
-namespace net\analogstudios\entities;
+namespace net\analogstudios\models;
 
-use \net\analogstudios\core as core;
+use net\analogstudios\core as core;
+use net\analogstudios\base as base;
 
 /**
  * Description of Events

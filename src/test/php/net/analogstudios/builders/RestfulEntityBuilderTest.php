@@ -3,9 +3,11 @@
 error_reporting(E_ALL | E_STRICT);
 
 require_once "src/main/php/net/analogstudios/base/Database.php";
+require_once "src/main/php/net/analogstudios/base/Entity.php";
 require_once "src/main/php/net/analogstudios/builders/RestfulEntityBuilder.php";
 require_once "src/main/php/net/analogstudios/core/RestfulDatabase.php";
-require_once "src/main/php/net/analogstudios/entities/Events.php";
+require_once "src/main/php/net/analogstudios/core/RestfulEntity.php";
+require_once "src/main/php/net/analogstudios/models/Events.php";
 
 //use net\analogstudios\base as base;
 //use net\analogstudios\builders as builder;
