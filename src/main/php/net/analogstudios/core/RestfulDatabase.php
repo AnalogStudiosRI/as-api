@@ -31,8 +31,11 @@ class RestfulDatabase extends base\Database{
     500 => "Internal Service Error"
   );
   
-  function __construct($dbConfig) {
+  function __construct($dbConfig = array(), $restfulConfig = array()) {
     parent::__construct('PDO', $dbConfig);
+    //tableName
+    //requiredParams
+    //updateParams
   }
   
   private function generateResponse ($code = null, $result = array(), $msg = '') {

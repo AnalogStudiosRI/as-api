@@ -3,7 +3,7 @@
 namespace net\analogstudios\builders;
 
 use \net\analogstudios\core as core;
-use \net\analogstudios\entities as entity;
+use \net\analogstudios\models as model;
 
 
 /**
@@ -48,7 +48,7 @@ class RestfulEntityBuilder {
     if(self::$ENTITY_ROUTE_MAPPER[strtoupper($this->entityType)]){
       switch ($this->entityType){
         case self::$ENTITY_ROUTE_MAPPER["EVENTS"]["TYPE"]:
-          $entity = new entity\Events($this->db);
+          $entity = new model\Events($this->db);
           break;
       }
     }
