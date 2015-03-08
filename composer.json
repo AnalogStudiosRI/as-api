@@ -5,12 +5,9 @@
   "require": {
     "slim/slim": "2.*"
   },
-  "require-dev":{
-    "phpunit/phpunit": "3.7.*"
-  },
   "autoload":{
     "psr-4": {
-      "bc\\" : "/src/main/php/com/analogstudios/"
+      "as\\" : "/src/main/php/com/analogstudios/"
     }
   }
 }

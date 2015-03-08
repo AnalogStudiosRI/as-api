@@ -117,7 +117,7 @@
         <include name="**/**" />
       </fileset>
       <metadata>
-        <element name="version" value="bc-api-${project.version}" />
+        <element name="version" value="as-api-${project.version}" />
         <element name="authors">
           <element name="Owen Buckley">
             <element name="email" value="owen@analogstudios.net" />
