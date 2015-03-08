@@ -3,7 +3,9 @@
     "vendor-dir": "src/main/php/vendor"
   },
   "require": {
-    "slim/slim": "2.*"
+    "slim/slim": "2.6.*",
+    "phing/phing": "2.10.*",
+    "phpunit/phpunit": "4.3.*"
   },
   "autoload":{
     "psr-4": {
