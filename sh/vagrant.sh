@@ -26,16 +26,18 @@ add-apt-repository ppa:ondrej/apache2 > /dev/null 2>&1
 
 apt-get update
 
-echo "*** Install MySQL specific packages and settings ***"
+echo "*** Install MySQL / phpMyAdmin specific packages and settings ***"
 apt-get purge -y mysql-server-5.5
+apt-get purge phpmyadmin
 
 echo "mysql-server mysql-server/root_password password $DBPASSWD" | debconf-set-selections
 echo "mysql-server mysql-server/root_password_again password $DBPASSWD" | debconf-set-selections
-#echo "phpmyadmin phpmyadmin/dbconfig-install boolean true" | debconf-set-selections
-#echo "phpmyadmin phpmyadmin/app-password-confirm password $DBPASSWD" | debconf-set-selections
-#echo "phpmyadmin phpmyadmin/mysql/admin-pass password $DBPASSWD" | debconf-set-selections
-#echo "phpmyadmin phpmyadmin/mysql/app-pass password $DBPASSWD" | debconf-set-selections
-#echo "phpmyadmin phpmyadmin/reconfigure-webserver multiselect none" | debconf-set-selections
+echo "phpmyadmin phpmyadmin/dbconfig-install boolean true" | debconf-set-selections
+echo "phpmyadmin phpmyadmin/app-password-confirm password $DBPASSWD" | debconf-set-selections
+echo "phpmyadmin phpmyadmin/mysql/admin-pass password $DBPASSWD" | debconf-set-selections
+echo "phpmyadmin phpmyadmin/mysql/app-pass password $DBPASSWD" | debconf-set-selections
+echo "phpmyadmin phpmyadmin/reconfigure-webserver multiselect none" | debconf-set-selections
+
 apt-get -y install mysql-server-5.5 phpmyadmin
 
 echo -e "*** Setting up our MySQL user and db ***"
@@ -43,7 +45,6 @@ mysql -uroot -p$DBPASSWD < $SQL_IMPORT
 mysql -uroot -p$DBPASSWD < $SQL_IMPORT_TEST
 mysql -uroot -p$DBPASSWD -e "grant all privileges on $DBNAME.* to '$DBUSER'@'$LOCALHOST' identified by '$DBPASSWD'"
 mysql -uroot -p$DBPASSWD -e "grant all privileges on $DBNAME_TEST.* to '$DBUSER_TEST'@'$LOCALHOST' identified by '$DBPASSWD_TEST'"
-#mysql -v -uroot -pDbxld554P2 -e "grant all on asadmin_analogstudios_test.* to 'astester'@'localhost' identified by 't3st3r'
 
 /etc/init.d/mysql restart
 
@@ -64,26 +65,23 @@ echo "*** We definitely need to see PHP errors, turning them on ***"
 sed -i "s/error_reporting = .*/error_reporting = E_ALL/" /etc/php5/apache2/php.ini
 sed -i "s/display_errors = .*/display_errors = On/" /etc/php5/apache2/php.ini
 
-#echo -e "*** Configure Apache to use phpMyAdmin ***"
-#echo -e "\n\nListen 81\n" >> /etc/apache2/ports.conf
-#cat > /etc/apache2/conf-available/phpmyadmin.conf << "EOF"
-#<VirtualHost *:81>
-#    ServerAdmin webmaster@localhost
-#    DocumentRoot /usr/share/phpmyadmin
-#    DirectoryIndex index.php
-#    ErrorLog ${APACHE_LOG_DIR}/phpmyadmin-error.log
-#    CustomLog ${APACHE_LOG_DIR}/phpmyadmin-access.log combined
-#</VirtualHost>
-#EOF
+echo -e "*** Configure Apache to use phpMyAdmin ***"
+echo -e "\n\nListen 8181\n" >> /etc/apache2/ports.conf
+cat > /etc/apache2/conf-available/phpmyadmin.conf << "EOF"
+<VirtualHost *:8181>
+    ServerAdmin webmaster@localhost
+    DocumentRoot /usr/share/phpmyadmin
+    DirectoryIndex index.php
+    ErrorLog ${APACHE_LOG_DIR}/phpmyadmin-error.log
+    CustomLog ${APACHE_LOG_DIR}/phpmyadmin-access.log combined
+</VirtualHost>
+EOF
 
 echo "*** Restarting Apache ***"
 service apache2 restart > /dev/null 2>&1
 
-echo "apache2 -v"
 apache2 -v
-echo "php -v"
 php -v
-echo "mysql -v"
 mysql --version
 
 echo "*** Installing Composer for PHP package management ***"
@@ -100,9 +98,6 @@ export PATH=$PATH:/vagrant/src/main/php/vendor/bin
 EOF
 source /home/vagrant/.bash_profile
 
-echo "composer -v"
 composer --version
-echo "phing -v"
 phing -v
-echo "phpunit -v"
 phpunit --version
