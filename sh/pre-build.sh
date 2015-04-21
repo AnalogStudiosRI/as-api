@@ -9,5 +9,5 @@ export PATH=$PATH:$WORKSPACE/src/main/php/vendor/bin
 echo "system info..."
 php --version
 composer --version
-#phing -version
+phing -version
 #phpunit -version
