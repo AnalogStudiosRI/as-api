@@ -11,3 +11,5 @@ php --version
 composer --version
 phing -version
 phpunit --version
+
+phing build
