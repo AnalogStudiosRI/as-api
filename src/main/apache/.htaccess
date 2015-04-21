@@ -11,4 +11,4 @@ RewriteEngine On
 
 # this handles API requests
 RewriteCond %{REQUEST_FILENAME} !-f
-RewriteRule ^api route.php [QSA,L]
+RewriteRule ^api controller.php [QSA,L]

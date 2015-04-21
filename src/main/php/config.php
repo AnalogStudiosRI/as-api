@@ -3,7 +3,7 @@
 $CONFIG = array(
   "db" => array(
     "dsn" => "mysql:host=${db.host};dbname=${db.name}",
-    "user" => "${db.user}",
+    "username" => "${db.user}",
     "password" => "${db.password}"
   ),
 
