@@ -3,7 +3,8 @@
     "vendor-dir": "src/main/php/vendor"
   },
   "require": {
-    "slim/slim": "2.6.*"
+    "slim/slim": "2.6.*",
+    "phpdocumentor/phpdocumentor": "2.*"
   },
   "autoload":{
     "psr-4": {

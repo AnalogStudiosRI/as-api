@@ -19,7 +19,7 @@ class RestfulEntityBuilder extends PHPUnit_Framework_TestCase{
     "username" => "astester",
     "password" => "t3st3r"
   );
-  
+
   public function setup(){
 
   }
@@ -27,11 +27,11 @@ class RestfulEntityBuilder extends PHPUnit_Framework_TestCase{
   public function tearDown(){
 
   }
-  
+
   public function testBuildRestfulEventsEntity(){
     $builder = new builder\RestfulEntityBuilder($this->DB_CONFIG, 'events');
     $entity = $builder->getEntity();
-    
+
     $this->assertTrue($entity instanceof model\Events);
     $this->assertTrue(is_subclass_of($entity, core\RestfulEntity::class, false));
   }

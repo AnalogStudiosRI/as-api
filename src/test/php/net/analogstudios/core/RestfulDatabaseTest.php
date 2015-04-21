@@ -14,7 +14,7 @@ class RestfulDatabaseTest extends PHPUnit_Framework_TestCase{
     "username" => "astester",
     "password" => "t3st3r"
   );
-  
+
   public function setup(){
     $this->db = new core\RestfulDatabase($this->dbConfig);
   }
@@ -22,11 +22,11 @@ class RestfulDatabaseTest extends PHPUnit_Framework_TestCase{
   public function tearDown(){
     $this->db = null;
   }
-  
+
   public function testInstanceOf(){
     $this->assertTrue($this->db instanceof core\RestfulDatabase);
   }
-  
+
   public function testInstanceOfParent(){
     $this->assertTrue($this->db instanceof core\RestfulDatabase);
     $this->assertTrue(is_subclass_of($this->db, base\Database::class, false));

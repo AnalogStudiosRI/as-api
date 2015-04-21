@@ -1,4 +1,4 @@
-<?php 
+<?php
 
 namespace net\analogstudios\builders;
 
@@ -7,7 +7,7 @@ use net\analogstudios\models as model;
 
 
  /**
-  * 
+  *
   * @author Owen Buckley
   * @email owen@analogstudios.net
   * @api as-api
@@ -15,11 +15,11 @@ use net\analogstudios\models as model;
   * @uses net\analogstudios\core net\analogstudios\core
   * @uses net\analogstudios\models net\analogstudios\models
   * @class RestfulEntityBuilder
-  * 
+  *
   * @since 0.3.0
-  * 
+  *
   * @copyright 2014
-  * 
+  *
   */
 class RestfulEntityBuilder {
   private $entityType;
@@ -37,7 +37,6 @@ class RestfulEntityBuilder {
       $this->db = new core\RestfulDatabase($dbConfig);
     }else{
       throw new \InvalidArgumentException('Invalid Constructor Params');
-      //TODO throw exception
     }
   }
 
@@ -49,7 +48,7 @@ class RestfulEntityBuilder {
    */
   private function buildEntity(){
     $entity = NULL;
-    
+
     if(self::$ENTITY_ROUTE_MAPPER[strtoupper($this->entityType)]){
       switch ($this->entityType){
         case self::$ENTITY_ROUTE_MAPPER["EVENTS"]["TYPE"]:
@@ -57,10 +56,10 @@ class RestfulEntityBuilder {
           break;
       }
     }
-    
+
     return $entity;
   }
-  
+
   /**
    *
    * @method getEntity
