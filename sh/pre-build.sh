@@ -10,4 +10,4 @@ echo "system info..."
 php --version
 composer --version
 phing -version
-#phpunit -version
+phpunit --version
