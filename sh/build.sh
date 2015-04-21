@@ -13,7 +13,7 @@ phing -version
 phpunit --version
 
 echo "building..."
-phing build -env=dev
+phing build -D env=dev
 
 echo "preparing deployment directory..."
 sudo rm -rvf /var/www/analogstudios/.htaccess
