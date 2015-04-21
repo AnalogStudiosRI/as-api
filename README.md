@@ -20,4 +20,4 @@ XXX
 
 ## Build
 
-The repo for this project is ssh://git@thegreenhouse.io/repositories/analogstudios/as-api.git
+To build locally use `phing build -D targetDir=/home/vagrant/`

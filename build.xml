@@ -3,11 +3,11 @@
 
 <php expression="include('src/main/php/vendor/autoload.php')"/>
 <property name="project.version" value="0.2.0-SNAPSHOT" />
+<property name="targetDir" value="target" />
 <property file="./properties/local.properties" />
 
   <fileset dir="src/main/php" id="projectFiles">
     <include name="net/analogstudios/**/*.php" />
-    <!--<include name="io/thegreenhouse/**/*.php" />-->
     <include name="vendor/composer/**/*.php" />
     <include name="vendor/autoload.php" />
     <include name="vendor/slim/slim/Slim/**/*.php" />
@@ -57,7 +57,7 @@
       <fileset dir="src/main/php/" >
         <include name="net/**/*.php"/>
         <exclude name="vendor/**/*"/>
-      </fileset> 
+      </fileset>
     </phplint>
   </target>
 
@@ -67,14 +67,14 @@
       <batchtest>
         <fileset dir="src/test/php/" >
           <include name="**/*Test.php"/>
-        </fileset> 
+        </fileset>
       </batchtest>
       <formatter type="xml">
       </formatter>
     </phpunit>
     <phpunitreport todir="target"/>
   </target>
-  
+
   <target name="docs" description="as-api documentation">
     <exec command="phpdoc
        -d src/main/php/net/analogstudios/
@@ -92,7 +92,7 @@
 
   <target name="package">
     <echo msg="packaging application..."/>
-    
+
     <echo msg="preparing packaging directories..."/>
     <mkdir dir="target" />
     <mkdir dir="tmp" />
@@ -123,7 +123,7 @@
 
     <echo msg="creating phar archive..."/>
     <pharpackage
-      destfile="target/as-api-${project.version}.phar"
+      destfile="${targetDir}/as-api-${project.version}.phar"
       basedir="tmp/"
       compression="gzip"
       stub="src/main/php/stub.php"
@@ -144,7 +144,7 @@
 
   <target name="build" description="executes a build">
     <echo msg="starting a build..."/>
-    <phingcall target="info" /> 
+    <phingcall target="info" />
     <phingcall target="clean" />
     <phingcall target="lint" />
     <phingcall target="test" />
