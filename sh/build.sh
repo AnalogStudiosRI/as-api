@@ -24,5 +24,5 @@ echo "deploying project..."
 sudo cp -v target/.htaccess /var/www/analogstudios/
 sudo cp -v target/*.phar /var/www/analogstudios/
 sudo cp -v target/config.php /var/www/analogstudios/
-sudo cp -v target/route.php /var/www/analogstudios/
+sudo cp -v target/controller.php /var/www/analogstudios/
 
