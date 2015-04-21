@@ -4,6 +4,8 @@
   },
   "require": {
     "slim/slim": "2.6.*",
+    "phing/phing": "2.10.1",
+    "phpunit/phpunit": "4.6.0",
     "phpdocumentor/phpdocumentor": "2.*"
   },
   "autoload":{
