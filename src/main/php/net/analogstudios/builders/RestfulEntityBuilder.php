@@ -36,7 +36,7 @@ class RestfulEntityBuilder {
       $this->entityType = $entityType;
       $this->db = new core\RestfulDatabase($dbConfig);
     }else{
-      throw new \InvalidArgumentException('Invalid Constrcutor Params');
+      throw new \InvalidArgumentException('Invalid Constructor Params');
       //TODO throw exception
     }
   }

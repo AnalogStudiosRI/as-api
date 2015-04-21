@@ -10,7 +10,7 @@ use net\analogstudios\core as core;
 class RestfulDatabaseTest extends PHPUnit_Framework_TestCase{
   private $db;
   private $dbConfig = array(
-    "dsn" => "mysql:host=127.0.0.1;dbname=asadmin_analogstudios_2.0_test",
+    "dsn" => "mysql:host=127.0.0.1;dbname=asadmin_analogstudios_new_test",
     "username" => "astester",
     "password" => "t3st3r"
   );

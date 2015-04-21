@@ -5,11 +5,11 @@ DBHOST=127.0.0.1
 DBNAME=asadmin_analogstudios_new
 DBNAME_TEST=asadmin_analogstudios_new_test
 DBUSER=asadmin
-DBUSER_TEST=ast3st3r
+DBUSER_TEST=astester
 DBPASSWD=Dbxld554P2
 DBPASSWD_TEST=t3st3r
 SQL_IMPORT=/vagrant/src/main/sql/backups/analogstudios-20141105.sql
-SQL_IMPORT_TEST=/vagrant/src/main/sql/backups/analogstudios-test-20141119.sql
+SQL_IMPORT_TEST=/vagrant/src/main/sql/backups/analogstudios-new-test-20150308.sql
 
 echo "*** Starting installation... ***"
 
@@ -46,10 +46,10 @@ mysql -uroot -p$DBPASSWD < $SQL_IMPORT_TEST
 mysql -uroot -p$DBPASSWD -e "grant all privileges on $DBNAME.* to '$DBUSER'@'$LOCALHOST' identified by '$DBPASSWD'"
 mysql -uroot -p$DBPASSWD -e "grant all privileges on $DBNAME_TEST.* to '$DBUSER_TEST'@'$LOCALHOST' identified by '$DBPASSWD_TEST'"
 
-/etc/init.d/mysql restart
+service mysql restart
 
 echo "*** Installing PHP / Apache ***"
-apt-get -y install php5 apache2 libapache2-mod-php5 php5-curl php5-gd php5-mcrypt php5-mysql php-apc > /dev/null 2>&1
+apt-get -y install php5 apache2 libapache2-mod-php5 php5-curl php5-gd php5-mcrypt php5-mysql php-apc php5-xsl php5-phar > /dev/null 2>&1
 
 echo "*** Enabling mod-rewrite ***"
 a2enmod rewrite > /dev/null 2>&1
