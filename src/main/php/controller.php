@@ -44,13 +44,15 @@ $path = $request->getResourceUri();
 $route = '';
 
 switch ($path){
-  case strpos($path, events) !== FALSE:
+  case strpos($path, 'events') !== FALSE:
     $route = 'events';
     break;
 }
 
-$builder = new \net\analogstudios\core\RestfulEntityBuilder($CONFIG["db"]);
-$entity = $builder->getEntity(\net\analogstudios\builders\EntityBuilder::$ENTITY_ROUTE_MAPPER[strtoupper($route)]["TYPE"]);
+//get entity to pass to respective router
+$entityType = \net\analogstudios\builders\RestfulEntityBuilder::$ENTITY_ROUTE_MAPPER[strtoupper($route)]["TYPE"];
+$builder = new \net\analogstudios\builders\RestfulEntityBuilder($CONFIG["db"], $entityType);
+$entity = $builder->getEntity();
 
 require_once "phar://" . $CONFIG["pharfile"] . "/net/analogstudios/routes/" . $route . "-route.php";
 

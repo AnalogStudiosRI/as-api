@@ -6,11 +6,15 @@
 <property name="targetDir" value="target" />
 <property file="./properties/local.properties" />
 
+  <!-- fix file includes -->
   <fileset dir="src/main/php" id="projectFiles">
     <include name="net/analogstudios/**/*.php" />
     <include name="vendor/composer/**/*.php" />
-    <include name="vendor/autoload.php" />
     <include name="vendor/slim/slim/Slim/**/*.php" />
+    <include name="vendor/phpunit/phpunit/src/Framework/Assert/Functions.php" />
+    <include name="vendor/herrera-io/json/src/lib/json_version.php" />
+    <include name="vendor/herrera-io/phar-update/src/lib/constants.php" />
+    <include name="vendor/autoload.php" />
   </fileset>
 
   <if>
@@ -30,7 +34,7 @@
   <target name="clean">
     <echo msg="cleaning target directory..."/>
     <delete includeemptydirs="true" quiet="true">
-      <fileset dir="target">
+      <fileset dir="${targetDir}">
         <include name="**/**"/>
       </fileset>
     </delete>
@@ -40,9 +44,6 @@
         <include name="**/**"/>
       </fileset>
     </delete>
-
-    <mkdir dir="target" />
-    <mkdir dir="tmp" />
   </target>
 
   <target name="compose">
@@ -62,6 +63,8 @@
   </target>
 
   <target name="test">
+    <mkdir dir="${targetDir}" />
+
     <echo msg="running tests..."/>
     <phpunit printsummary="true" haltonerror="true" haltonincomplete="true" haltonfailure="true" haltonskipped="true">
       <batchtest>
@@ -72,7 +75,7 @@
       <formatter type="xml">
       </formatter>
     </phpunit>
-    <phpunitreport todir="target"/>
+    <phpunitreport todir="${targetDir}"/>
   </target>
 
   <target name="docs" description="as-api documentation">
@@ -94,7 +97,7 @@
     <echo msg="packaging application..."/>
 
     <echo msg="preparing packaging directories..."/>
-    <mkdir dir="target" />
+    <mkdir dir="${targetDir}" />
     <mkdir dir="tmp" />
 
     <echo msg="copying build files..."/>
@@ -116,11 +119,6 @@
         </filterchain>
     </reflexive>
 
-    <echo msg="moving build files..."/>
-    <move file="tmp/config.php" tofile="target/config.php" />
-    <move file="tmp/controller.php" tofile="target/controller.php" />
-    <move file="tmp/.htaccess" tofile="target/.htaccess" />
-
     <echo msg="creating phar archive..."/>
     <pharpackage
       destfile="${targetDir}/as-api-${project.version}.phar"
@@ -140,6 +138,12 @@
         </element>
       </metadata>
     </pharpackage>
+
+    <echo msg="moving build files..."/>
+    <copy file="tmp/config.php" tofile="${targetDir}/config.php" />
+    <copy file="tmp/controller.php" tofile="${targetDir}/controller.php" />
+    <copy file="tmp/.htaccess" tofile="${targetDir}/.htaccess" />
+
   </target>
 
   <target name="build" description="executes a build">
