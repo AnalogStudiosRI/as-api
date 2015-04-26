@@ -3,8 +3,8 @@
 
 <php expression="include('src/main/php/vendor/autoload.php')"/>
 
-<property name="project.version" value="0.2.0-SNAPSHOT" />
-<property name="targetDir" value="target"
+<property name="project.version" value="0.2.0" />
+<property name="targetDir" value="target"/>
 <property file="./properties/local.properties" />
 
   <!-- fix file includes -->
