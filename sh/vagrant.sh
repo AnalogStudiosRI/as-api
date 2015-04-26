@@ -8,7 +8,7 @@ DBUSER=asadmin
 DBUSER_TEST=astester
 DBPASSWD=Dbxld554P2
 DBPASSWD_TEST=t3st3r
-SQL_IMPORT=/vagrant/src/main/sql/backups/analogstudios-20141105.sql
+SQL_IMPORT=/vagrant/src/main/sql/backups/analogstudios-new-test-20150308.sql
 SQL_IMPORT_TEST=/vagrant/src/main/sql/backups/analogstudios-new-test-20150308.sql
 
 echo "*** Starting installation... ***"
@@ -59,7 +59,7 @@ sed -i "s/AllowOverride None/AllowOverride All/g" /etc/apache2/apache2.conf
 
 echo "*** Setting document root to public directory ***"
 rm -rf /var/www/html
-ln -fs /vagrant/target /var/www/html
+ln -fs /home/vagrant/target /var/www/html
 
 echo "*** We definitely need to see PHP errors, turning them on ***"
 sed -i "s/error_reporting = .*/error_reporting = E_ALL/" /etc/php5/apache2/php.ini
