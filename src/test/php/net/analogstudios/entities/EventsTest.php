@@ -1,7 +1,15 @@
 <?php
+
 error_reporting(E_ALL | E_STRICT);
 
-require_once "src/main/php/net/analogstudios/controllers/EventsController.php";
+require_once "src/main/php/net/analogstudios/base/Database.php";
+require_once "src/main/php/net/analogstudios/base/Entity.php";
+require_once "src/main/php/net/analogstudios/builders/RestfulEntityBuilder.php";
+require_once "src/main/php/net/analogstudios/core/RestfulDatabase.php";
+require_once "src/main/php/net/analogstudios/core/RestfulEntity.php";
+require_once "src/main/php/net/analogstudios/models/Events.php";
+
+use net\analogstudios\builders as builder;
 
 /**
  *
@@ -9,32 +17,36 @@ require_once "src/main/php/net/analogstudios/controllers/EventsController.php";
  *
  * @author Owen Buckley
  */
-class EventsContollerTest extends PHPUnit_Framework_TestCase{
-  private $eventsCtrl;
+class EventsTest extends PHPUnit_Framework_TestCase{
+  private $eventsEntity;
   private static $SUCCESS = 200;
   private static $CREATED = 201;
   private static $NOT_MODIFIED = 304;
   private static $BAD_REQUEST = 400;
   private static $NOT_FOUND = 404;
   private static $NOW_OFFSET = 10800000;
+  private static $DB_CONFIG = array(
+    "dsn" => "mysql:host=127.0.0.1;dbname=asadmin_analogstudios_new_test",
+    "username" => "astester",
+    "password" => "t3st3r"
+  );
 
   public function setup(){
-    $db = new PDO("mysql:host=127.0.0.1;dbname=asadmin_analogstudios_2.0_test", "astester", "t3st3r");
-    $this->eventsCtrl = new \net\analogstudios\controllers\EventsController($db);
+    $builder = new builder\RestfulEntityBuilder(self::$DB_CONFIG, 'events');
+    $this->eventsEntity = $builder->getEntity();
   }
 
   public function tearDown(){
-    $this->sessionCtrl = null;
+    $this->eventsEntity = null;
   }
 
   /********/
   /* GET  */
   /********/
   public function testGetAllEventsSuccess(){
-    //get response
-    $response = $this->eventsCtrl->get();
+    $response = $this->eventsEntity->getEvents();
     $status = $response["status"];
-    $data = $response["body"];
+    $data = $response["data"];
 
     //assert
     $this->assertEquals(self::$SUCCESS, $status);
@@ -60,9 +72,9 @@ class EventsContollerTest extends PHPUnit_Framework_TestCase{
 
   public function testGetEventByIdSuccess(){
     //get response
-    $response = $this->eventsCtrl->get(1);
+    $response = $this->eventsEntity->getEventById(1);
     $status = $response["status"];
-    $data = $response["body"];
+    $data = $response["data"];
     $event = $data[0];
 
     //assert
@@ -85,7 +97,7 @@ class EventsContollerTest extends PHPUnit_Framework_TestCase{
 
   public function testGetEventBadRequestFailure(){
     //get response
-    $response = $this->eventsCtrl->get('abc');
+    $response = $this->eventsEntity->getEventById('abc');
     $status = $response["status"];
 
     //assert
@@ -94,16 +106,16 @@ class EventsContollerTest extends PHPUnit_Framework_TestCase{
 
   public function testGetEventNotFoundFailure(){
     //get response
-    $response = $this->eventsCtrl->get(99999999999);
+    $response = $this->eventsEntity->getEventById(99999999999);
     $status = $response["status"];
 
     //assert
     $this->assertEquals(self::$NOT_FOUND, $status);
   }
 
-  /********/
-  /* POST */
-  /********/
+  /**********/
+  /* CREATE */
+  /**********/
   public function testCreateEventSuccess(){
     $now = time();
     $newEvent = array(
@@ -114,10 +126,10 @@ class EventsContollerTest extends PHPUnit_Framework_TestCase{
     );
 
     //get response
-    $response = $this->eventsCtrl->create($newEvent);
+    $response = $this->eventsEntity->createEvent($newEvent);
 
     $status = $response["status"];
-    $body = $response["body"];
+    $body = $response["data"];
 
     //assert create
     $this->assertNotEmpty($body["createdTime"]);
@@ -137,12 +149,13 @@ class EventsContollerTest extends PHPUnit_Framework_TestCase{
     );
 
     //get response
-    $response = $this->eventsCtrl->create($newEvent);
+    $response = $this->eventsEntity->createEvent($newEvent);
     $status = $response["status"];
 
     //assert
     $this->assertEquals(self::$BAD_REQUEST, $status);
-    $this->assertEquals("There is an error.  Expected title param", $response["body"]["message"]);
+    $this->assertEquals(0, count($response["data"]));
+    $this->assertEquals("Bad Request.  Expected title param", $response["message"]);
   }
 
   public function testCreateEventNoDescriptionFailure(){
@@ -154,12 +167,13 @@ class EventsContollerTest extends PHPUnit_Framework_TestCase{
     );
 
     //get response
-    $response = $this->eventsCtrl->create($newEvent);
+    $response = $this->eventsEntity->createEvent($newEvent);
     $status = $response["status"];
 
     //assert
     $this->assertEquals(self::$BAD_REQUEST, $status);
-    $this->assertEquals("There is an error.  Expected description param", $response["body"]["message"]);
+    $this->assertEquals(0, count($response["data"]));
+    $this->assertEquals("Bad Request.  Expected description param", $response["message"]);
   }
 
   public function testCreateEventNoStartTimeFailure(){
@@ -171,12 +185,13 @@ class EventsContollerTest extends PHPUnit_Framework_TestCase{
     );
 
     //get response
-    $response = $this->eventsCtrl->create($newEvent);
+    $response = $this->eventsEntity->createEvent($newEvent);
     $status = $response["status"];
 
     //assert
     $this->assertEquals(self::$BAD_REQUEST, $status);
-    $this->assertEquals("There is an error.  Expected startTime param", $response["body"]["message"]);
+    $this->assertEquals(0, count($response["data"]));
+    $this->assertEquals("Bad Request.  Expected startTime param", $response["message"]);
   }
 
   public function testCreateEventNoEndTimeFailure(){
@@ -188,94 +203,93 @@ class EventsContollerTest extends PHPUnit_Framework_TestCase{
     );
 
     //get response
-    $response = $this->eventsCtrl->create($newEvent);
+    $response = $this->eventsEntity->createEvent($newEvent);
     $status = $response["status"];
 
     //assert
     $this->assertEquals(self::$BAD_REQUEST, $status);
-    $this->assertEquals("There is an error.  Expected endTime param", $response["body"]["message"]);
+    $this->assertEquals(0, count($response["data"]));
+    $this->assertEquals("Bad Request.  Expected endTime param", $response["message"]);
   }
 
-  /********/
-  /* PUT  */
-  /********/
+  /**********/
+  /* UPDATE */
+  /**********/
   public function testUpdateEventSuccess(){
     $now = time();
-    $eventsResponse = $this->eventsCtrl->get();
-    $randIndex = rand(1, (count($eventsResponse["body"]) - 1));
-    $event = $eventsResponse["body"][$randIndex];
+    $eventsResponse = $this->eventsEntity->getEvents();
+    $randIndex = rand(1, (count($eventsResponse["data"]) - 1));
+    $event = $eventsResponse["data"][$randIndex];
 
     //get response
-    $response = $this->eventsCtrl->update($event["id"], array(
+    $response = $this->eventsEntity->updateEvent($event["id"], array(
       "title" => "some new title" . $now,
       "description" => "some new description" . $now,
       "startTime" => $now,
       "endTime" =>  $now + self::$NOW_OFFSET
     ));
+
     $status = $response["status"];
-    $body = $response["body"];
+    $data = $response["data"];
 
     //assert
     $this->assertEquals(self::$SUCCESS, $status);
-    $this->assertEquals("/api/events/" . $body["id"], $body["url"]);
+    $this->assertEquals("/api/events/" . $data["id"], $data["url"]);
   }
 
   public function testCreateEventDataNotChangedFailure(){
-    $eventsResponse = $this->eventsCtrl->get();
-    $randIndex = rand(1, (count($eventsResponse["body"]) - 1));
-    $event = $eventsResponse["body"][$randIndex];
+    $eventsResponse = $this->eventsEntity->getEvents();
+    $randIndex = rand(1, (count($eventsResponse["data"]) - 1));
+    $event = $eventsResponse["data"][$randIndex];
 
     //get response
-    $response = $this->eventsCtrl->update($event["id"], array("title" => $event["title"]));
+    $response = $this->eventsEntity->updateEvent($event["id"], array("title" => $event["title"]));
     $status = $response["status"];
 
     //assert
     $this->assertEquals(self::$NOT_MODIFIED, $status);
-    $this->assertEquals("Duplicate data, event not modified", $response["body"]["message"]);
+    $this->assertEquals(0, count($response["data"]));
+    $this->assertEquals("Duplicate data, event not modified", $response["message"]);
   }
 
   public function testUpdateNoEventIdFailure(){
     //get response
-    $response = $this->eventsCtrl->update();
-    $status = $response["status"];
-    $body = $response["body"];
+    $response = $this->eventsEntity->updateEvent();
 
     //assert
-    $this->assertEquals(self::$BAD_REQUEST, $status);
-    $this->assertEquals("Bad Request.  No id provided", $body["message"]);
+    $this->assertEquals(self::$BAD_REQUEST, $response["status"]);
+    $this->assertEquals(0, count($response["data"]));
+    $this->assertEquals("Bad Request.  No id provided", $response["message"]);
   }
 
   public function testUpdateEventNoParamsFailure(){
     //get response
-    $response = $this->eventsCtrl->update(1);
-    $status = $response["status"];
-    $body = $response["body"];
+    $response = $this->eventsEntity->updateEvent(1);
 
     //assert
-    $this->assertEquals(self::$BAD_REQUEST, $status);
-    $this->assertEquals("Bad Request.  No params provided", $body["message"]);
+    $this->assertEquals(self::$BAD_REQUEST, $response["status"]);
+    $this->assertEquals(0, count($response["data"]));
+    $this->assertEquals("Bad Request.  No params provided", $response["message"]);
   }
 
   public function testUpdateEventNoValidParamsFailure(){
     //get response
-    $response = $this->eventsCtrl->update(1, array("foo" => "bar"));
-    $status = $response["status"];
-    $body = $response["body"];
+    $response = $this->eventsEntity->updateEvent(1, array("foo" => "bar"));
 
     //assert
-    $this->assertEquals(self::$BAD_REQUEST, $status);
-    $this->assertEquals("Bad Request.  No valid params provided", $body["message"]);
+    $this->assertEquals(self::$BAD_REQUEST, $response["status"]);
+    $this->assertEquals(0, count($response["data"]));
+    $this->assertEquals("Bad Request.  No valid params provided", $response["message"]);
   }
 
   public function testUpdateEventNotFoundFailure(){
     //get response
-    $response = $this->eventsCtrl->update(99999999999999, array("title" => "some new title"));
-    $status = $response["status"];
-    $body = $response["body"];
+    $response = $this->eventsEntity->updateEvent(99999999999999, array("title" => "some new title"));
 
     //assert
-    $this->assertEquals(self::$NOT_FOUND, $status);
-    $this->assertEquals("Event Not Found", $body["message"]);
+    $this->assertEquals(self::$NOT_FOUND, $response["status"]);
+    $this->assertEquals(0, count($response["data"]));
+    $this->assertEquals("Event Not Found", $response["message"]);
   }
 
   /**********/
@@ -283,50 +297,47 @@ class EventsContollerTest extends PHPUnit_Framework_TestCase{
   /**********/
   public function testDeleteEventSuccess(){
     //get event
-    $eventsResponse = $this->eventsCtrl->get();
-    $randIndex = rand(1, (count($eventsResponse["body"]) - 1));
-    $event = $eventsResponse["body"][$randIndex];
+    $eventsResponse = $this->eventsEntity->getEvents();
+    $randIndex = rand(1, (count($eventsResponse["data"]) - 1));
+    $event = $eventsResponse["data"][$randIndex];
 
     //get response
-    $response = $this->eventsCtrl->delete($event["id"]);
-    $status = $response["status"];
-    $body = $response["body"];
+    $response = $this->eventsEntity->deleteEvent($event["id"]);
 
     //assert
-    $this->assertEquals(self::$SUCCESS, $status);
-    $this->assertEquals("Event deleted successfully", $body["message"]);
+    $this->assertEquals(self::$SUCCESS, $response["status"]);
+    $this->assertEquals(0, count($response["data"]));
+    $this->assertEquals("Event deleted successfully", $response["message"]);
   }
 
   public function testDeleteNoEventIdFailure(){
     //get response
-    $response = $this->eventsCtrl->delete();
-    $status = $response["status"];
-    $body = $response["body"];
+    $response = $this->eventsEntity->deleteEvent();
+
 
     //assert
-    $this->assertEquals(self::$BAD_REQUEST, $status);
-    $this->assertEquals("Bad Request.  No valid event id provided", $body["message"]);
+    $this->assertEquals(self::$BAD_REQUEST, $response["status"]);
+    $this->assertEquals(0, count($response["data"]));
+    $this->assertEquals("Bad Request.  No valid event id provided", $response["message"]);
   }
 
   public function testDeleteInvalidEventIdFailure(){
     //get response
-    $response = $this->eventsCtrl->delete("abc");
-    $status = $response["status"];
-    $body = $response["body"];
+    $response = $this->eventsEntity->deleteEvent("abc");
 
     //assert
-    $this->assertEquals(self::$BAD_REQUEST, $status);
-    $this->assertEquals("Bad Request.  No valid event id provided", $body["message"]);
+    $this->assertEquals(self::$BAD_REQUEST, $response["status"]);
+    $this->assertEquals(0, count($response["data"]));
+    $this->assertEquals("Bad Request.  No valid event id provided", $response["message"]);
   }
 
   public function testDeleteEventNotFoundFailure(){
     //get response
-    $response = $this->eventsCtrl->delete(9999999999999999);
-    $status = $response["status"];
-    $body = $response["body"];
+    $response = $this->eventsEntity->deleteEvent(9999999999999999);
 
     //assert
-    $this->assertEquals(self::$NOT_FOUND, $status);
-    $this->assertEquals("Event not found", $body["message"]);
+    $this->assertEquals(self::$NOT_FOUND, $response["status"]);
+    $this->assertEquals(0, count($response["data"]));
+    $this->assertEquals("Event not found", $response["message"]);
   }
 }

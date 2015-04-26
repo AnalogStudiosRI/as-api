@@ -1,4 +1,4 @@
-q<?php
+<?php
 error_reporting(E_ALL | E_STRICT);
 
 require_once 'src/main/php/net/analogstudios/controllers/LoginController.php';
@@ -30,7 +30,7 @@ class LoginContollerTest extends PHPUnit_Framework_TestCase {
   }
 
   public function setup(){
-    $db = new PDO('mysql:host=127.0.0.1;dbname=asadmin_analogstudios_2.0_test','astester','t3st3r');
+    $db = new PDO('mysql:host=127.0.0.1;dbname=asadmin_analogstudios_new_test','astester','t3st3r');
     $this->loginCtrl = new \net\analogstudios\controllers\LoginController($db);
   }
 

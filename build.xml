@@ -2,15 +2,20 @@
 <project name="as-api" default="info" basedir="." description="analogstudios API" phingVersion="2.7.0">
 
 <php expression="include('src/main/php/vendor/autoload.php')"/>
-<property name="project.version" value="0.1.0" />
+
+<property name="project.version" value="0.2.0-SNAPSHOT" />
+<property name="targetDir" value="target"
 <property file="./properties/local.properties" />
 
+  <!-- fix file includes -->
   <fileset dir="src/main/php" id="projectFiles">
     <include name="net/analogstudios/**/*.php" />
-    <!--<include name="io/thegreenhouse/**/*.php" />-->
     <include name="vendor/composer/**/*.php" />
-    <include name="vendor/autoload.php" />
     <include name="vendor/slim/slim/Slim/**/*.php" />
+    <include name="vendor/phpunit/phpunit/src/Framework/Assert/Functions.php" />
+    <include name="vendor/herrera-io/json/src/lib/json_version.php" />
+    <include name="vendor/herrera-io/phar-update/src/lib/constants.php" />
+    <include name="vendor/autoload.php" />
   </fileset>
 
   <if>
@@ -30,7 +35,7 @@
   <target name="clean">
     <echo msg="cleaning target directory..."/>
     <delete includeemptydirs="true" quiet="true">
-      <fileset dir="target">
+      <fileset dir="${targetDir}">
         <include name="**/**"/>
       </fileset>
     </delete>
@@ -40,9 +45,6 @@
         <include name="**/**"/>
       </fileset>
     </delete>
-
-    <mkdir dir="target" />
-    <mkdir dir="tmp" />
   </target>
 
   <target name="compose">
@@ -55,31 +57,48 @@
     <echo msg="linting project..."/>
     <phplint haltonfailure="true" level="verbose" deprecatedAsError="true">
       <fileset dir="src/main/php/" >
-        <include name="com/**/*.php"/>
+        <include name="net/**/*.php"/>
         <exclude name="vendor/**/*"/>
-      </fileset> 
+      </fileset>
     </phplint>
   </target>
 
   <target name="test">
+    <mkdir dir="${targetDir}" />
+
     <echo msg="running tests..."/>
     <phpunit printsummary="true" haltonerror="true" haltonincomplete="true" haltonfailure="true" haltonskipped="true">
       <batchtest>
         <fileset dir="src/test/php/" >
           <include name="**/*Test.php"/>
-        </fileset> 
+        </fileset>
       </batchtest>
       <formatter type="xml">
       </formatter>
     </phpunit>
-    <phpunitreport todir="target"/>
+    <phpunitreport todir="${targetDir}"/>
+  </target>
+
+  <target name="docs" description="as-api documentation">
+    <exec command="phpdoc
+       -d src/main/php/net/analogstudios/
+       -t docs
+       --template responsive
+   " />
+<!--    <phpdoc2 title="as-api documentation"
+      destdir="docs"
+      template="responsive-twig">
+       <fileset dir="./src/main/php/net/analogstudios/php/">
+          <include name="**/*.php" />
+       </fileset>
+    </phpdoc2>-->
   </target>
 
   <target name="package">
     <echo msg="packaging application..."/>
-    
+
     <echo msg="preparing packaging directories..."/>
-    <mkdir dir="target" />
+    <mkdir dir="${targetDir}" />
     <mkdir dir="tmp" />
 
     <echo msg="copying build files..."/>
@@ -88,7 +107,7 @@
     </copy>
 
     <copy file="src/main/php/config.php" tofile="tmp/config.php" />
-    <copy file="src/main/php/route.php" tofile="tmp/route.php" />
+    <copy file="src/main/php/controller.php" tofile="tmp/controller.php" />
     <copy file="src/main/apache/.htaccess" tofile="tmp/.htaccess" />
 
     <echo msg="applying environment filters..."/>
@@ -101,14 +120,9 @@
         </filterchain>
     </reflexive>
 
-    <echo msg="moving build files..."/>
-    <move file="tmp/config.php" tofile="target/config.php" />
-    <move file="tmp/route.php" tofile="target/route.php" />
-    <move file="tmp/.htaccess" tofile="target/.htaccess" />
-
     <echo msg="creating phar archive..."/>
     <pharpackage
-      destfile="target/as-api-${project.version}.phar"
+      destfile="${targetDir}/as-api-${project.version}.phar"
       basedir="tmp/"
       compression="gzip"
       stub="src/main/php/stub.php"
@@ -117,7 +131,7 @@
         <include name="**/**" />
       </fileset>
       <metadata>
-        <element name="version" value="bc-api-${project.version}" />
+        <element name="version" value="as-api-${project.version}" />
         <element name="authors">
           <element name="Owen Buckley">
             <element name="email" value="owen@analogstudios.net" />
@@ -125,16 +139,21 @@
         </element>
       </metadata>
     </pharpackage>
-    <!--<move file="as-api-${project.version}.phar" tofile="target/as-api-${project.version}.phar" />-->
+
+    <echo msg="moving build files..."/>
+    <copy file="tmp/config.php" tofile="${targetDir}/config.php" />
+    <copy file="tmp/controller.php" tofile="${targetDir}/controller.php" />
+    <copy file="tmp/.htaccess" tofile="${targetDir}/.htaccess" />
+
   </target>
 
   <target name="build" description="executes a build">
     <echo msg="starting a build..."/>
-    <phingcall target="info" /> 
+    <phingcall target="info" />
     <phingcall target="clean" />
     <phingcall target="lint" />
     <phingcall target="test" />
-     <phingcall target="package" />
+    <phingcall target="package" />
   </target>
 
 </project>

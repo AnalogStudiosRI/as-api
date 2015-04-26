@@ -17,7 +17,12 @@ XXX
 
 [EditorConfig]: http://editorconfig.org/
 
+//TODO add to vagrant file
+// sudo vim /etc/php5/apache2/php.ini  //phar.readOnly
+// sudo vim /etc/php5/cli/php.ini  //phar.readOnly
+// sudo /etc/init.d/apache2 restart
 
 ## Build
 
-The repo for this project is ssh://git@thegreenhouse.io/repositories/analogstudios/as-api.git
+//XXX TODO find link to reason why
+To build locally use `phing build -D targetDir=/home/vagrant/target`
