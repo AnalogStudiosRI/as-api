@@ -50,9 +50,8 @@ switch ($path){
 }
 
 //get entity to pass to respective router
-$entityType = \net\analogstudios\builders\RestfulEntityBuilder::$ENTITY_ROUTE_MAPPER[strtoupper($route)]["TYPE"];
-$builder = new \net\analogstudios\builders\RestfulEntityBuilder($CONFIG["db"], $entityType);
-$entity = $builder->getEntity();
+$builder = new \resources\RestfulResourceBuilder($CONFIG["db"], $route);
+$resource = $builder->getResource();
 
 require_once "phar://" . $CONFIG["pharfile"] . "/routes/" . $route . "-route.php";
 

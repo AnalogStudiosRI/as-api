@@ -21,13 +21,6 @@ use dao as dao;
 class RestfulResourceBuilder {
   private $entityType;
 
-  public static $ENTITY_ROUTE_MAPPER = array(
-    "EVENTS" => array(
-      "TABLE_NAME" => "events",
-      "TYPE" => "events"
-    )
-  );
-
   function __construct($dbConfig = array(), $entityType = "") {
     if($dbConfig && count($dbConfig) === 3 && $entityType !== ""){
       $this->entityType = $entityType;
@@ -41,17 +34,17 @@ class RestfulResourceBuilder {
    *
    * @method buildEntity
    *
-   * @return RestfulEntity RestfulEntity model
+   * @return RestfulResource
    */
   private function buildResource(){
     $entity = NULL;
 
-    if(self::$ENTITY_ROUTE_MAPPER[strtoupper($this->entityType)]){
-      switch ($this->entityType){
-        case self::$ENTITY_ROUTE_MAPPER["EVENTS"]["TYPE"]:
-          $entity = new EventResource($this->db);
-          break;
-      }
+    switch (strtolower($this->entityType)){
+      case 'events':
+        $entity = new EventsResource($this->db);
+        break;
+      default:
+        //throw exception
     }
 
     return $entity;

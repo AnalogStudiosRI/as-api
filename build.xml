@@ -7,8 +7,11 @@
   <property name="buildDir" value="build"/>
   <property file="./properties/local.properties" />
 
-  <fileset dir="." id="projectFiles">
-    <include name="src/**/*.php" />
+  <fileset dir="src" id="projectFiles">
+    <include name="**/*.php" />
+  </fileset>
+
+  <fileset dir="." id="vendorFiles">
     <include name="vendor/composer/**/*.php" />
     <include name="vendor/slim/slim/Slim/**/*.php" />
     <include name="vendor/phpunit/phpunit/src/Framework/Assert/Functions.php" />
@@ -97,6 +100,7 @@
     <echo msg="copying build files..."/>
     <copy todir="tmp">
       <fileset refid="projectFiles" />
+      <fileset refid="vendorFiles" />
     </copy>
 
     <copy file="src/config.php" tofile="tmp/config.php" />

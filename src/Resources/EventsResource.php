@@ -12,14 +12,14 @@ use base as base;
   * @api as-api
   * @package resources
   * @uses base base
-  * @class Events
+  * @class EventsResource
   *
   * @since 0.3.0
   *
   * @copyright 2014
   *
   */
-class EventResource extends base\AbstractRestfulResource{
+class EventsResource extends base\AbstractRestfulResource{
   private $name = "event";
   private $tableName = "events";
   private $createParams = array("title", "description", "startTime", "endTime", "createdTime");
