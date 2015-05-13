@@ -1,27 +1,24 @@
 <?php
 
-namespace net\analogstudios\builders;
+namespace resources;
 
-use net\analogstudios\core as core;
-use net\analogstudios\models as model;
-
+use dao as dao;
 
  /**
   *
   * @author Owen Buckley
   * @email owen@analogstudios.net
   * @api as-api
-  * @package net\analogstudios\builders
-  * @uses net\analogstudios\core net\analogstudios\core
-  * @uses net\analogstudios\models net\analogstudios\models
-  * @class RestfulEntityBuilder
+  * @package resources
+  * @uses base base
+  * @class RestfulResourceBuilder
   *
   * @since 0.3.0
   *
   * @copyright 2014
   *
   */
-class RestfulEntityBuilder {
+class RestfulResourceBuilder {
   private $entityType;
 
   public static $ENTITY_ROUTE_MAPPER = array(
@@ -34,7 +31,7 @@ class RestfulEntityBuilder {
   function __construct($dbConfig = array(), $entityType = "") {
     if($dbConfig && count($dbConfig) === 3 && $entityType !== ""){
       $this->entityType = $entityType;
-      $this->db = new core\RestfulDatabase($dbConfig);
+      $this->db = new dao\RestfulDatabase($dbConfig);
     }else{
       throw new \InvalidArgumentException('Invalid Constructor Params');
     }
@@ -46,13 +43,13 @@ class RestfulEntityBuilder {
    *
    * @return RestfulEntity RestfulEntity model
    */
-  private function buildEntity(){
+  private function buildResource(){
     $entity = NULL;
 
     if(self::$ENTITY_ROUTE_MAPPER[strtoupper($this->entityType)]){
       switch ($this->entityType){
         case self::$ENTITY_ROUTE_MAPPER["EVENTS"]["TYPE"]:
-          $entity = new model\Events($this->db);
+          $entity = new EventResource($this->db);
           break;
       }
     }
@@ -62,12 +59,12 @@ class RestfulEntityBuilder {
 
   /**
    *
-   * @method getEntity
+   * @method getResource
    *
-   * @return RestfulEntity;
+   * @return RestfulResource;
    */
-  public function getEntity () {
-    return $this->buildEntity();
+  public function getResource () {
+    return $this->buildResource();
   }
 }
 ?>

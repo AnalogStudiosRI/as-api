@@ -8,8 +8,8 @@ DBUSER=asadmin
 DBUSER_TEST=astester
 DBPASSWD=Dbxld554P2
 DBPASSWD_TEST=t3st3r
-SQL_IMPORT=/vagrant/src/main/sql/backups/analogstudios-new-test-20150308.sql
-SQL_IMPORT_TEST=/vagrant/src/main/sql/backups/analogstudios-new-test-20150308.sql
+SQL_IMPORT=/vagrant/sql/backups/analogstudios-new-test-20150308.sql
+SQL_IMPORT_TEST=/vagrant/sql/backups/analogstudios-new-test-20150308.sql
 
 echo "*** Starting installation... ***"
 
@@ -94,7 +94,7 @@ composer update
 
 echo "*** Adding Composer Dependencies to the $PATH ***"
 cat >> /home/vagrant/.bash_profile <<EOF
-export PATH=$PATH:/vagrant/src/main/php/vendor/bin
+export PATH=$PATH:/vagrant/vendor/bin
 EOF
 source /home/vagrant/.bash_profile
 

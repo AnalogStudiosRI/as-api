@@ -1,24 +1,25 @@
 <?php
 
-namespace net\analogstudios\core;
+namespace dao;
 
-use net\analogstudios\base as base;
+use base as base;
 
  /**
-  * 
+  *
   * @author Owen Buckley
   * @email owen@analogstudios.net
   * @api as-api
-  * @package net\analogstudios\core
-  * @uses net\analogstudios\base net\analogstudios\base
+  * @package dao
+  * @uses base base
   * @class RestfulDatabase
-  * 
+  *
   * @since 0.3.0
-  * 
+  *
   * @copyright 2014
-  * 
+  *
   */
-class RestfulDatabase extends base\Database{
+
+class RestfulDatabase extends base\AbstractRestfulDatabase{
   private static $PATTERN = array(
     "ID" => "/^[0-9]+$/"
   );
@@ -39,25 +40,25 @@ class RestfulDatabase extends base\Database{
     404 => "Not Found",
     500 => "Internal Service Error"
   );
-  
+
   function __construct($dbConfig = array(), $restfulConfig = array()) {
     parent::__construct('PDO', $dbConfig);
     //tableName
     //requiredParams
     //updateParams
   }
-  
+
   private function generateResponse ($code = null, $result = array(), $msg = '') {
     $normalizedCode = $code ? $code : 500;
     $normalizedMessage = $msg ? $msg : self::$STATUS_MESSAGE[$normalizedCode];
-    
+
     return array(
       "status" => $normalizedCode,
       "message" => $normalizedMessage,
       "data" => $result
     );
   }
-  
+
   public function select ($tableName = "", $id = null) {
     $db = $this->db;
     $validEventId = preg_match(self::$PATTERN["ID"], $id) === 1 ? TRUE : FALSE;
@@ -70,7 +71,7 @@ class RestfulDatabase extends base\Database{
       $stmt = $db->prepare($sql);
       $stmt->bindValue(":id", $id, $db::PARAM_INT);
     }else{
-      //XXX TODO test for table name
+      //XXX TODO tests for table name
       $stmt = $db->prepare($sql);
     }
 
@@ -93,7 +94,7 @@ class RestfulDatabase extends base\Database{
 
     return $this->generateResponse($code, $result);
   }
-  
+
   public function insert ($tableName = "", $requiredParams = array(), $params = array()) {
     $db = $this->db;
     $queryParams = array();
@@ -121,9 +122,9 @@ class RestfulDatabase extends base\Database{
     if($validParamsNeeded === count($queryParams) && $invalidParamError === ""){
       $query = rtrim($query, ", ");
       $keys = rtrim($keys, ", ");
-      $values = trim($values, ", ");      
+      $values = trim($values, ", ");
       $query .= ($keys . ") VALUES " . $values . ") ");
-      
+
       $stmt = $db->prepare($query);
       $stmt->execute($queryParams);
 
@@ -141,10 +142,10 @@ class RestfulDatabase extends base\Database{
     }else{
       $code = self::$STATUS_CODE["BAD_REQUEST"];
     }
-    
+
     return $this->generateResponse($code, $result, $invalidParamError);
   }
-  
+
   public function update ($tableName = "", $id = null, $updateParams = array(), $params = array()) {
     $db = $this->db;
     $invalidParamError = '';
@@ -166,7 +167,7 @@ class RestfulDatabase extends base\Database{
         $query = rtrim($query, ", ");
         $query .= " WHERE id=:id";
         $queryParams[":id"] = $id;
-        
+
         $stmt = $db->prepare($query);
         $stmt->execute($queryParams);
 
@@ -201,7 +202,7 @@ class RestfulDatabase extends base\Database{
 
     return $this->generateResponse($code, $result, $invalidParamError);
   }
-  
+
   public function delete ($tableName = "", $id = null) {
     $db = $this->db;
     $result = array();
@@ -230,5 +231,5 @@ class RestfulDatabase extends base\Database{
 
     return $this->generateResponse($code, $result, $invalidParamError);
   }
-    
+
 }

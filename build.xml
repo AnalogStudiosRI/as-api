@@ -1,15 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project name="as-api" default="info" basedir="." description="analogstudios API" phingVersion="2.7.0">
+<project name="as-api" default="info" basedir="." description="Analog Studios Website - API" phingVersion="2.7.0">
 
-<php expression="include('src/main/php/vendor/autoload.php')"/>
+  <php expression="include('vendor/autoload.php')"/>
 
-<property name="project.version" value="0.3.0-SNAPSHOT" />
-<property name="targetDir" value="target"/>
-<property file="./properties/local.properties" />
+  <property name="project.version" value="0.3.0-SNAPSHOT" />
+  <property name="buildDir" value="build"/>
+  <property file="./properties/local.properties" />
 
-  <!-- fix file includes -->
-  <fileset dir="src/main/php" id="projectFiles">
-    <include name="net/analogstudios/**/*.php" />
+  <fileset dir="." id="projectFiles">
+    <include name="src/**/*.php" />
     <include name="vendor/composer/**/*.php" />
     <include name="vendor/slim/slim/Slim/**/*.php" />
     <include name="vendor/phpunit/phpunit/src/Framework/Assert/Functions.php" />
@@ -33,9 +32,9 @@
    </target>
 
   <target name="clean">
-    <echo msg="cleaning target directory..."/>
+    <echo msg="cleaning build directory..."/>
     <delete includeemptydirs="true" quiet="true">
-      <fileset dir="${targetDir}">
+      <fileset dir="${buildDir}">
         <include name="**/**"/>
       </fileset>
     </delete>
@@ -47,36 +46,30 @@
     </delete>
   </target>
 
-  <target name="compose">
-    <echo msg="installing and updating composer..."/>
-    <composer command="update" composer="${composer.path}" />
-    <composer command="install" composer="${composer.path}" />
-  </target>
-
   <target name="lint">
     <echo msg="linting project..."/>
     <phplint haltonfailure="true" level="verbose" deprecatedAsError="true">
-      <fileset dir="src/main/php/" >
-        <include name="net/**/*.php"/>
-        <exclude name="vendor/**/*"/>
+      <fileset dir="." >
+        <include name="src/**/*.php"/>
+        <include name="tests/**/*.php"/>
       </fileset>
     </phplint>
   </target>
 
   <target name="test">
-    <mkdir dir="${targetDir}" />
+    <mkdir dir="${buildDir}" />
 
     <echo msg="running tests..."/>
     <phpunit printsummary="true" haltonerror="true" haltonincomplete="true" haltonfailure="true" haltonskipped="true">
       <batchtest>
-        <fileset dir="src/test/php/" >
-          <include name="**/*Test.php"/>
+        <fileset dir="tests/" >
+          <include name="**/*.php"/>
         </fileset>
       </batchtest>
       <formatter type="xml">
       </formatter>
     </phpunit>
-    <phpunitreport todir="${targetDir}"/>
+    <phpunitreport todir="${buildDir}"/>
   </target>
 
   <target name="docs" description="as-api documentation">
@@ -98,7 +91,7 @@
     <echo msg="packaging application..."/>
 
     <echo msg="preparing packaging directories..."/>
-    <mkdir dir="${targetDir}" />
+    <mkdir dir="${buildDir}" />
     <mkdir dir="tmp" />
 
     <echo msg="copying build files..."/>
@@ -106,9 +99,9 @@
       <fileset refid="projectFiles" />
     </copy>
 
-    <copy file="src/main/php/config.php" tofile="tmp/config.php" />
-    <copy file="src/main/php/controller.php" tofile="tmp/controller.php" />
-    <copy file="src/main/apache/.htaccess" tofile="tmp/.htaccess" />
+    <copy file="src/config.php" tofile="tmp/config.php" />
+    <copy file="src/controller.php" tofile="tmp/controller.php" />
+    <copy file="src/.htaccess" tofile="tmp/.htaccess" />
 
     <echo msg="applying environment filters..."/>
     <reflexive>
@@ -122,10 +115,10 @@
 
     <echo msg="creating phar archive..."/>
     <pharpackage
-      destfile="${targetDir}/as-api-${project.version}.phar"
+      destfile="${buildDir}/as-api-${project.version}.phar"
       basedir="tmp/"
       compression="gzip"
-      stub="src/main/php/stub.php"
+      stub="src/stub.php"
       signature="sha1">
       <fileset dir="tmp">
         <include name="**/**" />
@@ -141,9 +134,9 @@
     </pharpackage>
 
     <echo msg="moving build files..."/>
-    <copy file="tmp/config.php" tofile="${targetDir}/config.php" />
-    <copy file="tmp/controller.php" tofile="${targetDir}/controller.php" />
-    <copy file="tmp/.htaccess" tofile="${targetDir}/.htaccess" />
+    <copy file="tmp/config.php" tofile="${buildDir}/config.php" />
+    <copy file="tmp/controller.php" tofile="${buildDir}/controller.php" />
+    <copy file="tmp/.htaccess" tofile="${buildDir}/.htaccess" />
 
   </target>
 

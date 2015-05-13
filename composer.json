@@ -1,6 +1,6 @@
 {
   "config": {
-    "vendor-dir": "src/main/php/vendor"
+    "vendor-dir": "vendor"
   },
   "require": {
     "slim/slim": "2.6.*"
@@ -12,7 +12,7 @@
   },
   "autoload":{
     "psr-4": {
-      "as\\" : "/src/main/php/com/analogstudios/"
+      "as\\" : "/src"
     }
   }
 }

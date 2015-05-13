@@ -54,7 +54,7 @@ $entityType = \net\analogstudios\builders\RestfulEntityBuilder::$ENTITY_ROUTE_MA
 $builder = new \net\analogstudios\builders\RestfulEntityBuilder($CONFIG["db"], $entityType);
 $entity = $builder->getEntity();
 
-require_once "phar://" . $CONFIG["pharfile"] . "/net/analogstudios/routes/" . $route . "-route.php";
+require_once "phar://" . $CONFIG["pharfile"] . "/routes/" . $route . "-route.php";
 
 //start slim
 $slim->run();

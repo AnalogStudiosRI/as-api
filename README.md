@@ -25,4 +25,16 @@ XXX
 ## Build
 
 //XXX TODO find link to reason why
-To build locally use `phing build -D targetDir=/home/vagrant/target`
+To build locally use `phing build -D buildDir=/home/vagrant/build`
+
+## Project Layout
+
+properties - build time configuration values based on env //XXX TODO Change to a config provider
+sh/ - shell scripts for Jenkins, Vagrant, etc
+sql/ - sql backups
+src/ - application code
+src/base/ - abstract classes and interfaces
+src/core/ - concrete
+src/resources/ - top level site pages and their static assets (JS, CSS, .html); implements angular controllers
+src/routes/ - API services and non-UI components; implements angular services
+tests/ - unit / integration tests
