@@ -1,15 +1,16 @@
 <?php
+/*
 error_reporting(E_ALL | E_STRICT);
 
-require_once 'src/main/php/net/analogstudios/controllers/LoginController.php';
-
+require_once 'src/resources/SessionResource.php';
+*/
 /**
  *
  * name: LoginControllerTest
  *
  * @author Owen Buckley
  */
-class LoginContollerTest extends PHPUnit_Framework_TestCase {
+/*class SessionResourceTest extends PHPUnit_Framework_TestCase {
   private $loginCtrl;
   private static $USERNAME = "astester";
   private static $PASSWORD = "t3st3r";
@@ -31,7 +32,7 @@ class LoginContollerTest extends PHPUnit_Framework_TestCase {
 
   public function setup(){
     $db = new PDO('mysql:host=127.0.0.1;dbname=asadmin_analogstudios_new_test','astester','t3st3r');
-    $this->loginCtrl = new \net\analogstudios\controllers\LoginController($db);
+    $this->loginCtrl = new reourcLoginController($db);
   }
 
   public function tearDown(){
@@ -117,3 +118,4 @@ class LoginContollerTest extends PHPUnit_Framework_TestCase {
     $this->assertEquals(self::$NO_ACTIVE_SESSION, $body["message"]);
   }
 }
+*/

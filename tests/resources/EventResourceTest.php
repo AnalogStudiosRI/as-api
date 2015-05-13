@@ -2,22 +2,21 @@
 
 error_reporting(E_ALL | E_STRICT);
 
-require_once "src/main/php/net/analogstudios/base/Database.php";
-require_once "src/main/php/net/analogstudios/base/Entity.php";
-require_once "src/main/php/net/analogstudios/builders/RestfulEntityBuilder.php";
-require_once "src/main/php/net/analogstudios/core/RestfulDatabase.php";
-require_once "src/main/php/net/analogstudios/core/RestfulEntity.php";
-require_once "src/main/php/net/analogstudios/models/Events.php";
+require_once "src/base/AbstractRestfulDatabase.php";
+require_once "src/base/AbstractRestfulResource.php";
+require_once "src/dao/RestfulDatabase.php";
+require_once "src/resources/EventsResource.php";
+require_once "src/resources/RestfulResourceBuilder.php";
 
-use net\analogstudios\builders as builder;
+use resources as resource;
 
 /**
  *
- * name: EventsControllerTest
+ * name: EventResourceTest
  *
  * @author Owen Buckley
  */
-class EventsTest extends PHPUnit_Framework_TestCase{
+class EventResourceTest extends PHPUnit_Framework_TestCase{
   private $eventsEntity;
   private static $SUCCESS = 200;
   private static $CREATED = 201;
@@ -32,8 +31,8 @@ class EventsTest extends PHPUnit_Framework_TestCase{
   );
 
   public function setup(){
-    $builder = new builder\RestfulEntityBuilder(self::$DB_CONFIG, 'events');
-    $this->eventsEntity = $builder->getEntity();
+    $builder = new resource\RestfulResourceBuilder(self::$DB_CONFIG, 'events');
+    $this->eventsEntity = $builder->getResource();
   }
 
   public function tearDown(){

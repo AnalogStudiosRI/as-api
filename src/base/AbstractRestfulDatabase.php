@@ -1,33 +1,33 @@
 <?php
 
-namespace net\analogstudios\base;
+namespace base;
 
- /**
-  * 
+/**
+  *
   * @author Owen Buckley
   * @email owen@analogstudios.net
   * @api as-api
-  * @package net\analogstudios\base
-  * @class Database
-  * @internal
-  * 
+  * @package base
+  * @class AbstractRestfulDatabase
+  *
   * @since 0.3.0
-  * 
+  *
   * @copyright 2014
-  * 
+  *
   */
-abstract class Database {
+
+abstract class AbstractRestfulDatabase {
   //put your code here
   protected $db = null;
-  
+
   function __construct($dbType = "", $dbConfig = array()){
     switch ($dbType) {
       case 'PDO':
-        try {  
+        try {
           $this->db = new \PDO($dbConfig["dsn"], $dbConfig["username"], $dbConfig["password"]);
-        } catch(PDOException $e) {  
-          echo $e->getMessage();  
-        }  
+        } catch(PDOException $e) {
+          echo $e->getMessage();
+        }
         break;
       default:
         //echo 'throw expection';
