@@ -1,11 +1,11 @@
 #!/bin/bash
 
-# assumes build. sh has been run
+# assumes build.sh has been run
 
 echo "preparing deployment directory..."
-sudo rm -rvf /var/www/analogstudios/.htaccess
-sudo rm -rvf /var/www/analogstudios/*.phar
-sudo rm -rvf /var/www/analogstudios/*.php
+sudo rm -rvf /var/www/analogstudios/.htaccess > /dev/null
+sudo rm -rvf /var/www/analogstudios/*.phar > /dev/null
+sudo rm -rvf /var/www/analogstudios/*.php > /dev/null
 
 echo "deploying project..."
 sudo cp -v target/.htaccess /var/www/analogstudios/
