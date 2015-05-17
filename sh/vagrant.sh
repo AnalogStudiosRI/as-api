@@ -101,3 +101,6 @@ source /home/vagrant/.bash_profile
 composer --version
 phing -v
 phpunit --version
+
+echo *** Setting Up App Config ***
+cp /vagrant/ini/config-local.ini /var/config.ini

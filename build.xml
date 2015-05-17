@@ -5,7 +5,6 @@
 
   <property name="project.version" value="0.3.0-SNAPSHOT" />
   <property name="buildDir" value="build"/>
-  <property file="./properties/local.properties" />
 
   <fileset dir="src" id="projectFiles">
     <include name="**/*.php" />
@@ -20,17 +19,8 @@
     <include name="vendor/autoload.php" />
   </fileset>
 
-  <if>
-    <isset property="env" />
-    <then>
-      <echo message="Overwriting default.properties with ${env}.properties" />
-      <property file="./properties/${env}.properties" override="true" />
-    </then>
-  </if>
-
   <target name="info" description="Displays basic project information">
     <echo message="This is project ${phing.project.name}" />
-    <echo message="Current environment is: ${env}" />
     <echo message="Current version of phing is: ${project.version}" />
    </target>
 
@@ -103,23 +93,12 @@
       <fileset refid="vendorFiles" />
     </copy>
 
-    <copy file="src/config.php" tofile="tmp/config.php" />
     <copy file="src/controller.php" tofile="tmp/controller.php" />
     <copy file="src/.htaccess" tofile="tmp/.htaccess" />
 
-    <echo msg="applying environment filters..."/>
-    <reflexive>
-      <fileset dir="tmp/">
-        <include pattern="config.php" />
-      </fileset>
-        <filterchain>
-          <expandproperties/>
-        </filterchain>
-    </reflexive>
-
     <echo msg="creating phar archive..."/>
     <pharpackage
-      destfile="${buildDir}/as-api-${project.version}.phar"
+      destfile="${buildDir}/as-api.phar"
       basedir="tmp/"
       compression="gzip"
       stub="src/stub.php"
@@ -138,7 +117,6 @@
     </pharpackage>
 
     <echo msg="moving build files..."/>
-    <copy file="tmp/config.php" tofile="${buildDir}/config.php" />
     <copy file="tmp/controller.php" tofile="${buildDir}/controller.php" />
     <copy file="tmp/.htaccess" tofile="${buildDir}/.htaccess" />
 
