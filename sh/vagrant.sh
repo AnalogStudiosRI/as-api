@@ -59,7 +59,7 @@ sed -i "s/AllowOverride None/AllowOverride All/g" /etc/apache2/apache2.conf
 
 echo "*** Setting document root to public directory ***"
 rm -rf /var/www/html
-ln -fs /home/vagrant/build /var/www/html
+ln -fs /home/vagrant/build/ /var/www/html
 
 echo "*** We definitely need to see PHP errors, turning them on ***"
 sed -i "s/error_reporting = .*/error_reporting = E_ALL/" /etc/php5/apache2/php.ini
@@ -102,5 +102,5 @@ composer --version
 phing -v
 phpunit --version
 
-echo *** Setting Up App Config ***
-cp /vagrant/ini/config-local.ini /var/config.ini
+echo "*** Setting Up Env Config ***"
+cp /vagrant/ini/config-local.ini /var/www/config-env.ini

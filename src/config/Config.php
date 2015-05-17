@@ -18,20 +18,25 @@ namespace config;
 
 class Config{
 
-  private $configPath;
-
-  function __construct($configPath = '') {
-
-    if(file_exists($configPath)){
-      $this->configPath = $configPath;
+  private static function checkPathExists($path = ''){
+    if(file_exists($path)){
+      return true;
     }else{
-      throw new \InvalidArgumentException('Invalid Constructor Params');
+      return false;
     }
-
   }
 
-  public function getConfig(){
-    return parse_ini_file($this->configPath, true);
+  private static function loadIni($path = ''){
+    return parse_ini_file($path, true);
+  }
+
+  public static function getConfigFromIni($path = ''){
+
+    if(self::checkPathExists($path)){
+      return self::loadIni($path);
+    }else{
+      throw new \InvalidArgumentException('Invalid Path');
+    }
   }
 
 }

@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project name="as-api" default="info" basedir="." description="Analog Studios Website - API" phingVersion="2.7.0">
+<project name="as-api" default="info" basedir="." description="Analog Studios Website - API" phingVersion="2.10.0">
 
   <php expression="include('vendor/autoload.php')"/>
 
@@ -25,7 +25,7 @@
    </target>
 
   <target name="clean">
-    <echo msg="cleaning build directory..."/>
+    <echo msg="cleaning tmp directory..."/>
     <delete includeemptydirs="true" quiet="true">
       <fileset dir="${buildDir}">
         <include name="**/**"/>
@@ -119,6 +119,7 @@
     <echo msg="moving build files..."/>
     <copy file="tmp/controller.php" tofile="${buildDir}/controller.php" />
     <copy file="tmp/.htaccess" tofile="${buildDir}/.htaccess" />
+    <copy file="ini/config-bootstrap.ini" tofile="${buildDir}/config.ini" />
 
   </target>
 
