@@ -8,7 +8,7 @@ DBUSER=asadmin
 DBUSER_TEST=astester
 DBPASSWD=Dbxld554P2
 DBPASSWD_TEST=t3st3r
-SQL_IMPORT=/vagrant/sql/backups/analogstudios-new-test-20150308.sql
+SQL_IMPORT=/vagrant/sql/backups/analogstudios-new-20150308.sql
 SQL_IMPORT_TEST=/vagrant/sql/backups/analogstudios-new-test-20150308.sql
 
 echo "*** Starting installation... ***"
