@@ -1,12 +1,18 @@
 <?php
 
-/* initial requires */
-require_once "config.php";
-require_once $CONFIG["pharfile"];
-require_once "phar://" . $CONFIG["pharfile"] . "/vendor/autoload.php";
+//constants
+define("PHAR_PATH", "phar://as-api.phar");
+
+//load phar
+require_once PHAR_PATH;
+require_once PHAR_PATH . "/vendor/autoload.php";
+
+/* get config */
+$appConfig = \config\Config::getConfigFromIni('config.ini');
+$envConfig = \config\Config::getConfigFromIni($appConfig['env_config_ini_path']);
 
 //runtime configuration
-ini_set("display_errors", $CONFIG["displayErrors"]);
+ini_set("display_errors", $envConfig["runtime.displayErrors"]);
 date_default_timezone_set("America/New_York");
 
 //setup session handling
@@ -18,7 +24,7 @@ $slim = new \Slim\Slim();
 
 /* use slim session middleware */
 $slim->add(new \Slim\Middleware\SessionCookie(array(
-  "domain" => $CONFIG["session"]["domain"]
+  "domain" => $envConfig["session.domain"]
 )));
 
 /* common response headers */
@@ -50,10 +56,15 @@ switch ($path){
 }
 
 //get entity to pass to respective router
-$builder = new \resources\RestfulResourceBuilder($CONFIG["db"], $route);
+$builder = new \resources\RestfulResourceBuilder(array(
+  "dsn" => "mysql:host=" . $envConfig['db.host'] . ";dbname=" . $envConfig['db.name'],
+  "username" => $envConfig["db.user"],
+  "password" => $envConfig["db.password"]
+), $route);
+
 $resource = $builder->getResource();
 
-require_once "phar://" . $CONFIG["pharfile"] . "/routes/" . $route . "-route.php";
+require_once PHAR_PATH . "/routes/" . $route . "-route.php";
 
 //start slim
 $slim->run();

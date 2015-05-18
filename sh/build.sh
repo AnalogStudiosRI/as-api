@@ -13,4 +13,4 @@ phing -version
 phpunit --version
 
 echo "building..."
-phing build -D env=dev
+phing build
