@@ -12,3 +12,13 @@ RewriteEngine On
 # this handles API requests
 RewriteCond %{REQUEST_FILENAME} !-f
 RewriteRule ^api controller.php [QSA,L]
+
+<Files ~ "\.ini$">
+  Order allow,deny
+  Deny from all
+</Files>
+
+<Files ~ "\.phar$">
+  Order allow,deny
+  Deny from all
+</Files>
