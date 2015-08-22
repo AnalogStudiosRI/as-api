@@ -8,8 +8,8 @@ DBUSER=asadmin
 DBUSER_TEST=astester
 DBPASSWD=Dbxld554P2
 DBPASSWD_TEST=t3st3r
-SQL_IMPORT=/vagrant/sql/backups/analogstudios-new-20150308.sql
-SQL_IMPORT_TEST=/vagrant/sql/backups/analogstudios-new-test-20150308.sql
+SQL_IMPORT=/vagrant/sql/analogstudios-new-20150308.sql
+SQL_IMPORT_TEST=/vagrant/sql/analogstudios-new-test-20150308.sql
 
 echo "*** Starting installation... ***"
 
@@ -17,6 +17,7 @@ echo "*** Updating packages ***"
 apt-get update
 
 echo "*** Install base packages ***"
+apt-get -y install git
 apt-get -y install vim curl buildssential python-software-properties git > /dev/null 2>&1
 apt-get update
 
@@ -85,12 +86,17 @@ php -v
 mysql --version
 
 echo "*** Installing Composer for PHP package management ***"
-curl --silent https://getcomposer.org/installer | php
-mv composer.phar /usr/local/bin/composer
+curl -s http://getcomposer.org/installer | php
+sudo mv composer.phar /usr/local/bin/composer
 
-echo "*** Update Composer Dependencies ***"
+#wget http://getcomposer.org/composer.phar
+#php composer.phar install
+#sudo mv composer.phar /usr/local/bin/composer
+
+echo "*** Install Composer Dependencies ***"
 cd /vagrant
 composer update
+composer install
 
 echo "*** Adding Composer Dependencies to the $PATH ***"
 cat >> /home/vagrant/.bash_profile <<EOF
