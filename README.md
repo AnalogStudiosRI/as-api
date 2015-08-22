@@ -12,7 +12,7 @@ This project uses Vagrant for local development.  To use it please install
 
 3. Add this entry to your hosts file
 ```
-127.0.0.1       local.analogstuios.thegreenhouse.io
+127.0.0.1       local.analogstudios.thegreenhouse.io
 ```
 
 4. Add the [EditorConfig][] plugin to your IDE
@@ -33,22 +33,27 @@ This project uses Vagrant for local development.  To use it please install
 - *src/base/* - abstract classes and interfaces
 - *src/config/* - config class
 - *src/dao/* - data access class
-- *src/resources/* - top level site pages and their static assets (JS, CSS, .html); implements angular controllers
-- *src/routes/* - API services and non-UI components; implements angular services
-- *tests/* - unit / integration tests
+- *src/resources/* - available collections to map to endpoints
+- *src/routes/* - map of endpoints to resources
+- *tests/* - unit and integration tests
 
-## Development / Building
+## Development & Building
 ### Start Vagrant
 1. Start Vagrant `vagrant up`
+2. ssh into the box `vagrant ssh`
+3. move to the project root `cd /vagrant`
+4. Run these steps
 
-### Development
-The build tool for this project is Phing.
+`sudo vim /etc/php5/apache2/php.ini` //set `phar.readonly = Off`
+`sudo vim /etc/php5/cli/php.ini` //set `phar.readonly = Off`
+`sudo /etc/init.d/apache2 restart`
 
-1. ssh into the box `vagrant ssh`
+`sudo apt-get install php5-xsl` //phpdocumenter
 
-2. move to the project root `cd /vagrant`
 
-### Build
+## Build
+*make sure you have ini/config-local.ini file*
+
 1. local build `phing build -D buildDir=/home/vagrant/build`
 
 2. production build `phing build`
@@ -57,7 +62,7 @@ You can test from the VM using cURL
 `curl localhost/api/events`
 
 Or from the browser in your host machine
-`local.analogstuios.thegreenhouse.io:4567/api/events`
+`local.analogstudios.thegreenhouse.io:4567/api/events`
 
 ### Testing
 PHPunit is used for unit testing
@@ -66,7 +71,10 @@ PHPunit is used for unit testing
 ## Environment Configuration / Deploying
 
 ### App Deployment
-The application expects that the as-api.phar, .htaccess, controller.php to be deployed in the webroot.
+The application expects the following files to be deployed to the webroot
+* as-api.phar
+* .htaccess
+* controller.php
 
 ### App Config (ini)
 `config-bootstrap.ini` contains the initial configuration needed for the application, and should be deployed in the
