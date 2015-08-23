@@ -30,11 +30,9 @@ This project uses Vagrant for local development.  To use it please install
 - *sh/* - shell scripts for Jenkins, Vagrant, etc
 - *sql/* - sql backups
 - *src/* - application code
-- *src/base/* - abstract classes and interfaces
-- *src/config/* - config class
-- *src/dao/* - data access class
 - *src/resources/* - available collections to map to endpoints
 - *src/routes/* - map of endpoints to resources
+- *src/services/* - helper / utitlity functions, classes not mapped to collectionsgit
 - *tests/* - unit and integration tests
 
 ## Development & Building
