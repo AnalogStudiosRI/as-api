@@ -44,8 +44,9 @@ class ContactService {
 
     if(!$error){
       $message = wordwrap($message, 70, "\r\n");
+      $headers = "From: " . $from;
 
-      if(mail($to, $subject, $message)){
+      if(mail($to, $subject, $message, $headers)){
         $errorMessage = "Message sent";
       } else {
         $errorMessage = "Couldn't send mail";
