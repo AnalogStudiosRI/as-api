@@ -1,6 +1,6 @@
 <?php
 
-namespace dao;
+namespace services;
 
 use base as base;
 
@@ -9,9 +9,9 @@ use base as base;
   * @author Owen Buckley
   * @email owen@analogstudios.net
   * @api as-api
-  * @package dao
+  * @package services
   * @uses base base
-  * @class RestfulDatabase
+  * @class RestfulDatabaseService
   *
   * @since 0.3.0
   *
@@ -19,7 +19,7 @@ use base as base;
   *
   */
 
-class RestfulDatabase extends base\AbstractRestfulDatabase{
+class RestfulDatabaseService extends base\AbstractRestfulDatabase{
   private static $PATTERN = array(
     "ID" => "/^[0-9]+$/"
   );

@@ -2,7 +2,7 @@
 
 namespace base;
 
-use dao as dao;
+use services as service;
 
  /**
   *
@@ -22,7 +22,7 @@ use dao as dao;
 abstract class AbstractRestfulResource{
   protected $db;
 
-  function __construct(dao\RestfulDatabase $db) {
+  function __construct(service\RestfulDatabaseService $db) {
     $this->db = $db;
   }
 

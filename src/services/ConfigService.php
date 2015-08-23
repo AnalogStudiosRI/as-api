@@ -1,14 +1,14 @@
 <?php
 
-namespace config;
+namespace services;
 
 /**
  *
  * @author Owen Buckley
  * @email owen@analogstudios.net
  * @api as-api
- * @package config
- * @class Config
+ * @package services
+ * @class ConfigService
  *
  * @since 0.3.0
  *
@@ -16,7 +16,7 @@ namespace config;
  *
  */
 
-class Config{
+class ConfigService{
 
   private static function checkPathExists($path = ''){
     if(file_exists($path)){

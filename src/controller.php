@@ -8,8 +8,8 @@ require_once PHAR_PATH;
 require_once PHAR_PATH . "/vendor/autoload.php";
 
 /* get config */
-$appConfig = \config\Config::getConfigFromIni('config.ini');
-$envConfig = \config\Config::getConfigFromIni($appConfig['env_config_ini_path']);
+$appConfig = \services\ConfigService::getConfigFromIni('config.ini');
+$envConfig = \services\ConfigService::getConfigFromIni($appConfig['env_config_ini_path']);
 
 //runtime configuration
 ini_set("display_errors", $envConfig["runtime.displayErrors"]);
