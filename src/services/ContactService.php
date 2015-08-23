@@ -17,40 +17,46 @@ namespace services;
  */
 class ContactService {
 
-  public static function sendEmail($to = '', $from = '', $subject = '', $message = ''){
+  public static function sendEmail($to = "", $from = "", $subject = "", $message = ""){
     $error = false;
-    $errorMessage = '';
+    $status = 200;
+    $errorMessage = "";
 
-    if($to === '' || !filter_var($to, FILTER_VALIDATE_EMAIL)){
+    if($to === "" || !filter_var($to, FILTER_VALIDATE_EMAIL)){
       $error = true;
-      $errorMessage = 'Invalid to email address';
+      $errorMessage = "Invalid to email address";
     }
 
-    if(!$error && ($from === '' || !filter_var($from, FILTER_VALIDATE_EMAIL))){
+    if(!$error && ($from === "" || !filter_var($from, FILTER_VALIDATE_EMAIL))){
       $error = true;
-      $errorMessage = 'Invalid from email address';
+      $errorMessage = "Invalid from email address";
     }
 
-    if(!$error && $subject === ''){
+    if(!$error && $subject === ""){
       $error = true;
-      $errorMessage = 'No subject';
+      $errorMessage = "No subject";
     }
 
-    if(!$error && $message === ''){
+    if(!$error && $message === ""){
       $error = true;
-      $errorMessage = 'No message';
+      $errorMessage = "No message";
     }
 
     if(!$error){
       $message = wordwrap($message, 70, "\r\n");
 
       if(mail($to, $subject, $message)){
-        $errorMessage = 'Message sent';
+        $errorMessage = "Message sent";
+      } else {
+        $errorMessage = "Couldn't send mail";
+        $status = 500;
       }
+    }else{
+      $status = 400;
     }
 
     return array(
-      "status" => !$error,
+      "status" => $status,
       "message" => $errorMessage
     );
 

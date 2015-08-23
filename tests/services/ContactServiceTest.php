@@ -24,35 +24,35 @@ class ContactServiceTest extends PHPUnit_Framework_TestCase{
   public function testSendEmailSuccess(){
     $response = service\ContactService::sendEmail(self::$validEmail, self::$validEmail, self::$subject, self::$message);
 
-    $this->assertTrue($response["status"]);
+    $this->assertEquals($response["status"], 200);
     $this->assertEquals($response["message"], "Message sent");
   }
 
   public function testSendEmailInvalidToEmailFailure(){
     $response = service\ContactService::sendEmail(self::$invalidEmail, self::$validEmail, self::$subject, self::$message);
 
-    $this->assertFalse($response["status"]);
+    $this->assertEquals($response["status"], 400);
     $this->assertEquals($response["message"], "Invalid to email address");
   }
 
   public function testSendEmailInvalidFromEmailFailure(){
     $response = service\ContactService::sendEmail(self::$validEmail, self::$invalidEmail, self::$subject, self::$message);
 
-    $this->assertFalse($response["status"]);
+    $this->assertEquals($response["status"], 400);
     $this->assertEquals($response["message"], "Invalid from email address");
   }
 
   public function testSendEmailNoSubjectFailure(){
     $response = service\ContactService::sendEmail(self::$validEmail, self::$validEmail, '', self::$message);
 
-    $this->assertFalse($response["status"]);
+    $this->assertEquals($response["status"], 400);
     $this->assertEquals($response["message"], "No subject");
   }
 
   public function testSendEmailNoMessageFailure(){
     $response = service\ContactService::sendEmail(self::$validEmail, self::$validEmail, self::$subject, '');
 
-    $this->assertFalse($response["status"]);
+    $this->assertEquals($response["status"], 400);
     $this->assertEquals($response["message"], "No message");
   }
 

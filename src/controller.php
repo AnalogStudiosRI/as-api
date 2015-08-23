@@ -47,23 +47,32 @@ $slim->response->headers->set('Content-Type', 'application/json');
 /* routing and controlling */
 $request = $slim->request;
 $path = $request->getResourceUri();
+$resources = array('events');
 $route = '';
 
 switch ($path){
   case strpos($path, 'events') !== FALSE:
     $route = 'events';
     break;
+  case strpos($path, 'contact') !== FALSE:
+    $route = 'contact';
+    break;
 }
 
-//get entity to pass to respective router
-$builder = new \resources\RestfulResourceBuilder(array(
-  "dsn" => "mysql:host=" . $envConfig['db.host'] . ";dbname=" . $envConfig['db.name'],
-  "username" => $envConfig["db.user"],
-  "password" => $envConfig["db.password"]
-), $route);
+//build a resource
+if(in_array($route, $resources)){
 
-$resource = $builder->getResource();
+  //TODO get entity to pass to respective router
+  $builder = new \resources\RestfulResourceBuilder(array(
+      "dsn" => "mysql:host=" . $envConfig['db.host'] . ";dbname=" . $envConfig['db.name'],
+      "username" => $envConfig["db.user"],
+      "password" => $envConfig["db.password"]
+  ), $route);
 
+  $resource = $builder->getResource();
+};
+
+//TODO make routing OOP
 require_once PHAR_PATH . "/routes/" . $route . "-route.php";
 
 //start slim
