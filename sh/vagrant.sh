@@ -18,6 +18,7 @@ apt-get update
 
 echo "*** Install base packages ***"
 apt-get -y install git
+apt-get -y install postfix
 apt-get -y install vim curl buildssential python-software-properties git > /dev/null 2>&1
 apt-get update
 
