@@ -51,7 +51,7 @@ mysql -uroot -p$DBPASSWD -e "grant all privileges on $DBNAME_TEST.* to '$DBUSER_
 service mysql restart
 
 echo "*** Installing PHP / Apache ***"
-apt-get -y install php5 apache2 libapache2-mod-php5 php5-curl php5-xdebug php5-gd php5-mcrypt php5-mysql php-apc php5-xsl php5-phar > /dev/null 2>&1
+apt-get -y install php5 apache2 libapache2-mod-php5 php5-curl php5-gd php5-mcrypt php5-mysql php-apc php5-phar > /dev/null 2>&1
 
 echo "*** Enabling mod-rewrite ***"
 a2enmod rewrite > /dev/null 2>&1
@@ -111,3 +111,6 @@ phpunit --version
 
 echo "*** Setting Up Env Config ***"
 cp /vagrant/ini/config-local.ini /var/www/config-env.ini
+
+apt-get -y install php5-xdebug php5-xsl
+apt-get -y install sendmail
