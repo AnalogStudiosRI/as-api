@@ -6,10 +6,8 @@ Backend API component for Analog Studios 2.0 Redesign
 
 This project uses Vagrant for local development.  To use it please install
 
-1.  [Vagrant][]
-
-2.  [VirtualMachine][]
-
+1.  [Vagrant][] >= 1.7.4
+2.  [VirtualBox][] >= 5.x and latest available version guest additions (should get prompted during VB installation)
 3. Add this entry to your hosts file
 ```
 127.0.0.1       local.analogstudios.thegreenhouse.io
@@ -22,32 +20,27 @@ This project uses Vagrant for local development.  To use it please install
 [EditorConfig]: http://editorconfig.org/
 [php]: http://php.net/
 [Vagrant]: https://www.vagrantup.com/
-[VirtualMachine]: https://www.virtualbox.org/
+[VirtualBox]: https://www.virtualbox.org/
 
 ## Project Layout
 
 - *ini/* - tracked and un-tracked environment based configuration files
-- *sh/* - shell scripts for Jenkins, Vagrant, etc
+- *bin/* - executable scripts for Jenkins, Vagrant, etc
 - *sql/* - sql backups
 - *src/* - application code
 - *src/resources/* - available collections to map to endpoints
 - *src/routes/* - map of endpoints to resources
 - *src/services/* - helper / utitlity functions, classes not mapped to collectionsgit
-- *tests/* - unit and integration tests
+- *tests/* - unit and integration tests organized to match the _src_ direectory
 
-## Development & Building
-### Start Vagrant
+## Vagrant
 1. Start Vagrant `vagrant up`
 2. ssh into the box `vagrant ssh`
 3. move to the project root `cd /vagrant`
 4. Run these steps
-
-`sudo vim /etc/php5/apache2/php.ini` //set `phar.readonly = Off`
-`sudo vim /etc/php5/cli/php.ini` //set `phar.readonly = Off`
-`sudo /etc/init.d/apache2 restart`
-
-`sudo apt-get install php5-xsl` //phpdocumenter
-
+* `sudo vim /etc/php5/apache2/php.ini` //set `phar.readonly = Off`
+* `sudo vim /etc/php5/cli/php.ini` //set `phar.readonly = Off`
+* `sudo /etc/init.d/apache2 restart`
 
 ## Build
 *make sure you have ini/config-local.ini file*
