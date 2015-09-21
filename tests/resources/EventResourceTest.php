@@ -4,7 +4,7 @@ error_reporting(E_ALL | E_STRICT);
 
 require_once "src/base/AbstractRestfulDatabase.php";
 require_once "src/base/AbstractRestfulResource.php";
-require_once "src/dao/RestfulDatabase.php";
+require_once "src/services/RestfulDatabaseService.php";
 require_once "src/resources/EventsResource.php";
 require_once "src/resources/RestfulResourceBuilder.php";
 

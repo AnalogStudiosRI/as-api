@@ -1,15 +1,14 @@
 <?php
 error_reporting(E_ALL | E_STRICT);
 
-require_once "src/config/Config.php";
+require_once "src/services/ConfigService.php";
 
-use config as config;
+use services as service;
 
-class ConfigTest extends PHPUnit_Framework_TestCase{
+class ConfigServiceTest extends PHPUnit_Framework_TestCase{
 
   public function testGetConfigSuccess(){
-    $cfg = new config\Config();
-    $config = $cfg->getConfigFromIni('ini/config-env.tmpl.ini');
+    $config = service\ConfigService::getConfigFromIni('ini/config-env.tmpl.ini');
 
     //test database
     $this->assertEquals($config['db.host'], 'db-host');

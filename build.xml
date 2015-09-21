@@ -19,6 +19,15 @@
     <include name="vendor/autoload.php" />
   </fileset>
 
+  <!-- TODO add more files to coverage reporting -->
+  <fileset dir="." id="coverageFiles">
+    <include name="src/**/*.php"/>
+    <exclude name="src/controllers/*.php"/>
+    <exclude name="src/stub.php"/>
+    <exclude name="src/controller.php"/>
+    <exclude name="src/routes/*.php"/>
+  </fileset>
+
   <target name="info" description="Displays basic project information">
     <echo message="This is project ${phing.project.name}" />
     <echo message="Current version of phing is: ${project.version}" />
@@ -52,8 +61,16 @@
   <target name="test">
     <mkdir dir="${buildDir}" />
 
+    <mkdir dir="coverage_db"/>
+    <mkdir dir="coverage_result"/>
+
+    <echo msg="preparing code coverage database..."/>
+    <coverage-setup database="coverage_db/coverage.db">
+      <fileset refid="coverageFiles"/>
+    </coverage-setup>
+
     <echo msg="running tests..."/>
-    <phpunit printsummary="true" haltonerror="true" haltonincomplete="true" haltonfailure="true" haltonskipped="true">
+    <phpunit printsummary="true" haltonerror="true" haltonincomplete="true" haltonfailure="true" haltonskipped="true" codecoverage="true">
       <batchtest>
         <fileset dir="tests/" >
           <include name="**/*.php"/>
@@ -63,6 +80,12 @@
       </formatter>
     </phpunit>
     <phpunitreport todir="${buildDir}"/>
+
+    <echo msg="generating code coverage results..."/>
+    <coverage-report outfile="coverage_db/coverage.xml">
+      <report todir="coverage_result"/>
+    </coverage-report>
+
   </target>
 
   <target name="docs" description="as-api documentation">

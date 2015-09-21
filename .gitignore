@@ -5,5 +5,7 @@ build/
 testsuites.xml
 .vagrant/
 docs/
+coverage_db/
+coverage_result/
 ini/config-dev.ini
 ini/config-local.ini

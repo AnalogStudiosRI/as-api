@@ -2,7 +2,7 @@
 
 namespace resources;
 
-use dao as dao;
+use services as service;
 
  /**
   *
@@ -24,7 +24,7 @@ class RestfulResourceBuilder {
   function __construct($dbConfig = array(), $entityType = "") {
     if($dbConfig && count($dbConfig) === 3 && $entityType !== ""){
       $this->entityType = $entityType;
-      $this->db = new dao\RestfulDatabase($dbConfig);
+      $this->db = new service\RestfulDatabaseService($dbConfig);
     }else{
       throw new \InvalidArgumentException('Invalid Constructor Params');
     }

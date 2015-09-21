@@ -2,9 +2,9 @@
 error_reporting(E_ALL | E_STRICT);
 
 require_once "src/base/AbstractRestfulDatabase.php";
-require_once "src/dao/RestfulDatabase.php";
+require_once "src/services/RestfulDatabaseService.php";
 
-use dao as dao;
+use services as service;
 
 class RestfulDatabaseTest extends PHPUnit_Framework_TestCase{
   private $db;
@@ -15,7 +15,7 @@ class RestfulDatabaseTest extends PHPUnit_Framework_TestCase{
   );
 
   public function setup(){
-    $this->db = new dao\RestfulDatabase($this->dbConfig);
+    $this->db = new service\RestfulDatabaseService($this->dbConfig);
   }
 
   public function tearDown(){
@@ -23,11 +23,11 @@ class RestfulDatabaseTest extends PHPUnit_Framework_TestCase{
   }
 
   public function testInstanceOf(){
-    $this->assertTrue($this->db instanceof dao\RestfulDatabase);
+    $this->assertTrue($this->db instanceof service\RestfulDatabaseService);
   }
 
   public function testInstanceOfParent(){
-    $this->assertTrue($this->db instanceof dao\RestfulDatabase);
+    $this->assertTrue($this->db instanceof service\RestfulDatabaseService);
     $this->assertTrue(is_subclass_of($this->db, base\AbstractRestfulDatabase::class, false));
   }
 }

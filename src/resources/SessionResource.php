@@ -1,6 +1,6 @@
 <?php
 
-namespace resource;
+namespace resources;
 
 use base as base;
 

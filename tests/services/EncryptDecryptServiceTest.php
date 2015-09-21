@@ -2,9 +2,9 @@
 
 error_reporting(E_ALL | E_STRICT);
 
-require_once "src/encrypt/EncryptDecrypt.php";
+require_once "src/services/EncryptDecryptService.php";
 
-use encrypt as encrypt;
+use services as service;
 
 /**
  *

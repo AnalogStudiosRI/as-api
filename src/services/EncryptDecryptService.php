@@ -1,13 +1,13 @@
 <?php
 
-namespace encrypt;
+namespace services;
 
 /**
  *
  * @author Owen Buckley
  * @email owen@analogstudios.net
  * @api as-api
- * @package encrypt
+ * @package services
  * @class EncryptDecrypt
  *
  * @since 0.3.0
@@ -16,7 +16,7 @@ namespace encrypt;
  *
  */
 
-class EncryptDecrypt {
+class EncryptDecryptService {
   private $token = '';
 
   function __construct($tokenPath = ''){
