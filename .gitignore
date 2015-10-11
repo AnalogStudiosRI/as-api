@@ -9,3 +9,4 @@ coverage_db/
 coverage_result/
 ini/config-dev.ini
 ini/config-local.ini
+reports/

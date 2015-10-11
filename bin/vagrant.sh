@@ -79,6 +79,10 @@ cat > /etc/apache2/conf-available/phpmyadmin.conf << "EOF"
 </VirtualHost>
 EOF
 
+echo -e "*** Turn on Phar Support ***"
+sed -i 's/;phar.readonly = On/phar.readonly = Off/g' /etc/php5/apache2/php.ini
+sed -i 's/;phar.readonly = On/phar.readonly = Off/g' /etc/php5/cli/php.ini
+
 echo "*** Restarting Apache ***"
 service apache2 restart > /dev/null 2>&1
 

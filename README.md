@@ -37,10 +37,6 @@ This project uses Vagrant for local development.  To use it please install
 1. Start Vagrant `vagrant up`
 2. ssh into the box `vagrant ssh`
 3. move to the project root `cd /vagrant`
-4. Run these steps
-* `sudo vim /etc/php5/apache2/php.ini` //set `phar.readonly = Off`
-* `sudo vim /etc/php5/cli/php.ini` //set `phar.readonly = Off`
-* `sudo /etc/init.d/apache2 restart`
 
 ## Build
 *make sure you have ini/config-local.ini file*
