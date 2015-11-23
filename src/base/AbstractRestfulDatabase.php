@@ -17,7 +17,6 @@ namespace base;
   */
 
 abstract class AbstractRestfulDatabase {
-  //put your code here
   protected $db = null;
 
   function __construct($dbType = "", $dbConfig = array()){
