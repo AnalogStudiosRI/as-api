@@ -16,6 +16,9 @@ class AuthenticationServiceTest extends PHPUnit_Framework_TestCase{
       "dsn" => "mysql:host=127.0.0.1;dbname=asadmin_analogstudios_new_test",
       "username" => "astester",
       "password" => "t3st3r"
+    ),
+    "key" => array(
+      "jwtSecret" => "PbgtB@Q3RER8dN"
     )
   );
 

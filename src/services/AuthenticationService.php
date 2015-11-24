@@ -19,7 +19,9 @@ namespace services;
 use \Firebase\JWT\JWT;
 
 class AuthenticationService{
-
+  private static $JWT_NOT_BEFORE_OFFEST = 10;   //Adding 10 seconds
+  private static $JWT_EXPIRE_OFFEST = 60;       //Adding 70 seconds
+  private static $JWT_ALGORITHM = "HS512";      //https://tools.ietf.org/html/draft-ietf-jose-json-web-algorithms-40#section-3
   private $db;
   private $config;
 
@@ -31,11 +33,12 @@ class AuthenticationService{
   }
 
   private function generateJWT ($id, $username) {
-    $tokenId    = base64_encode(mcrypt_create_iv(32));
-    $issuedAt   = time();
-    $notBefore  = $issuedAt + 10;                     //Adding 10 seconds
-    $expire     = $notBefore + 60;                    // Adding 60 seconds
-    $serverName = $this->config["session"]["domain"];  // Retrieve the server name from config file
+    $tokenId = base64_encode(mcrypt_create_iv(32));
+    $issuedAt = time();
+    $notBefore = $issuedAt + self::$JWT_NOT_BEFORE_OFFEST;
+    $expire = $notBefore + self::$JWT_EXPIRE_OFFEST;
+    $serverName = $this->config["session"]["domain"];
+    $secretKey = $this->config["key"]["jwtSecret"];
 
     /*
      * Create the token as an array
@@ -52,9 +55,6 @@ class AuthenticationService{
       ]
     );
 
-    //XXX TODO THIS SHOULD NOT BE HARDCODED!!!!
-    $secretKey = base64_decode("jwtKey");
-
     /*
      * Encode the array to a JWT string.
      * Second parameter is the key to encode the token.
@@ -62,9 +62,9 @@ class AuthenticationService{
      * The output string can be validated at http://jwt.io/
      */
     $jwt = JWT::encode(
-      $jwtData,       //Data to be encoded in the JWT
-      $secretKey,     // The signing key
-      "HS512"         // Algorithm used to sign the token, see https://tools.ietf.org/html/draft-ietf-jose-json-web-algorithms-40#section-3
+      $jwtData,               //Data to be encoded in the JWT
+      $secretKey,             // The signing key
+      self::$JWT_ALGORITHM    // Algorithm used to sign the token
     );
 
     $unencodedArray = ["jwt" => $jwt];
