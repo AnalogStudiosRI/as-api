@@ -6,7 +6,8 @@
     "vendor-dir": "vendor"
   },
   "require": {
-    "slim/slim": "2.6.*"
+    "slim/slim": "2.6.*",
+    "firebase/php-jwt": "3.0"
   },
   "require-dev": {
     "phing/phing": "2.10.1",
