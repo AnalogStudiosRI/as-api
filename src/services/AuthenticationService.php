@@ -29,7 +29,11 @@ class AuthenticationService{
   //XXX TODO should have JWT Service injected
   public function __construct($config){
     $this->config = $config;
-    $this->db = new \PDO($this->config["db"]["dsn"], $this->config["db"]["username"], $this->config["db"]["password"]);
+    $this->db = new \PDO(
+      "mysql:host=" . $this->config['db.host'] . ";dbname=" . $this->config['db.name'],
+      $this->config["db.user"],
+      $this->config["db.password"]
+    );
   }
 
   private function generateJWT ($id, $username) {
@@ -37,8 +41,8 @@ class AuthenticationService{
     $issuedAt = time();
     $notBefore = $issuedAt + self::$JWT_NOT_BEFORE_OFFEST;
     $expire = $notBefore + self::$JWT_EXPIRE_OFFEST;
-    $serverName = $this->config["session"]["domain"];
-    $secretKey = $this->config["key"]["jwtSecret"];
+    $serverName = $this->config["session.domain"];
+    $secretKey = $this->config["key.jwtSecret"];
 
     /*
      * Create the token as an array
@@ -117,7 +121,7 @@ class AuthenticationService{
         $response["message"] = "Invalid Credentials";
       }
     }else{
-      throw new \InvalidArgumentException("Missing Credentials");
+      $response["message"] = "Missing Credentials";
     }
 
     return $response;
@@ -131,8 +135,6 @@ class AuthenticationService{
 
     if(is_string($token)){
       $isValid = $this->validateJWT($token);
-    }else{
-      throw new \InvalidArgumentException("Missing Valid Token Param");
     }
 
     return $isValid;

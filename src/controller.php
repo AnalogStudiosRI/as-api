@@ -30,19 +30,8 @@ $slim->add(new \Slim\Middleware\SessionCookie(array(
 /* common response headers */
 $slim->response->headers->set('Content-Type', 'application/json');
 
-/* get login status */
-//$loginCtrl    = new \net\analogstudios\controllers\LoginController($pdoDB);
-//$sessionResponse  = $loginCtrl->get();
-//$sessionInfo      = array(
-//  "hasSession"          =>  $sessionResponse["body"]["hasSession"],
-//  "username"            =>  isset($sessionResponse["body"]["username"]) ? $sessionResponse["body"]["username"] : null,
-//  "noSessionResponse"   =>  array(
-//    "status"              => 401,
-//    "body"                => array(
-//      "message"           => "No active session"
-//    )
-//  )
-//);
+/* instatiate authentication service */
+$authService = new \services\AuthenticationService($envConfig);
 
 /* routing and controlling */
 $request = $slim->request;
@@ -51,15 +40,18 @@ $resources = array('events');
 $route = '';
 
 switch ($path){
-  case strpos($path, 'events') !== FALSE:
-    $route = 'events';
+  case strpos($path, 'login') !== FALSE:
+    $route = 'login';
     break;
   case strpos($path, 'contact') !== FALSE:
     $route = 'contact';
     break;
+  case strpos($path, 'events') !== FALSE:
+    $route = 'events';
+    break;
 }
 
-//build a resource
+//build a resource based on route
 if(in_array($route, $resources)){
 
   //TODO get entity to pass to respective router
@@ -72,7 +64,7 @@ if(in_array($route, $resources)){
   $resource = $builder->getResource();
 };
 
-//TODO make routing OOP
+//XXX TODO make routing OOP
 require_once PHAR_PATH . "/routes/" . $route . "-route.php";
 
 //start slim
