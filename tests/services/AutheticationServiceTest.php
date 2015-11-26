@@ -8,6 +8,7 @@ use services as service;
 class AuthenticationServiceTest extends PHPUnit_Framework_TestCase{
   private static $username = "obuckley";
   private static $password = "testpwd";
+  //XXX TODO mock ConfigService
   private static $CONFIG = array(
     "session" => array(
       "domain" => "analogstudios.thegreenhouse.io"
@@ -69,4 +70,36 @@ class AuthenticationServiceTest extends PHPUnit_Framework_TestCase{
     $loginService = new service\AuthenticationService(self::$CONFIG);
     $loginService->login(self::$username, null);
   }
+
+  public function testValidateLoginSuccess(){
+    $authService = new service\AuthenticationService(self::$CONFIG);
+    $loginStatus = $authService->login("astester", '$1$fDUPbgtB$Q3RER8dNV4aBbcw/dys8a/');
+    $token = $loginStatus["data"]["jwt"];
+
+    sleep(11);
+
+    $tokenStatus = $authService->validateLogin($token);
+
+    $this->assertTrue($tokenStatus);
+  }
+
+  /**
+   * @expectedException InvalidArgumentException
+   */
+  public function testValidateLoginFailureInvalidTokenParam(){
+    $authService = new service\AuthenticationService(self::$CONFIG);
+    $authService->validateLogin();
+  }
+
+  /**
+   * @expectedException \Firebase\JWT\BeforeValidException
+   */
+  public function testValidateLoginFailureTokenNotBeforeTime(){
+    $authService = new service\AuthenticationService(self::$CONFIG);
+    $loginStatus = $authService->login("astester", '$1$fDUPbgtB$Q3RER8dNV4aBbcw/dys8a/');
+    $token = $loginStatus["data"]["jwt"];
+
+    $authService->validateLogin($token);
+  }
+
 }

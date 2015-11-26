@@ -67,24 +67,47 @@ class AuthenticationService{
       self::$JWT_ALGORITHM    // Algorithm used to sign the token
     );
 
-    $unencodedArray = ["jwt" => $jwt];
-    //echo json_encode($unencodedArray);
-
-    return $unencodedArray;
+    return array("jwt" => $jwt);
   }
 
+  private function validateJWT ($token){
+    $isValid = false;
+
+    if(is_string($token)){
+
+      try{
+        JWT::decode($token, $this->config["key"]["jwtSecret"], array(self::$JWT_ALGORITHM));
+
+        $isValid = true;
+      }catch(\Firebase\JWT\BeforeValidException $e){
+        throw new \Firebase\JWT\BeforeValidException("Before Valid Time");
+      }
+    }else{
+      throw new \InvalidArgumentException("Missing Token");
+    }
+
+    return $isValid;
+  }
+
+  private function validateCredentials ($username, $password){
+    $db = $this->db;
+
+    $stmt = $db->prepare("SELECT * FROM users WHERE username=:username AND password=:password");
+    $stmt->bindValue(":username", $username);
+    $stmt->bindValue(":password", $password);
+    $stmt->execute();
+
+    return $stmt->fetchAll($db::FETCH_ASSOC);
+  }
+
+  /*
+   * Used when a user logs in for the first time
+   */
   public function login ($username = null, $password = null) {
-    $response = array("success" => false, "message" => "");
+    $response = array("success" => false, "message" => "", "data" => "");
 
     if(is_string($username) && is_string($password)){
-      $db = $this->db;
-
-      $stmt = $db->prepare("SELECT * FROM users WHERE username=:username AND password=:password");
-      $stmt->bindValue(":username", $username);
-      $stmt->bindValue(":password", $password);
-      $stmt->execute();
-
-      $result = $stmt->fetchAll($db::FETCH_ASSOC);
+      $result = $this->validateCredentials($username, $password);
 
       if(count($result) === 1){
         $response["success"] = true;
@@ -94,10 +117,25 @@ class AuthenticationService{
         $response["message"] = "Invalid Credentials";
       }
     }else{
-      throw new \InvalidArgumentException("Messing Credentials");
+      throw new \InvalidArgumentException("Missing Credentials");
     }
 
     return $response;
+  }
+
+  /*
+   * Used when a user is requested protected resources and existing login needs to be validated
+   */
+  public function validateLogin ($token = null){
+    $isValid = false;
+
+    if(is_string($token)){
+      $isValid = $this->validateJWT($token);
+    }else{
+      throw new \InvalidArgumentException("Missing Valid Token Param");
+    }
+
+    return $isValid;
   }
 
 }
