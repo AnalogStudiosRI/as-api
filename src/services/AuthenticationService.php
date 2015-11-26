@@ -80,7 +80,7 @@ class AuthenticationService{
     if(is_string($token)){
 
       try{
-        JWT::decode($token, $this->config["key"]["jwtSecret"], array(self::$JWT_ALGORITHM));
+        JWT::decode($token, $this->config["key.jwtSecret"], array(self::$JWT_ALGORITHM));
 
         $isValid = true;
       }catch(\Firebase\JWT\BeforeValidException $e){

@@ -10,72 +10,77 @@ class AuthenticationServiceTest extends PHPUnit_Framework_TestCase{
   private static $password = "testpwd";
   //XXX TODO mock ConfigService
   private static $CONFIG = array(
-    "session" => array(
-      "domain" => "analogstudios.thegreenhouse.io"
-    ),
-    "db" => array(
-      "dsn" => "mysql:host=127.0.0.1;dbname=asadmin_analogstudios_new_test",
-      "username" => "astester",
-      "password" => "t3st3r"
-    ),
-    "key" => array(
-      "jwtSecret" => "PbgtB@Q3RER8dN"
-    )
+    "session.domain" => "analogstudios.thegreenhouse.io",
+    "db.host" => "127.0.0.1",
+    "db.name" => "asadmin_analogstudios_new_test",
+    "db.user" => "astester",
+    "db.password" => "t3st3r",
+    "key.jwtSecret" => "PbgtB@Q3RER8dN"
   );
 
   public function testLoginSuccess(){
-    $loginService = new service\AuthenticationService(self::$CONFIG);
-    $loginStatus = $loginService->login("astester", '$1$fDUPbgtB$Q3RER8dNV4aBbcw/dys8a/');
+    $authService = new service\AuthenticationService(self::$CONFIG);
+    $authStatus = $authService->login("astester", '$1$fDUPbgtB$Q3RER8dNV4aBbcw/dys8a/');
 
-    $this->assertArrayHasKey("success", $loginStatus);
-    $this->assertArrayHasKey("message", $loginStatus);
-    $this->assertArrayHasKey("data", $loginStatus);
-    $this->assertArrayHasKey("jwt", $loginStatus["data"]);
+    $this->assertArrayHasKey("success", $authStatus);
+    $this->assertArrayHasKey("message", $authStatus);
+    $this->assertArrayHasKey("data", $authStatus);
+    $this->assertArrayHasKey("jwt", $authStatus["data"]);
 
-    $this->assertEquals($loginStatus["success"], true);
-    $this->assertEquals($loginStatus["message"], "Login Success");
+    $this->assertEquals($authStatus["success"], true);
+    $this->assertEquals($authStatus["message"], "Login Success");
   }
 
   public function testLoginSuccessInvalidCredentials(){
-    $loginService = new service\AuthenticationService(self::$CONFIG);
-    $loginStatus = $loginService->login(self::$username, self::$password);
+    $authService = new service\AuthenticationService(self::$CONFIG);
+    $authStatus = $authService->login(self::$username, self::$password);
 
-    $this->assertArrayHasKey("success", $loginStatus);
-    $this->assertArrayHasKey("message", $loginStatus);
+    $this->assertArrayHasKey("success", $authStatus);
+    $this->assertArrayHasKey("message", $authStatus);
 
-    $this->assertEquals($loginStatus["success"], false);
-    $this->assertEquals($loginStatus["message"], "Invalid Credentials");
+    $this->assertEquals($authStatus["success"], false);
+    $this->assertEquals($authStatus["message"], "Invalid Credentials");
   }
 
-  /**
-   * @expectedException InvalidArgumentException
-   */
   public function testLoginFailureNoCredentials(){
-    $loginService = new service\AuthenticationService(self::$CONFIG);
-    $loginService->login();
+    $authService = new service\AuthenticationService(self::$CONFIG);
+    $authStatus = $authService->login();
+
+    $this->assertArrayHasKey("success", $authStatus);
+    $this->assertArrayHasKey("message", $authStatus);
+
+    $this->assertEquals($authStatus["success"], false);
+    $this->assertEquals($authStatus["message"], "Missing Credentials");
   }
 
-  /**
-   * @expectedException InvalidArgumentException
-   */
   public function testLoginFailureNoUsernameCredential(){
-    $loginService = new service\AuthenticationService(self::$CONFIG);
-    $loginService->login(null);
+    $authService = new service\AuthenticationService(self::$CONFIG);
+    $authStatus = $authService->login(null, self::$password);
+
+    $this->assertArrayHasKey("success", $authStatus);
+    $this->assertArrayHasKey("message", $authStatus);
+
+    $this->assertEquals($authStatus["success"], false);
+    $this->assertEquals($authStatus["message"], "Missing Credentials");
   }
 
-  /**
-   * @expectedException InvalidArgumentException
-   */
   public function testLoginFailureNoPasswordCredential(){
-    $loginService = new service\AuthenticationService(self::$CONFIG);
-    $loginService->login(self::$username, null);
+    $authService = new service\AuthenticationService(self::$CONFIG);
+    $authStatus = $authService->login(self::$username);
+
+    $this->assertArrayHasKey("success", $authStatus);
+    $this->assertArrayHasKey("message", $authStatus);
+
+    $this->assertEquals($authStatus["success"], false);
+    $this->assertEquals($authStatus["message"], "Missing Credentials");
   }
 
   public function testValidateLoginSuccess(){
     $authService = new service\AuthenticationService(self::$CONFIG);
-    $loginStatus = $authService->login("astester", '$1$fDUPbgtB$Q3RER8dNV4aBbcw/dys8a/');
-    $token = $loginStatus["data"]["jwt"];
+    $authStatus = $authService->login("astester", '$1$fDUPbgtB$Q3RER8dNV4aBbcw/dys8a/');
+    $token = $authStatus["data"]["jwt"];
 
+    //intentionally expire JWT
     sleep(11);
 
     $tokenStatus = $authService->validateLogin($token);
@@ -83,12 +88,10 @@ class AuthenticationServiceTest extends PHPUnit_Framework_TestCase{
     $this->assertTrue($tokenStatus);
   }
 
-  /**
-   * @expectedException InvalidArgumentException
-   */
   public function testValidateLoginFailureInvalidTokenParam(){
     $authService = new service\AuthenticationService(self::$CONFIG);
-    $authService->validateLogin();
+
+    $this->assertFalse($authService->validateLogin());
   }
 
   /**
@@ -96,8 +99,8 @@ class AuthenticationServiceTest extends PHPUnit_Framework_TestCase{
    */
   public function testValidateLoginFailureTokenNotBeforeTime(){
     $authService = new service\AuthenticationService(self::$CONFIG);
-    $loginStatus = $authService->login("astester", '$1$fDUPbgtB$Q3RER8dNV4aBbcw/dys8a/');
-    $token = $loginStatus["data"]["jwt"];
+    $authStatus = $authService->login("astester", '$1$fDUPbgtB$Q3RER8dNV4aBbcw/dys8a/');
+    $token = $authStatus["data"]["jwt"];
 
     $authService->validateLogin($token);
   }
