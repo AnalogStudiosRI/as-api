@@ -16,12 +16,12 @@ namespace services;
  *
  */
 
-use \Firebase\JWT\JWT;
+use \Firebase\JWT\JWT as JWT;
 
 class AuthenticationService{
-  private static $JWT_NOT_BEFORE_OFFEST = 10;   //Adding 10 seconds
-  private static $JWT_EXPIRE_OFFEST = 60;       //Adding 70 seconds
-  private static $JWT_ALGORITHM = "HS512";      //https://tools.ietf.org/html/draft-ietf-jose-json-web-algorithms-40#section-3
+  private static $JWT_NOT_BEFORE_OFFEST = 10;      //Adding 10 seconds
+  private static $JWT_EXPIRE_OFFEST = 1200;        //Adding 1200 seconds (20m session)
+  private static $JWT_ALGORITHM = "HS512";         //https://tools.ietf.org/html/draft-ietf-jose-json-web-algorithms-40#section-3
   private $db;
   private $config;
 
@@ -93,6 +93,7 @@ class AuthenticationService{
     return $isValid;
   }
 
+  //private function
   private function validateCredentials ($username, $password){
     $db = $this->db;
 
@@ -128,7 +129,7 @@ class AuthenticationService{
   }
 
   /*
-   * Used when a user is requested protected resources and existing login needs to be validated
+   * Used when a user is requesting protected resources and existing login needs to be validated
    */
   public function validateLogin ($token = null){
     $isValid = false;
@@ -138,6 +139,19 @@ class AuthenticationService{
     }
 
     return $isValid;
+  }
+
+  public function refreshLogin ($token = null){
+    $newToken = null;
+
+    if(is_string($token) && $this->validateJWT($token)){
+      $tokenPieces = JWT::decode($token, $this->config["key.jwtSecret"], array(self::$JWT_ALGORITHM));
+      $tokenData = $tokenPieces->data;
+
+      $newToken = $this->generateJWT($tokenData->userId, $tokenData->userName)["jwt"];
+    }
+
+    return $newToken;
   }
 
 }

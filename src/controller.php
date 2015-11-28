@@ -28,10 +28,17 @@ $slim->add(new \Slim\Middleware\SessionCookie(array(
 )));
 
 /* common response headers */
-$slim->response->headers->set('Content-Type', 'application/json');
+$slim->response->headers->set("Content-Type", "application/json");
 
-/* instatiate authentication service */
+/* instantiate authentication service */
 $authService = new \services\AuthenticationService($envConfig);
+$authHeader = $slim->request->headers->get('Authorization');
+$token = sscanf($authHeader, 'Bearer %s')[0];
+
+if($token){
+  $newToken = $authService->refreshLogin($token);
+  $slim->response->headers->set("Authorization", "Bearer " . $newToken);
+}
 
 /* routing and controlling */
 $request = $slim->request;
@@ -56,9 +63,9 @@ if(in_array($route, $resources)){
 
   //TODO get entity to pass to respective router
   $builder = new \resources\RestfulResourceBuilder(array(
-      "dsn" => "mysql:host=" . $envConfig['db.host'] . ";dbname=" . $envConfig['db.name'],
-      "username" => $envConfig["db.user"],
-      "password" => $envConfig["db.password"]
+    "dsn" => "mysql:host=" . $envConfig['db.host'] . ";dbname=" . $envConfig['db.name'],
+    "username" => $envConfig["db.user"],
+    "password" => $envConfig["db.password"]
   ), $route);
 
   $resource = $builder->getResource();

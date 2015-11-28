@@ -80,7 +80,7 @@ class AuthenticationServiceTest extends PHPUnit_Framework_TestCase{
     $authStatus = $authService->login("astester", '$1$fDUPbgtB$Q3RER8dNV4aBbcw/dys8a/');
     $token = $authStatus["data"]["jwt"];
 
-    //intentionally expire JWT
+    //make sure we have reached JWT used time clearance
     sleep(11);
 
     $tokenStatus = $authService->validateLogin($token);
@@ -103,6 +103,25 @@ class AuthenticationServiceTest extends PHPUnit_Framework_TestCase{
     $token = $authStatus["data"]["jwt"];
 
     $authService->validateLogin($token);
+  }
+
+  public function testRefreshLoginSuccess(){
+    $authService = new service\AuthenticationService(self::$CONFIG);
+    $authStatus = $authService->login("astester", '$1$fDUPbgtB$Q3RER8dNV4aBbcw/dys8a/');
+
+    //make sure we have reached JWT used time clearance
+    sleep(11);
+
+    $refreshToken = $authService->refreshLogin($authStatus["data"]["jwt"]);
+
+    $this->assertNotNull($refreshToken);
+  }
+
+  public function testRefreshLoginFailureNotToken(){
+    $authService = new service\AuthenticationService(self::$CONFIG);
+    $refreshToken = $authService->refreshLogin();
+
+    $this->assertNull($refreshToken);
   }
 
 }
