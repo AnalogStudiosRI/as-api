@@ -22,3 +22,5 @@ RewriteRule ^api controller.php [QSA,L]
   Order allow,deny
   Deny from all
 </Files>
+
+RewriteRule .* - [env=HTTP_AUTHORIZATION:%{HTTP:Authorization}]

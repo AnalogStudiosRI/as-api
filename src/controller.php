@@ -28,21 +28,17 @@ $slim->add(new \Slim\Middleware\SessionCookie(array(
 )));
 
 /* common response headers */
-$slim->response->headers->set('Content-Type', 'application/json');
+$slim->response->headers->set("Content-Type", "application/json");
 
-/* get login status */
-//$loginCtrl    = new \net\analogstudios\controllers\LoginController($pdoDB);
-//$sessionResponse  = $loginCtrl->get();
-//$sessionInfo      = array(
-//  "hasSession"          =>  $sessionResponse["body"]["hasSession"],
-//  "username"            =>  isset($sessionResponse["body"]["username"]) ? $sessionResponse["body"]["username"] : null,
-//  "noSessionResponse"   =>  array(
-//    "status"              => 401,
-//    "body"                => array(
-//      "message"           => "No active session"
-//    )
-//  )
-//);
+/* instantiate authentication service */
+$authService = new \services\AuthenticationService($envConfig);
+$authHeader = $slim->request->headers->get('Authorization');
+$token = sscanf($authHeader, 'Bearer %s')[0];
+
+if($token){
+  $newToken = $authService->refreshLogin($token);
+  $slim->response->headers->set("Authorization", "Bearer " . $newToken);
+}
 
 /* routing and controlling */
 $request = $slim->request;
@@ -51,28 +47,31 @@ $resources = array('events');
 $route = '';
 
 switch ($path){
-  case strpos($path, 'events') !== FALSE:
-    $route = 'events';
+  case strpos($path, 'login') !== FALSE:
+    $route = 'login';
     break;
   case strpos($path, 'contact') !== FALSE:
     $route = 'contact';
     break;
+  case strpos($path, 'events') !== FALSE:
+    $route = 'events';
+    break;
 }
 
-//build a resource
+//build a resource based on route
 if(in_array($route, $resources)){
 
   //TODO get entity to pass to respective router
   $builder = new \resources\RestfulResourceBuilder(array(
-      "dsn" => "mysql:host=" . $envConfig['db.host'] . ";dbname=" . $envConfig['db.name'],
-      "username" => $envConfig["db.user"],
-      "password" => $envConfig["db.password"]
+    "dsn" => "mysql:host=" . $envConfig['db.host'] . ";dbname=" . $envConfig['db.name'],
+    "username" => $envConfig["db.user"],
+    "password" => $envConfig["db.password"]
   ), $route);
 
   $resource = $builder->getResource();
 };
 
-//TODO make routing OOP
+//XXX TODO make routing OOP
 require_once PHAR_PATH . "/routes/" . $route . "-route.php";
 
 //start slim
