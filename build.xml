@@ -17,6 +17,7 @@
     <include name="vendor/phpunit/phpunit/src/Framework/Assert/Functions.php" />
     <include name="vendor/herrera-io/json/src/lib/json_version.php" />
     <include name="vendor/herrera-io/phar-update/src/lib/constants.php" />
+    <include name="vendor/symfony/polyfill-mbstring/bootstrap.php" />
     <include name="vendor/autoload.php" />
   </fileset>
 
