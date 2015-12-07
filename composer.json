@@ -6,13 +6,13 @@
     "vendor-dir": "vendor"
   },
   "require": {
-    "slim/slim": "2.6.*",
+    "slim/slim": "2.6.2",
     "firebase/php-jwt": "3.0"
   },
   "require-dev": {
     "phing/phing": "2.10.1",
     "phpunit/phpunit": "4.6.0",
-    "phpdocumentor/phpdocumentor": "2.*"
+    "phpdocumentor/phpdocumentor": "2.8.5"
   },
   "autoload":{
     "psr-4": {
