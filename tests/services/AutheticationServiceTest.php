@@ -94,15 +94,14 @@ class AuthenticationServiceTest extends PHPUnit_Framework_TestCase{
     $this->assertFalse($authService->validateLogin());
   }
 
-  /**
-   * @expectedException \Firebase\JWT\BeforeValidException
-   */
   public function testValidateLoginFailureTokenNotBeforeTime(){
     $authService = new service\AuthenticationService(self::$CONFIG);
     $authStatus = $authService->login("astester", '$1$fDUPbgtB$Q3RER8dNV4aBbcw/dys8a/');
     $token = $authStatus["data"]["jwt"];
 
-    $authService->validateLogin($token);
+    $authStatus = $authService->validateLogin($token);
+
+    $this->assertEquals('EXPIRED', $authStatus);
   }
 
   public function testRefreshLoginSuccess(){
