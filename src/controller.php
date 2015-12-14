@@ -34,7 +34,7 @@ $slim->response->headers->set("Content-Type", "application/json");
 $authService = new \services\AuthenticationService($envConfig);
 $authHeader = $slim->request->headers->get('Authorization');
 $token = sscanf($authHeader, 'Bearer %s')[0];
-$loginStatus = $authService->validateLogin($token);
+$loginStatus = $token ? $authService->validateLogin($token) : "";
 $hasValidLogin = $loginStatus === 'VALID' ? true : false;
 
 $invalidLoginResponse = array(
