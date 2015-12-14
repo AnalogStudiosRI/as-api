@@ -87,13 +87,16 @@ class AuthenticationService{
 
         $authStatus = self::$AUTH_STATUS_VALID;
       }catch(\Exception $e){
+        //\Firebase\JWT\BeforeValidException
+        //\Firebase\JWT\SignatureInvalidException.php
+        echo 'catching exception';
         if($e instanceof \Firebase\JWT\ExpiredException) {
+          echo 'caught ExpiredException';
           $authStatus = self::$AUTH_STATUS_EXPIRED;
         }
-        //\Firebase\JWT\ExpiredException
-        //\Firebase\JWT\BeforeValidException
       }
     }else{
+      echo 'here!!?????';
       throw new \InvalidArgumentException("Missing Token");
     }
 
@@ -137,15 +140,16 @@ class AuthenticationService{
 
   /*
    * Used when a user is requesting protected resources and existing login needs to be validated
+   * Succeeds only if token is not expired or has any other issues (eg. within session limit)
    */
   public function validateLogin ($token = null){
-    return is_string($token) ? $this->validateJWT($token) : false;
+    $this->validateJWT($token);
   }
 
   public function refreshLogin ($token = null){
     $newToken = null;
 
-    if(is_string($token) && $this->validateJWT($token)){
+    if(is_string($token) && ($this->validateJWT($token) === self::$VALID)){
       $tokenPieces = JWT::decode($token, $this->config["key.jwtSecret"], array(self::$JWT_ALGORITHM));
       $tokenData = $tokenPieces->data;
 
