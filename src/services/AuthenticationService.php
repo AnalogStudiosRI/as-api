@@ -19,6 +19,9 @@ namespace services;
 use \Firebase\JWT\JWT as JWT;
 
 class AuthenticationService{
+  private static $AUTH_STATUS_VALID = 'VALID';
+  private static $AUTH_STATUS_EXPIRED = 'EXPIRED';
+  private static $AUTH_STATUS_UNKNOWN = 'UNKNOWN';
   private static $JWT_NOT_BEFORE_OFFEST = 10;      //Adding 10 seconds
   private static $JWT_EXPIRE_OFFEST = 1200;        //Adding 1200 seconds (20m session)
   private static $JWT_ALGORITHM = "HS512";         //https://tools.ietf.org/html/draft-ietf-jose-json-web-algorithms-40#section-3
@@ -75,22 +78,26 @@ class AuthenticationService{
   }
 
   private function validateJWT ($token){
-    $isValid = false;
+    $authStatus = self::$AUTH_STATUS_UNKNOWN;
 
     if(is_string($token)){
 
       try{
         JWT::decode($token, $this->config["key.jwtSecret"], array(self::$JWT_ALGORITHM));
 
-        $isValid = true;
-      }catch(\Firebase\JWT\BeforeValidException $e){
-        throw new \Firebase\JWT\BeforeValidException("Before Valid Time");
+        $authStatus = self::$AUTH_STATUS_VALID;
+      }catch(\Exception $e){
+        if($e instanceof \Firebase\JWT\ExpiredException) {
+          $authStatus = self::$AUTH_STATUS_EXPIRED;
+        }
+        //\Firebase\JWT\ExpiredException
+        //\Firebase\JWT\BeforeValidException
       }
     }else{
       throw new \InvalidArgumentException("Missing Token");
     }
 
-    return $isValid;
+    return $authStatus;
   }
 
   //private function
@@ -132,13 +139,7 @@ class AuthenticationService{
    * Used when a user is requesting protected resources and existing login needs to be validated
    */
   public function validateLogin ($token = null){
-    $isValid = false;
-
-    if(is_string($token)){
-      $isValid = $this->validateJWT($token);
-    }
-
-    return $isValid;
+    return $this->validateJWT($token);
   }
 
   public function refreshLogin ($token = null){

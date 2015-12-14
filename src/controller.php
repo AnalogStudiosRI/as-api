@@ -34,7 +34,8 @@ $slim->response->headers->set("Content-Type", "application/json");
 $authService = new \services\AuthenticationService($envConfig);
 $authHeader = $slim->request->headers->get('Authorization');
 $token = sscanf($authHeader, 'Bearer %s')[0];
-$hasValidLogin = $authService->validateLogin($token);
+$loginStatus = $authService->validateLogin($token);
+$hasValidLogin = $loginStatus === 'VALID' ? true : false;
 
 $invalidLoginResponse = array(
   "status" => 401,
@@ -43,9 +44,15 @@ $invalidLoginResponse = array(
   )
 );
 
-if($hasValidLogin){
-  $newToken = $authService->refreshLogin($token);
-  $slim->response->headers->set("Authorization", "Bearer " . $newToken);
+switch ($loginStatus) {
+  case "EXPIRED":
+    //TODO use 419;
+    $invalidLoginResponse["data"]["message"] = "User session expired";
+    break;
+  case "VALID":
+    $newToken = $authService->refreshLogin($token);
+    $slim->response->headers->set("Authorization", "Bearer " . $newToken);
+    break;
 }
 
 /* routing and controlling */
