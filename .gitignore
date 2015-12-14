@@ -1,8 +1,12 @@
-src/main/php/vendor/
+vendor/
 tmp/
-target/
-nbproject/
+build/
 .idea/
 testsuites.xml
 .vagrant/
 docs/
+coverage_db/
+coverage_result/
+ini/config-dev.ini
+ini/config-local.ini
+reports/
