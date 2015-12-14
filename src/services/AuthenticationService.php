@@ -149,7 +149,7 @@ class AuthenticationService{
   public function refreshLogin ($token = null){
     $newToken = null;
 
-    if(is_string($token) && ($this->validateJWT($token) === self::$VALID)){
+    if(is_string($token) && ($this->validateJWT($token) === self::$AUTH_STATUS_VALID)){
       $tokenPieces = JWT::decode($token, $this->config["key.jwtSecret"], array(self::$JWT_ALGORITHM));
       $tokenData = $tokenPieces->data;
 
