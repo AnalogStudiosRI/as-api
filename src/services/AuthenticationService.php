@@ -140,7 +140,7 @@ class AuthenticationService{
    * Succeeds only if token is not expired or has any other issues (eg. within session limit)
    */
   public function validateLogin ($token = null){
-    $this->validateJWT($token);
+    return $this->validateJWT($token);
   }
 
   public function refreshLogin ($token = null){
