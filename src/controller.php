@@ -47,6 +47,7 @@ $invalidLoginResponse = array(
 switch ($loginStatus) {
   case "EXPIRED":
     //TODO use 419;
+    //https://thegreenhouse.atlassian.net/browse/AS-202
     $invalidLoginResponse["data"]["message"] = "User session expired";
     break;
   case "VALID":
