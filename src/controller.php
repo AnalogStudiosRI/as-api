@@ -34,8 +34,16 @@ $slim->response->headers->set("Content-Type", "application/json");
 $authService = new \services\AuthenticationService($envConfig);
 $authHeader = $slim->request->headers->get('Authorization');
 $token = sscanf($authHeader, 'Bearer %s')[0];
+$hasValidLogin = $authService->validateLogin($token);
 
-if($token){
+$invalidLoginResponse = array(
+  "status" => 401,
+  "data" => array(
+    "message" => "User not Authenticated"
+  )
+);
+
+if($hasValidLogin){
   $newToken = $authService->refreshLogin($token);
   $slim->response->headers->set("Authorization", "Bearer " . $newToken);
 }
