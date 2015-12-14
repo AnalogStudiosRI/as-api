@@ -94,7 +94,6 @@ class AuthenticationService{
         }
       }
     }else{
-      echo 'here!!?????';
       throw new \InvalidArgumentException("Missing Token");
     }
 
