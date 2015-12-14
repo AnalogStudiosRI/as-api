@@ -139,7 +139,7 @@ class AuthenticationService{
    * Used when a user is requesting protected resources and existing login needs to be validated
    */
   public function validateLogin ($token = null){
-    return $this->validateJWT($token);
+    return is_string($token) ? $this->validateJWT($token) : false;
   }
 
   public function refreshLogin ($token = null){
