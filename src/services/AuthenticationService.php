@@ -89,9 +89,7 @@ class AuthenticationService{
       }catch(\Exception $e){
         //\Firebase\JWT\BeforeValidException
         //\Firebase\JWT\SignatureInvalidException.php
-        echo 'catching exception';
         if($e instanceof \Firebase\JWT\ExpiredException) {
-          echo 'caught ExpiredException';
           $authStatus = self::$AUTH_STATUS_EXPIRED;
         }
       }
