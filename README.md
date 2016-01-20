@@ -84,7 +84,16 @@ renamed to `config-env.ini`  (This is done automatically when developing locally
 - _runtime.displayErrors_ - display runtime errors or not (i.e. on or off)
 - _session.domain_ - the domain the app is running under (i.e. www.analogstudios.net)
 
-## TODO
-[AS-105][]
+**note: SENSITIVE CREDENTIALS SHOULD NOT BE COMMITTED TO THE REPO!  DB BACKUPS ARE ONLY FOR LOCAL TESTING, RDS SHOULD
+PRESERVE ALL BACKUPS***
 
-[AS-105]: https://thegreenhouse.atlassian.net/browse/AS-105
+## Database
+The application database is hosted in AWS [RDS].  All the relevant _sql_ backup and patch files are included in the
+_src/sql_ directory.  For each release, an incremented sql file is expected such that it can be run on the prod database
+for when a schema change is made.  When a release happens, the current production database should be backed (primary
+to keep the Vagrant created test databases current with production).
+
+**note: SENSITIVE CREDENTIALS SHOULD NOT BE COMMITTED TO THE REPO!  DB BACKUPS ARE ONLY FOR LOCAL TESTING, RDS SHOULD
+PRESERVE ALL BACKUPS***
+
+[RDS]: https://aws.amazon.com/rds/

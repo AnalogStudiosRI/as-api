@@ -12,15 +12,15 @@ class AuthenticationServiceTest extends PHPUnit_Framework_TestCase{
   private static $CONFIG = array(
     "session.domain" => "analogstudios.thegreenhouse.io",
     "db.host" => "127.0.0.1",
-    "db.name" => "asadmin_analogstudios_new_test",
+    "db.name" => "analogstudios_prod",
     "db.user" => "astester",
     "db.password" => "t3st3r",
-    "key.jwtSecret" => "PbgtB@Q3RER8dN"
+    "key.jwtSecret" => "De6CA9#3b#aSF3ZVG@Q3"
   );
 
   public function testLoginSuccess(){
     $authService = new service\AuthenticationService(self::$CONFIG);
-    $authStatus = $authService->login("astester", '$1$fDUPbgtB$Q3RER8dNV4aBbcw/dys8a/');
+    $authStatus = $authService->login(self::$CONFIG["db.user"], self::$CONFIG["db.password"]);
 
     $this->assertArrayHasKey("success", $authStatus);
     $this->assertArrayHasKey("message", $authStatus);
@@ -77,7 +77,7 @@ class AuthenticationServiceTest extends PHPUnit_Framework_TestCase{
 
   public function testValidateLoginSuccess(){
     $authService = new service\AuthenticationService(self::$CONFIG);
-    $authStatus = $authService->login("astester", '$1$fDUPbgtB$Q3RER8dNV4aBbcw/dys8a/');
+    $authStatus = $authService->login(self::$CONFIG["db.user"], self::$CONFIG["db.password"]);
     $token = $authStatus["data"]["jwt"];
 
     //make sure we have reached JWT used time clearance
@@ -97,7 +97,7 @@ class AuthenticationServiceTest extends PHPUnit_Framework_TestCase{
 
   public function testValidateLoginFailureTokenNotBeforeTime(){
     $authService = new service\AuthenticationService(self::$CONFIG);
-    $authStatus = $authService->login("astester", '$1$fDUPbgtB$Q3RER8dNV4aBbcw/dys8a/');
+    $authStatus = $authService->login(self::$CONFIG["db.user"], self::$CONFIG["db.password"]);
     $token = $authStatus["data"]["jwt"];
 
     $authStatus = $authService->validateLogin($token);
@@ -122,7 +122,7 @@ class AuthenticationServiceTest extends PHPUnit_Framework_TestCase{
 
   public function testRefreshLoginSuccess(){
     $authService = new service\AuthenticationService(self::$CONFIG);
-    $authStatus = $authService->login("astester", '$1$fDUPbgtB$Q3RER8dNV4aBbcw/dys8a/');
+    $authStatus = $authService->login(self::$CONFIG["db.user"], self::$CONFIG["db.password"]);
 
     //make sure we have reached JWT used time clearance
     sleep(11);
