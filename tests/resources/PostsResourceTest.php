@@ -220,7 +220,7 @@ class PostsResourceTest extends PHPUnit_Framework_TestCase{
     //assert
     $this->assertEquals(self::$NOT_MODIFIED, $status);
     $this->assertEquals(0, count($response["data"]));
-    $this->assertEquals("Duplicate data, post not modified", $response["message"]);
+    $this->assertEquals("Duplicate data.  Resource not modified", $response["message"]);
   }
 
   public function testUpdateNoPostIdFailure(){
@@ -260,7 +260,7 @@ class PostsResourceTest extends PHPUnit_Framework_TestCase{
     //assert
     $this->assertEquals(self::$NOT_FOUND, $response["status"]);
     $this->assertEquals(0, count($response["data"]));
-    $this->assertEquals("Post Not Found", $response["message"]);
+    $this->assertEquals("Resource not found", $response["message"]);
   }
 
   /**********/
@@ -278,7 +278,7 @@ class PostsResourceTest extends PHPUnit_Framework_TestCase{
     //assert
     $this->assertEquals(self::$SUCCESS, $response["status"]);
     $this->assertEquals(0, count($response["data"]));
-    $this->assertEquals("Post deleted successfully", $response["message"]);
+    $this->assertEquals("Resource deleted successfully", $response["message"]);
   }
 
   public function testDeleteNoPostIdFailure(){
@@ -289,7 +289,7 @@ class PostsResourceTest extends PHPUnit_Framework_TestCase{
     //assert
     $this->assertEquals(self::$BAD_REQUEST, $response["status"]);
     $this->assertEquals(0, count($response["data"]));
-    $this->assertEquals("Bad Request.  No valid post id provided", $response["message"]);
+    $this->assertEquals("Bad Request.  No valid id provided", $response["message"]);
   }
 
   public function testDeleteInvalidPostIdFailure(){
@@ -299,7 +299,7 @@ class PostsResourceTest extends PHPUnit_Framework_TestCase{
     //assert
     $this->assertEquals(self::$BAD_REQUEST, $response["status"]);
     $this->assertEquals(0, count($response["data"]));
-    $this->assertEquals("Bad Request.  No valid post id provided", $response["message"]);
+    $this->assertEquals("Bad Request.  No valid id provided", $response["message"]);
   }
 
   public function testDeletePostNotFoundFailure(){
@@ -309,6 +309,6 @@ class PostsResourceTest extends PHPUnit_Framework_TestCase{
     //assert
     $this->assertEquals(self::$NOT_FOUND, $response["status"]);
     $this->assertEquals(0, count($response["data"]));
-    $this->assertEquals("Post not found", $response["message"]);
+    $this->assertEquals("No results found", $response["message"]);
   }
 }

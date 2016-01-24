@@ -22,6 +22,7 @@ $slim->get("/api/posts/:id", function($eventId) use ($slim, $resource) {
 $slim->post("/api/posts", function() use ($slim, $resource, $hasValidLogin, $invalidLoginResponse) {
   $params = json_decode($slim->request->getBody(), true);
   $params["createdTime"] = time();
+
   $response = $hasValidLogin ? $resource->createPost($params) : $invalidLoginResponse;
 
   $slim->response->status($response['status']);
