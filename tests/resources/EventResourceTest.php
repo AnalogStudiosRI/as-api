@@ -27,7 +27,7 @@ class EventResourceTest extends PHPUnit_Framework_TestCase{
   private static $DB_CONFIG = array(
     "dsn" => "mysql:host=127.0.0.1;dbname=analogstudios_prod",
     "username" => "astester",
-    "password" => "4e7RqGEhtHKHAX6AtYnc"
+    "password" => "t3st3r"
   );
 
   public function setup(){
@@ -337,6 +337,6 @@ class EventResourceTest extends PHPUnit_Framework_TestCase{
     //assert
     $this->assertEquals(self::$NOT_FOUND, $response["status"]);
     $this->assertEquals(0, count($response["data"]));
-    $this->assertEquals("Event not found", $response["message"]);
+    $this->assertEquals("No results found", $response["message"]);
   }
 }

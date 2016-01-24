@@ -14,7 +14,7 @@ class AuthenticationServiceTest extends PHPUnit_Framework_TestCase{
     "db.host" => "127.0.0.1",
     "db.name" => "analogstudios_prod",
     "db.user" => "astester",
-    "db.password" => "4e7RqGEhtHKHAX6AtYnc",
+    "db.password" => "t3st3r",
     "key.jwtSecret" => "De6CA9#3b#aSF3ZVG@Q3"
   );
 
