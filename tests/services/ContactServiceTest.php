@@ -21,12 +21,12 @@ class ContactServiceTest extends PHPUnit_Framework_TestCase{
   /********/
   /* Send Email  */
   /********/
-  public function testSendEmailSuccess(){
-    $response = service\ContactService::sendEmail(self::$validEmail, self::$validEmail, self::$subject, self::$message);
-
-    $this->assertEquals($response["status"], 200);
-    $this->assertEquals($response["message"], "Message sent");
-  }
+//  public function testSendEmailSuccess(){
+//    $response = service\ContactService::sendEmail(self::$validEmail, self::$validEmail, self::$subject, self::$message);
+//
+//    $this->assertEquals($response["status"], 200);
+//    $this->assertEquals($response["message"], "Message sent");
+//  }
 
   public function testSendEmailInvalidToEmailFailure(){
     $response = service\ContactService::sendEmail(self::$invalidEmail, self::$validEmail, self::$subject, self::$message);
