@@ -248,7 +248,7 @@ class EventResourceTest extends PHPUnit_Framework_TestCase{
     //assert
     $this->assertEquals(self::$NOT_MODIFIED, $status);
     $this->assertEquals(0, count($response["data"]));
-    $this->assertEquals("Duplicate data, resource not modified", $response["message"]);
+    $this->assertEquals("Duplicate data, Resource not modified", $response["message"]);
   }
 
   public function testUpdateNoEventIdFailure(){
