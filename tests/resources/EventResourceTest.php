@@ -248,7 +248,7 @@ class EventResourceTest extends PHPUnit_Framework_TestCase{
     //assert
     $this->assertEquals(self::$NOT_MODIFIED, $status);
     $this->assertEquals(0, count($response["data"]));
-    $this->assertEquals("Duplicate data, event not modified", $response["message"]);
+    $this->assertEquals("Duplicate data, resource not modified", $response["message"]);
   }
 
   public function testUpdateNoEventIdFailure(){
@@ -288,7 +288,7 @@ class EventResourceTest extends PHPUnit_Framework_TestCase{
     //assert
     $this->assertEquals(self::$NOT_FOUND, $response["status"]);
     $this->assertEquals(0, count($response["data"]));
-    $this->assertEquals("Event Not Found", $response["message"]);
+    $this->assertEquals("Resource Not Found", $response["message"]);
   }
 
   /**********/
@@ -306,7 +306,7 @@ class EventResourceTest extends PHPUnit_Framework_TestCase{
     //assert
     $this->assertEquals(self::$SUCCESS, $response["status"]);
     $this->assertEquals(0, count($response["data"]));
-    $this->assertEquals("Event deleted successfully", $response["message"]);
+    $this->assertEquals("Resource deleted successfully", $response["message"]);
   }
 
   public function testDeleteNoEventIdFailure(){
@@ -317,7 +317,7 @@ class EventResourceTest extends PHPUnit_Framework_TestCase{
     //assert
     $this->assertEquals(self::$BAD_REQUEST, $response["status"]);
     $this->assertEquals(0, count($response["data"]));
-    $this->assertEquals("Bad Request.  No valid event id provided", $response["message"]);
+    $this->assertEquals("Bad Request.  No valid id provided", $response["message"]);
   }
 
   public function testDeleteInvalidEventIdFailure(){
@@ -327,7 +327,7 @@ class EventResourceTest extends PHPUnit_Framework_TestCase{
     //assert
     $this->assertEquals(self::$BAD_REQUEST, $response["status"]);
     $this->assertEquals(0, count($response["data"]));
-    $this->assertEquals("Bad Request.  No valid event id provided", $response["message"]);
+    $this->assertEquals("Bad Request.  No valid id provided", $response["message"]);
   }
 
   public function testDeleteEventNotFoundFailure(){
