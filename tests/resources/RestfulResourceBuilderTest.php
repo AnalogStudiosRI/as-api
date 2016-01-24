@@ -15,7 +15,7 @@ class RestfulEntityBuilder extends PHPUnit_Framework_TestCase{
   private $DB_CONFIG = array(
     "dsn" => "mysql:host=127.0.0.1;dbname=analogstudios_prod",
     "username" => "astester",
-    "password" => "4e7RqGEhtHKHAX6AtYnc"
+    "password" => "452SsQMwMP"
   );
 
   public function setup(){

@@ -3,8 +3,8 @@
 LOCALHOST=localhost
 DBHOST=127.0.0.1
 DBNAME=analogstudios_prod
-DBUSERastester
-DBPASSWD=t3st3r
+DBUSER=astester
+DBPASSWD=452SsQMwMP
 SQL_IMPORT=/vagrant/sql/analogstudios-v2.bak.sql
 
 echo "*** Starting installation... ***"
