@@ -59,8 +59,7 @@ CREATE TABLE IF NOT EXISTS `users` (
 --
 
 INSERT INTO `users` (`id`, `username`, `password`) VALUES
-(1, 'obuckley', '$1$fDUPbgtB$Q3RER8dNV4aBbcw/dys8a/'),
-(2, 'dave', 'Y4g8366&VRm#x34b3K4P');
+(1, 'astester', '4e7RqGEhtHKHAX6AtYnc');
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
 /*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
