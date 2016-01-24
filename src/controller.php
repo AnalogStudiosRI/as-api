@@ -68,6 +68,7 @@ switch ($path){
     break;
   case strpos($path, 'events') !== FALSE:
     $route = 'events';
+    break;
   case strpos($path, 'login') !== FALSE:
     $route = 'login';
     break;
