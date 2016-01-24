@@ -185,7 +185,7 @@ class RestfulDatabaseService extends base\AbstractRestfulDatabase{
 
           $found = $stm->fetch($db::FETCH_NUM) > 0;
           $code = $found ? self::$STATUS_CODE["NOT_MODIFIED"] : self::$STATUS_CODE["NOT_FOUND"];
-          $invalidParamError = $found ? "Duplicate data. Resource not modified" : "Resouce Not Found";
+          $invalidParamError = $found ? "Duplicate data. Resource not modified" : "Resource Not Found";
         } else {
           $code = self::$STATUS_CODE["ERROR"];
           $invalidParamError = "Unkown Database Error";
