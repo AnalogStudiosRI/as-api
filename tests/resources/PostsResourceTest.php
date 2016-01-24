@@ -260,7 +260,7 @@ class PostsResourceTest extends PHPUnit_Framework_TestCase{
     //assert
     $this->assertEquals(self::$NOT_FOUND, $response["status"]);
     $this->assertEquals(0, count($response["data"]));
-    $this->assertEquals("Resource Not found", $response["message"]);
+    $this->assertEquals("Resource Not Found", $response["message"]);
   }
 
   /**********/
