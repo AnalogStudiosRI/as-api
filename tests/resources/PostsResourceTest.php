@@ -126,7 +126,10 @@ class PostsResourceTest extends PHPUnit_Framework_TestCase{
 
   public function testGetPostByIdSuccess(){
     //get response
-    $response = $this->postsResource->getPostById(1);
+    $posts = $this->postsResource->getPosts();
+    $randIndex = rand(1, (count($posts["data"]) - 1));
+
+    $response = $this->postsResource->getPostById($posts["data"][$randIndex]);
     $status = $response["status"];
     $data = $response["data"];
     $post = $data[0];
