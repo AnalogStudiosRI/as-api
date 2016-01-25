@@ -46,8 +46,7 @@ class PostsResourceTest extends PHPUnit_Framework_TestCase{
     $now = time();
     $newPost = array(
       "title" => "Post Title " . $now,
-      "summary" => "Post Summary " . $now,
-      "creeatedTime" => $now
+      "summary" => "Post Summary " . $now
     );
 
     //get response
@@ -68,8 +67,7 @@ class PostsResourceTest extends PHPUnit_Framework_TestCase{
   public function testCreatePostNoTitleFailure(){
     $now = time();
     $newPost = array(
-      "summary" => "Post Summary " . $now,
-      "creeatedTime" => $now
+      "summary" => "Post Summary " . $now
     );
 
     //get response
@@ -85,8 +83,7 @@ class PostsResourceTest extends PHPUnit_Framework_TestCase{
   public function testCreatePostNoSummaryFailure(){
     $now = time();
     $newPost = array(
-      "title" => "Post Title " . $now,
-      "creeatedTime" => $now
+      "title" => "Post Title " . $now
     );
 
     //get response
@@ -96,7 +93,7 @@ class PostsResourceTest extends PHPUnit_Framework_TestCase{
     //assert
     $this->assertEquals(self::$BAD_REQUEST, $status);
     $this->assertEquals(0, count($response["data"]));
-    $this->assertEquals("Bad Request.  Expected description param", $response["message"]);
+    $this->assertEquals("Bad Request.  Expected summary param", $response["message"]);
   }
 
   /********/
