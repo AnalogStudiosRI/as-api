@@ -32,7 +32,7 @@
 
   <target name="info" description="Displays basic project information">
     <echo message="This is project ${phing.project.name}" />
-    <echo message="Current version of phing is: ${project.version}" />
+    <echo message="Current version of the project is: ${project.version}" />
    </target>
 
   <target name="clean">

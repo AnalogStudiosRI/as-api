@@ -43,6 +43,9 @@ class RestfulResourceBuilder {
       case 'events':
         $entity = new EventsResource($this->db);
         break;
+      case 'posts':
+        $entity = new PostsResource($this->db);
+        break;
       default:
         //throw exception
     }

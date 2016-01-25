@@ -6,7 +6,7 @@ require_once "src/services/RestfulDatabaseService.php";
 
 use services as service;
 
-class RestfulDatabaseTest extends PHPUnit_Framework_TestCase{
+class RestfulDatabaseServiceTest extends PHPUnit_Framework_TestCase{
   private $db;
   private $dbConfig = array(
     "dsn" => "mysql:host=127.0.0.1;dbname=analogstudios_prod",
