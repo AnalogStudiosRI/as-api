@@ -99,23 +99,6 @@ class PostsResourceTest extends PHPUnit_Framework_TestCase{
     $this->assertEquals("Bad Request.  Expected description param", $response["message"]);
   }
 
-  public function testCreatePostNoCreatedTimeFailure(){
-    $now = time();
-    $newPost = array(
-      "title" => "Post Title " . $now,
-      "summary" => "Post Summary " . $now
-    );
-
-    //get response
-    $response = $this->postsResource->createPost($newPost);
-    $status = $response["status"];
-
-    //assert
-    $this->assertEquals(self::$BAD_REQUEST, $status);
-    $this->assertEquals(0, count($response["data"]));
-    $this->assertEquals("Bad Request.  Expected startTime param", $response["message"]);
-  }
-
   /********/
   /* READ */
   /********/
