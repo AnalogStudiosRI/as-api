@@ -13,7 +13,7 @@ $slim->get("/api/posts", function() use ($slim, $resource) {
 });
 
 $slim->get("/api/posts/:id", function($eventId) use ($slim, $resource) {
-  $response = $resource->getPostsById($eventId);
+  $response = $resource->getPostById($eventId);
 
   $slim->response->status($response['status']);
   $slim->response->setBody(json_encode($response["data"]));
