@@ -104,6 +104,8 @@ class PostsResourceTest extends PHPUnit_Framework_TestCase{
     $status = $response["status"];
     $data = $response["data"];
 
+
+    var_dump($response);
     //assert
     $this->assertEquals(self::$SUCCESS, $status);
     $this->assertNotEmpty($data);
@@ -129,7 +131,7 @@ class PostsResourceTest extends PHPUnit_Framework_TestCase{
     $posts = $this->postsResource->getPosts();
     $randIndex = rand(1, (count($posts["data"]) - 1));
 
-    $response = $this->postsResource->getPostById($posts["data"][$randIndex]);
+    $response = $this->postsResource->getPostById($posts["data"][$randIndex]["id"]);
     $status = $response["status"];
     $data = $response["data"];
     $post = $data[0];
@@ -252,8 +254,8 @@ class PostsResourceTest extends PHPUnit_Framework_TestCase{
   public function testDeletePostSuccess(){
     //get post
     $postsResource = $this->postsResource->getPosts();
-    $randIndex = rand(1, (count($postsResource["data"]) - 1));
-    $post = $postsResource["data"][$randIndex];
+    //$randIndex = rand(0, (count($postsResource["data"]) - 1));
+    $post = $postsResource["data"][0];
 
     //get response
     $response = $this->postsResource->deletePost($post["id"]);
