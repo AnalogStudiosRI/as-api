@@ -3,7 +3,7 @@
 
   <php expression="include('vendor/autoload.php')"/>
 
-  <property name="project.version" value="0.3.0" />
+  <property name="project.version" value="0.4.0-SNAPSHOT" />
   <property name="buildDir" value="build"/>
 
   <fileset dir="src" id="projectFiles">
@@ -32,7 +32,7 @@
 
   <target name="info" description="Displays basic project information">
     <echo message="This is project ${phing.project.name}" />
-    <echo message="Current version of phing is: ${project.version}" />
+    <echo message="Current version of the project is: ${project.version}" />
    </target>
 
   <target name="clean">

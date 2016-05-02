@@ -59,18 +59,21 @@ switch ($loginStatus) {
 /* routing and controlling */
 $request = $slim->request;
 $path = $request->getResourceUri();
-$resources = array('events');
+$resources = array('events', 'posts');
 $route = '';
 
 switch ($path){
-  case strpos($path, 'login') !== FALSE:
-    $route = 'login';
-    break;
   case strpos($path, 'contact') !== FALSE:
     $route = 'contact';
     break;
   case strpos($path, 'events') !== FALSE:
     $route = 'events';
+    break;
+  case strpos($path, 'login') !== FALSE:
+    $route = 'login';
+    break;
+  case strpos($path, 'posts') !== FALSE:
+    $route = 'posts';
     break;
 }
 

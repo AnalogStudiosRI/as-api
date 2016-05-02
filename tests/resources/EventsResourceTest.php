@@ -25,9 +25,9 @@ class EventResourceTest extends PHPUnit_Framework_TestCase{
   private static $NOT_FOUND = 404;
   private static $NOW_OFFSET = 10800000;
   private static $DB_CONFIG = array(
-    "dsn" => "mysql:host=127.0.0.1;dbname=asadmin_analogstudios_new_test",
+    "dsn" => "mysql:host=127.0.0.1;dbname=analogstudios_prod",
     "username" => "astester",
-    "password" => "t3st3r"
+    "password" => "452SsQMwMP"
   );
 
   public function setup(){
@@ -248,7 +248,7 @@ class EventResourceTest extends PHPUnit_Framework_TestCase{
     //assert
     $this->assertEquals(self::$NOT_MODIFIED, $status);
     $this->assertEquals(0, count($response["data"]));
-    $this->assertEquals("Duplicate data, event not modified", $response["message"]);
+    $this->assertEquals("Duplicate data. Resource not modified", $response["message"]);
   }
 
   public function testUpdateNoEventIdFailure(){
@@ -288,7 +288,7 @@ class EventResourceTest extends PHPUnit_Framework_TestCase{
     //assert
     $this->assertEquals(self::$NOT_FOUND, $response["status"]);
     $this->assertEquals(0, count($response["data"]));
-    $this->assertEquals("Event Not Found", $response["message"]);
+    $this->assertEquals("Resource Not Found", $response["message"]);
   }
 
   /**********/
@@ -306,7 +306,7 @@ class EventResourceTest extends PHPUnit_Framework_TestCase{
     //assert
     $this->assertEquals(self::$SUCCESS, $response["status"]);
     $this->assertEquals(0, count($response["data"]));
-    $this->assertEquals("Event deleted successfully", $response["message"]);
+    $this->assertEquals("Resource deleted successfully", $response["message"]);
   }
 
   public function testDeleteNoEventIdFailure(){
@@ -317,7 +317,7 @@ class EventResourceTest extends PHPUnit_Framework_TestCase{
     //assert
     $this->assertEquals(self::$BAD_REQUEST, $response["status"]);
     $this->assertEquals(0, count($response["data"]));
-    $this->assertEquals("Bad Request.  No valid event id provided", $response["message"]);
+    $this->assertEquals("Bad Request.  No valid id provided", $response["message"]);
   }
 
   public function testDeleteInvalidEventIdFailure(){
@@ -327,7 +327,7 @@ class EventResourceTest extends PHPUnit_Framework_TestCase{
     //assert
     $this->assertEquals(self::$BAD_REQUEST, $response["status"]);
     $this->assertEquals(0, count($response["data"]));
-    $this->assertEquals("Bad Request.  No valid event id provided", $response["message"]);
+    $this->assertEquals("Bad Request.  No valid id provided", $response["message"]);
   }
 
   public function testDeleteEventNotFoundFailure(){
@@ -337,6 +337,6 @@ class EventResourceTest extends PHPUnit_Framework_TestCase{
     //assert
     $this->assertEquals(self::$NOT_FOUND, $response["status"]);
     $this->assertEquals(0, count($response["data"]));
-    $this->assertEquals("Event not found", $response["message"]);
+    $this->assertEquals("No results found", $response["message"]);
   }
 }

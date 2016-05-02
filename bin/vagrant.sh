@@ -2,14 +2,10 @@
 
 LOCALHOST=localhost
 DBHOST=127.0.0.1
-DBNAME=asadmin_analogstudios_new
-DBNAME_TEST=asadmin_analogstudios_new_test
-DBUSER=asadmin
-DBUSER_TEST=astester
-DBPASSWD=Dbxld554P2
-DBPASSWD_TEST=t3st3r
-SQL_IMPORT=/vagrant/sql/analogstudios-new-20150308.sql
-SQL_IMPORT_TEST=/vagrant/sql/analogstudios-new-test-20150308.sql
+DBNAME=analogstudios_prod
+DBUSER=astester
+DBPASSWD=452SsQMwMP
+SQL_IMPORT=/vagrant/sql/analogstudios-v2.bak.sql
 
 echo "*** Starting installation... ***"
 
@@ -44,9 +40,7 @@ apt-get -y install mysql-server-5.5 phpmyadmin
 
 echo -e "*** Setting up our MySQL user and db ***"
 mysql -uroot -p$DBPASSWD < $SQL_IMPORT
-mysql -uroot -p$DBPASSWD < $SQL_IMPORT_TEST
 mysql -uroot -p$DBPASSWD -e "grant all privileges on $DBNAME.* to '$DBUSER'@'$LOCALHOST' identified by '$DBPASSWD'"
-mysql -uroot -p$DBPASSWD -e "grant all privileges on $DBNAME_TEST.* to '$DBUSER_TEST'@'$LOCALHOST' identified by '$DBPASSWD_TEST'"
 
 service mysql restart
 
@@ -67,17 +61,9 @@ echo "*** We definitely need to see PHP errors, turning them on ***"
 sed -i "s/error_reporting = .*/error_reporting = E_ALL/" /etc/php5/apache2/php.ini
 sed -i "s/display_errors = .*/display_errors = On/" /etc/php5/apache2/php.ini
 
-echo -e "*** Configure Apache to use phpMyAdmin ***"
-echo -e "\n\nListen 8181\n" >> /etc/apache2/ports.conf
-cat > /etc/apache2/conf-available/phpmyadmin.conf << "EOF"
-<VirtualHost *:8181>
-    ServerAdmin webmaster@localhost
-    DocumentRoot /usr/share/phpmyadmin
-    DirectoryIndex index.php
-    ErrorLog ${APACHE_LOG_DIR}/phpmyadmin-error.log
-    CustomLog ${APACHE_LOG_DIR}/phpmyadmin-access.log combined
-</VirtualHost>
-EOF
+echo -e "*** Turn on Phar Support ***"
+sed -i 's/;phar.readonly = On/phar.readonly = Off/g' /etc/php5/apache2/php.ini
+sed -i 's/;phar.readonly = On/phar.readonly = Off/g' /etc/php5/cli/php.ini
 
 echo -e "*** Turn on Phar Support ***"
 sed -i 's/;phar.readonly = On/phar.readonly = Off/g' /etc/php5/apache2/php.ini

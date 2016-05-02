@@ -153,7 +153,7 @@ class RestfulDatabaseService extends base\AbstractRestfulDatabase{
     $code = null;
 
     if(preg_match(self::$PATTERN["ID"], $id) && count($params) > 0) {
-      $query = 'UPDATE events SET ';
+      $query = "UPDATE " . $tableName . " SET ";
       $queryParams = array();
 
       foreach ($params as $key => $value) {
@@ -185,7 +185,7 @@ class RestfulDatabaseService extends base\AbstractRestfulDatabase{
 
           $found = $stm->fetch($db::FETCH_NUM) > 0;
           $code = $found ? self::$STATUS_CODE["NOT_MODIFIED"] : self::$STATUS_CODE["NOT_FOUND"];
-          $invalidParamError = $found ? "Duplicate data, event not modified" : "Event Not Found";
+          $invalidParamError = $found ? "Duplicate data. Resource not modified" : "Resource Not Found";
         } else {
           $code = self::$STATUS_CODE["ERROR"];
           $invalidParamError = "Unkown Database Error";
@@ -216,17 +216,17 @@ class RestfulDatabaseService extends base\AbstractRestfulDatabase{
 
       if ($stmt->rowCount() === 1) {
         $code = self::$STATUS_CODE["SUCCESS"];
-        $invalidParamError = "Event deleted successfully";
+        $invalidParamError = "Resource deleted successfully";
       } else if ($stmt->rowCount() === 0) {
         $code = self::$STATUS_CODE["NOT_FOUND"];
-        $invalidParamError = "Event not found";
+        $invalidParamError = "No results found";
       } else {
         $code = self::$STATUS_CODE["ERROR"];
         $invalidParamError = "Unknown Database Error";
       }
     }else{
       $code = self::$STATUS_CODE["BAD_REQUEST"];
-      $invalidParamError = "Bad Request.  No valid event id provided";
+      $invalidParamError = "Bad Request.  No valid id provided";
     }
 
     return $this->generateResponse($code, $result, $invalidParamError);

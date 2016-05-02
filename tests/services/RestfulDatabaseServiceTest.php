@@ -6,12 +6,12 @@ require_once "src/services/RestfulDatabaseService.php";
 
 use services as service;
 
-class RestfulDatabaseTest extends PHPUnit_Framework_TestCase{
+class RestfulDatabaseServiceTest extends PHPUnit_Framework_TestCase{
   private $db;
   private $dbConfig = array(
-    "dsn" => "mysql:host=127.0.0.1;dbname=asadmin_analogstudios_new_test",
+    "dsn" => "mysql:host=127.0.0.1;dbname=analogstudios_prod",
     "username" => "astester",
-    "password" => "t3st3r"
+    "password" => "452SsQMwMP"
   );
 
   public function setup(){

@@ -6,21 +6,21 @@ require_once "src/services/AuthenticationService.php";
 use services as service;
 
 class AuthenticationServiceTest extends PHPUnit_Framework_TestCase{
-  private static $username = "obuckley";
-  private static $password = "testpwd";
+  private static $username = "astester";
+  private static $password = "4e7RqGEhtHKHAX6AtYnc";
   //XXX TODO mock ConfigService
   private static $CONFIG = array(
     "session.domain" => "analogstudios.thegreenhouse.io",
     "db.host" => "127.0.0.1",
-    "db.name" => "asadmin_analogstudios_new_test",
+    "db.name" => "analogstudios_prod",
     "db.user" => "astester",
-    "db.password" => "t3st3r",
-    "key.jwtSecret" => "PbgtB@Q3RER8dN"
+    "db.password" => "452SsQMwMP",
+    "key.jwtSecret" => "De6CA9#3b#aSF3ZVG@Q3"
   );
 
   public function testLoginSuccess(){
     $authService = new service\AuthenticationService(self::$CONFIG);
-    $authStatus = $authService->login("astester", '$1$fDUPbgtB$Q3RER8dNV4aBbcw/dys8a/');
+    $authStatus = $authService->login(self::$username, self::$password);
 
     $this->assertArrayHasKey("success", $authStatus);
     $this->assertArrayHasKey("message", $authStatus);
@@ -31,9 +31,9 @@ class AuthenticationServiceTest extends PHPUnit_Framework_TestCase{
     $this->assertEquals($authStatus["message"], "Login Success");
   }
 
-  public function testLoginSuccessInvalidCredentials(){
+  public function testLoginFailureInvalidCredentials(){
     $authService = new service\AuthenticationService(self::$CONFIG);
-    $authStatus = $authService->login(self::$username, self::$password);
+    $authStatus = $authService->login(self::$username, "&&&&");
 
     $this->assertArrayHasKey("success", $authStatus);
     $this->assertArrayHasKey("message", $authStatus);
@@ -77,11 +77,11 @@ class AuthenticationServiceTest extends PHPUnit_Framework_TestCase{
 
   public function testValidateLoginSuccess(){
     $authService = new service\AuthenticationService(self::$CONFIG);
-    $authStatus = $authService->login("astester", '$1$fDUPbgtB$Q3RER8dNV4aBbcw/dys8a/');
+    $authStatus = $authService->login(self::$username, self::$password);
     $token = $authStatus["data"]["jwt"];
 
     //make sure we have reached JWT used time clearance
-    sleep(11);
+    //sleep(11);
 
     //$loginStatus = $authService->validateLogin($token);
 
@@ -97,7 +97,7 @@ class AuthenticationServiceTest extends PHPUnit_Framework_TestCase{
 
   public function testValidateLoginFailureTokenNotBeforeTime(){
     $authService = new service\AuthenticationService(self::$CONFIG);
-    $authStatus = $authService->login("astester", '$1$fDUPbgtB$Q3RER8dNV4aBbcw/dys8a/');
+    $authStatus = $authService->login(self::$username, self::$password);
     $token = $authStatus["data"]["jwt"];
 
     $authStatus = $authService->validateLogin($token);
@@ -122,7 +122,7 @@ class AuthenticationServiceTest extends PHPUnit_Framework_TestCase{
 
   public function testRefreshLoginSuccess(){
     $authService = new service\AuthenticationService(self::$CONFIG);
-    $authStatus = $authService->login("astester", '$1$fDUPbgtB$Q3RER8dNV4aBbcw/dys8a/');
+    $authStatus = $authService->login(self::$username, self::$password);
 
     //make sure we have reached JWT used time clearance
     sleep(11);
