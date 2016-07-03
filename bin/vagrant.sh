@@ -54,24 +54,24 @@ apt-get install libapache2-mod-php -y > /dev/null 2>&1
 #enable php7 module
 a2enmod php7.0
 
-#echo "*** Enabling mod-rewrite ***"
-#a2enmod rewrite > /dev/null 2>&1
-#
-#echo "*** Allowing Apache override to all ***"
-#sed -i "s/AllowOverride None/AllowOverride All/g" /etc/apache2/apache2.conf
-#
-#echo "*** Setting document root to public directory ***"
-#rm -rf /var/www/html
-#ln -fs /home/vagrant/build/ /var/www/html
-#
-#echo "*** We definitely need to see PHP errors, turning them on ***"
-#sed -i "s/error_reporting = .*/error_reporting = E_ALL/" /etc/php5/apache2/php.ini
-#sed -i "s/display_errors = .*/display_errors = On/" /etc/php5/apache2/php.ini
-#
-#echo -e "*** Turn on Phar Support ***"
-#sed -i 's/;phar.readonly = On/phar.readonly = Off/g' /etc/php5/apache2/php.ini
-#sed -i 's/;phar.readonly = On/phar.readonly = Off/g' /etc/php5/cli/php.ini
-#
+echo "*** Enabling mod-rewrite ***"
+a2enmod rewrite > /dev/null 2>&1
+
+echo "*** Allowing Apache override to all ***"
+sed -i "s/AllowOverride None/AllowOverride All/g" /etc/apache2/apache2.conf
+
+echo "*** Setting document root to public directory ***"
+rm -rf /var/www/html
+ln -fs /home/vagrant/build/ /var/www/html
+
+echo "*** We definitely need to see PHP errors, turning them on ***"
+sed -i "s/error_reporting = .*/error_reporting = E_ALL/" /etc/php/7.0/apache2/php.ini
+sed -i "s/display_errors = .*/display_errors = On/" /etc/php/7.0/apache2/php.ini
+
+echo -e "*** Turn on Phar Support ***"
+sed -i 's/;phar.readonly = On/phar.readonly = Off/g' /etc/php/7.0/apache2/php.ini
+sed -i 's/;phar.readonly = On/phar.readonly = Off/g' /etc/php/7.0/cli/php.ini
+
 echo "*** Restarting Apache ***"
 service apache2 restart > /dev/null 2>&1
 
