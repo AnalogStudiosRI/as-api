@@ -12,9 +12,6 @@ echo "*** Starting installation... ***"
 echo "*** Updating packages ***"
 apt-get update
 
-echo "*** purge php ***"
-#apt-get -y purge php.*
-
 echo "*** Install base packages ***"
 apt-get -y install git
 apt-get -y install postfix
@@ -51,8 +48,12 @@ echo "*** Installing PHP / Apache ***"
 apt-get install php7.0 php7.0-fpm php7.0-mysql -y > /dev/null 2>&1
 apt-get install libapache2-mod-php -y > /dev/null 2>&1
 
-#apt-get -y install php5 apache2 libapache2-mod-php5 php5-curl php5-gd php5-mcrypt php5-mysql php-apc php5-phar > /dev/null 2>&1
-#
+#disable php5 apach2 module
+/usr/sbin/a2dismod php5
+
+#enable php7 module
+a2enmod php7.0
+
 #echo "*** Enabling mod-rewrite ***"
 #a2enmod rewrite > /dev/null 2>&1
 #
