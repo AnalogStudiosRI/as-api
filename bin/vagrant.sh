@@ -45,7 +45,7 @@ mysql -uroot -p$DBPASSWD -e "grant all privileges on $DBNAME.* to '$DBUSER'@'$LO
 service mysql restart
 
 echo "*** Installing PHP / Apache ***"
-apt-get install php7.0 php7.0-fpm php7.0-mysql -y > /dev/null 2>&1
+apt-get install php7.0 php7.0-fpm php7.0-mysql php-mcrypt -y > /dev/null 2>&1
 apt-get install libapache2-mod-php -y > /dev/null 2>&1
 
 #disable php5 apach2 module
@@ -79,32 +79,28 @@ apache2 -v
 php -v
 mysql --version
 
-#
-#echo "*** Installing Composer for PHP package management ***"
-#curl -s http://getcomposer.org/installer | php
-#sudo mv composer.phar /usr/local/bin/composer
-#
-##wget http://getcomposer.org/composer.phar
-##php composer.phar install
-##sudo mv composer.phar /usr/local/bin/composer
-#
-#echo "*** Install Composer Dependencies ***"
-#cd /vagrant
-#composer update
-#composer install
-#
-#echo "*** Adding Composer Dependencies to the $PATH ***"
-#cat >> /home/vagrant/.bash_profile <<EOF
-#export PATH=$PATH:/vagrant/vendor/bin
-#EOF
-#source /home/vagrant/.bash_profile
-#
-#composer --version
-#phing -v
-#phpunit --version
-#
-#echo "*** Setting Up Env Config ***"
-#cp /vagrant/ini/config-local.ini /var/www/config-env.ini
-#
-#apt-get -y install php5-xdebug php5-xsl
-#apt-get -y install sendmail
+
+echo "*** Installing Composer for PHP package management ***"
+curl -s http://getcomposer.org/installer | php
+sudo mv composer.phar /usr/local/bin/composer
+
+echo "*** Install Composer Dependencies ***"
+cd /vagrant
+composer update
+composer install
+
+echo "*** Adding Composer Dependencies to the $PATH ***"
+cat >> /home/vagrant/.bash_profile <<EOF
+export PATH=$PATH:/vagrant/vendor/bin
+EOF
+source /home/vagrant/.bash_profile
+
+composer --version
+phing -v
+phpunit --version
+
+echo "*** Setting Up Env Config ***"
+cp /vagrant/ini/config-local.ini /var/www/config-env.ini
+
+apt-get -y install php-xdebug php7.1-xsl -y
+apt-get -y install sendmail
