@@ -8,7 +8,7 @@ composer install
 
 echo "system info..."
 php --version
-composer --version
+composer -V
 
 echo "dependency info..."
 ./vender/bin/phing -version
