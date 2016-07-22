@@ -78,7 +78,8 @@
           <include name="**/*.php"/>
         </fileset>
       </batchtest>
-      <formatter type="clover" outfile="reports/clover.xml"/>
+      <formatter type="xml">
+      </formatter>
     </phpunit>
     <phpunitreport todir="${buildDir}"/>
 
