@@ -102,5 +102,5 @@ phpunit --version
 echo "*** Setting Up Env Config ***"
 cp /vagrant/ini/config-local.ini /var/www/config-env.ini
 
-apt-get -y install php-xdebug php7.1-xsl -y
+apt-get -y install php-xdebug php7.1-xsl php7.0-xml -y
 apt-get -y install sendmail

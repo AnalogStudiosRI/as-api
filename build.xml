@@ -153,7 +153,7 @@
     <phingcall target="info" />
     <phingcall target="clean" />
     <phingcall target="lint" />
-    <!--<phingcall target="test" />-->
+    <phingcall target="test" />
     <phingcall target="package" />
   </target>
 
