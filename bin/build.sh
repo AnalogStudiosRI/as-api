@@ -15,4 +15,4 @@ phing -version
 phpunit --version
 
 #echo "building..."
-#./vender/bin/phing build
+phing build
