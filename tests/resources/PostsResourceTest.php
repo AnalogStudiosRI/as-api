@@ -104,8 +104,6 @@ class PostsResourceTest extends PHPUnit_Framework_TestCase{
     $status = $response["status"];
     $data = $response["data"];
 
-
-    var_dump($response);
     //assert
     $this->assertEquals(self::$SUCCESS, $status);
     $this->assertNotEmpty($data);

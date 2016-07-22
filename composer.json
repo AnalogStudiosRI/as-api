@@ -10,7 +10,7 @@
     "firebase/php-jwt": "3.0"
   },
   "require-dev": {
-    "phing/phing": "2.10.1",
+    "phing/phing": "2.14.0",
     "phpunit/phpunit": "4.6.0",
     "phpdocumentor/phpdocumentor": "2.8.5"
   },
