@@ -119,7 +119,6 @@
     </copy>
 
     <copy file="src/controller.php" tofile="tmp/controller.php" />
-    <copy file="src/.htaccess" tofile="tmp/.htaccess" />
 
     <echo msg="creating phar archive..."/>
     <pharpackage
@@ -143,7 +142,6 @@
 
     <echo msg="moving build files..."/>
     <copy file="tmp/controller.php" tofile="${buildDir}/controller.php" />
-    <copy file="tmp/.htaccess" tofile="${buildDir}/.htaccess" />
     <copy file="ini/config-bootstrap.ini" tofile="${buildDir}/config.ini" />
 
   </target>
