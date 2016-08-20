@@ -3,7 +3,7 @@
 
   <php expression="include('vendor/autoload.php')"/>
 
-  <property name="project.version" value="0.5.0" />
+  <property name="project.version" value="0.6.0-SNAPSHOT" />
   <property name="buildDir" value="build"/>
 
   <fileset dir="src" id="projectFiles">
