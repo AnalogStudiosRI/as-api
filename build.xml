@@ -3,7 +3,7 @@
 
   <php expression="include('vendor/autoload.php')"/>
 
-  <property name="project.version" value="0.4.0" />
+  <property name="project.version" value="0.4.0-SNAPSHOT" />
   <property name="buildDir" value="build"/>
 
   <fileset dir="src" id="projectFiles">
@@ -119,7 +119,6 @@
     </copy>
 
     <copy file="src/controller.php" tofile="tmp/controller.php" />
-    <copy file="src/.htaccess" tofile="tmp/.htaccess" />
 
     <echo msg="creating phar archive..."/>
     <pharpackage
@@ -143,7 +142,6 @@
 
     <echo msg="moving build files..."/>
     <copy file="tmp/controller.php" tofile="${buildDir}/controller.php" />
-    <copy file="tmp/.htaccess" tofile="${buildDir}/.htaccess" />
     <copy file="ini/config-bootstrap.ini" tofile="${buildDir}/config.ini" />
 
   </target>

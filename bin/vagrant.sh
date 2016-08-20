@@ -16,12 +16,12 @@ echo "*** Install base packages ***"
 apt-get -y install git
 apt-get -y install postfix
 apt-get -y install vim curl buildssential python-software-properties git > /dev/null 2>&1
+apt-get install -y language-pack-en-base
 apt-get update
 
 echo "*** Add some custom repos to update our distro ***"
-add-apt-repository ppa:ondrej/php5 > /dev/null 2>&1
+LC_ALL=en_US.UTF-8 add-apt-repository ppa:ondrej/php > /dev/null 2>&1
 add-apt-repository ppa:ondrej/apache2 > /dev/null 2>&1
-
 apt-get update
 
 echo "*** Install MySQL / phpMyAdmin specific packages and settings ***"
@@ -45,7 +45,14 @@ mysql -uroot -p$DBPASSWD -e "grant all privileges on $DBNAME.* to '$DBUSER'@'$LO
 service mysql restart
 
 echo "*** Installing PHP / Apache ***"
-apt-get -y install php5 apache2 libapache2-mod-php5 php5-curl php5-gd php5-mcrypt php5-mysql php-apc php5-phar > /dev/null 2>&1
+apt-get install php7.0 php7.0-fpm php7.0-mysql php-mcrypt -y > /dev/null 2>&1
+apt-get install libapache2-mod-php -y > /dev/null 2>&1
+
+#disable php5 apach2 module
+/usr/sbin/a2dismod php5
+
+#enable php7 module
+a2enmod php7.0
 
 echo "*** Enabling mod-rewrite ***"
 a2enmod rewrite > /dev/null 2>&1
@@ -58,16 +65,12 @@ rm -rf /var/www/html
 ln -fs /home/vagrant/build/ /var/www/html
 
 echo "*** We definitely need to see PHP errors, turning them on ***"
-sed -i "s/error_reporting = .*/error_reporting = E_ALL/" /etc/php5/apache2/php.ini
-sed -i "s/display_errors = .*/display_errors = On/" /etc/php5/apache2/php.ini
+sed -i "s/error_reporting = .*/error_reporting = E_ALL/" /etc/php/7.0/apache2/php.ini
+sed -i "s/display_errors = .*/display_errors = On/" /etc/php/7.0/apache2/php.ini
 
 echo -e "*** Turn on Phar Support ***"
-sed -i 's/;phar.readonly = On/phar.readonly = Off/g' /etc/php5/apache2/php.ini
-sed -i 's/;phar.readonly = On/phar.readonly = Off/g' /etc/php5/cli/php.ini
-
-echo -e "*** Turn on Phar Support ***"
-sed -i 's/;phar.readonly = On/phar.readonly = Off/g' /etc/php5/apache2/php.ini
-sed -i 's/;phar.readonly = On/phar.readonly = Off/g' /etc/php5/cli/php.ini
+sed -i 's/;phar.readonly = On/phar.readonly = Off/g' /etc/php/7.0/apache2/php.ini
+sed -i 's/;phar.readonly = On/phar.readonly = Off/g' /etc/php/7.0/cli/php.ini
 
 echo "*** Restarting Apache ***"
 service apache2 restart > /dev/null 2>&1
@@ -76,13 +79,10 @@ apache2 -v
 php -v
 mysql --version
 
+
 echo "*** Installing Composer for PHP package management ***"
 curl -s http://getcomposer.org/installer | php
 sudo mv composer.phar /usr/local/bin/composer
-
-#wget http://getcomposer.org/composer.phar
-#php composer.phar install
-#sudo mv composer.phar /usr/local/bin/composer
 
 echo "*** Install Composer Dependencies ***"
 cd /vagrant
@@ -100,7 +100,7 @@ phing -v
 phpunit --version
 
 echo "*** Setting Up Env Config ***"
-cp /vagrant/ini/config-local.ini /var/www/config-env.ini
+cp /vagrant/ini/config-local.ini /home/vagrant/config-env.ini
 
-apt-get -y install php5-xdebug php5-xsl
+apt-get -y install php-xdebug php7.1-xsl php7.0-xml -y
 apt-get -y install sendmail

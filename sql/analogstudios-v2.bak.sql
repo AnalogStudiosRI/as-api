@@ -33,7 +33,7 @@ CREATE TABLE `events` (
   `createdTime` int(11) NOT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `id` (`id`)
-) ENGINE=MyISAM AUTO_INCREMENT=7 DEFAULT CHARSET=latin1;
+) ENGINE=MyISAM AUTO_INCREMENT=8 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -42,8 +42,35 @@ CREATE TABLE `events` (
 
 LOCK TABLES `events` WRITE;
 /*!40000 ALTER TABLE `events` DISABLE KEYS */;
-INSERT INTO `events` VALUES (1,'my new event - changed','<p>testing that this new event gets made</p><p><br/></p><p>for the 10th of april</p><p><br/></p><p>dec 3rd test</p>',1449189000,1449275399,1451789911),(2,'my first test event','<p>testing that this works</p><p><br/></p><p><i><b>marking it for last day of the month @7pm!</b></i></p>',1454284800,1454371199,1452454822),(3,'first event made','<h2>making an event!</h2><p><br/></p><p>this will be @7pm for the end of the month</p>',1454284831,1454371230,1452455052),(4,'my new event','<p>at some time</p>',1481691600,1481777999,1452455326),(5,'my new event','<p>at some time</p><p><br/></p><p>this will have its description changed</p>',1481760000,1481846399,1452455435),(6,'brand new event!!','<h1>Feb 1st!</h1><p><br/></p><p><b>at 7:30pm</b></p>',1454373045,1454459444,1452459386);
+INSERT INTO `events` VALUES (1,'Analog @ The Tankard','<p>Analog is playing at <a href=\"https://www.facebook.com/tankedatthetank\" target=\"\">The Tankard</a> this Saturday, with opening act Sean Daley. Â Please come join as we prevew some of the new songs on the album.</p>',1454810400,1454896799,1451789911),(7,'Dave Flamand @ Newport CYCFM','<p><img src=\"http://static.analogstudios.net.s3-website-us-west-2.amazonaws.com/hosted/images/events/dave-flamand-20160521.png\"/><br/></p>',1463873400,1463959799,1462923816);
 /*!40000 ALTER TABLE `events` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `posts`
+--
+
+DROP TABLE IF EXISTS `posts`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `posts` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `title` varchar(100) NOT NULL,
+  `summary` longtext NOT NULL,
+  `createdTime` int(11) NOT NULL,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `id_UNIQUE` (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=latin1;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `posts`
+--
+
+LOCK TABLES `posts` WRITE;
+/*!40000 ALTER TABLE `posts` DISABLE KEYS */;
+INSERT INTO `posts` VALUES (1,'Dave Flamand @ The Newport Newport CYCFM','<p>Details available at the <a href=\"http://www.analogstudios.net/#/events/7\" target=\"\">events page</a></p>',1462924501);
+/*!40000 ALTER TABLE `posts` ENABLE KEYS */;
 UNLOCK TABLES;
 
 --
@@ -67,7 +94,7 @@ CREATE TABLE `users` (
 
 LOCK TABLES `users` WRITE;
 /*!40000 ALTER TABLE `users` DISABLE KEYS */;
-INSERT INTO `users` VALUES (1,'astester','4e7RqGEhtHKHAX6AtYnc');
+INSERT INTO `users` VALUES (1,'astester','452SsQMwMP');
 /*!40000 ALTER TABLE `users` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
@@ -80,4 +107,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2016-01-19 20:26:10
+-- Dump completed on 2016-07-02 21:47:24

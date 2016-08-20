@@ -6,9 +6,7 @@ require_once "src/services/AuthenticationService.php";
 use services as service;
 
 class AuthenticationServiceTest extends PHPUnit_Framework_TestCase{
-  private static $username = "astester";
-  private static $password = "4e7RqGEhtHKHAX6AtYnc";
-  //XXX TODO mock ConfigService
+  //XXX TODO mock / inject ConfigService
   private static $CONFIG = array(
     "session.domain" => "analogstudios.thegreenhouse.io",
     "db.host" => "127.0.0.1",
@@ -20,7 +18,7 @@ class AuthenticationServiceTest extends PHPUnit_Framework_TestCase{
 
   public function testLoginSuccess(){
     $authService = new service\AuthenticationService(self::$CONFIG);
-    $authStatus = $authService->login(self::$username, self::$password);
+    $authStatus = $authService->login(self::$CONFIG["db.user"], self::$CONFIG["db.password"]);
 
     $this->assertArrayHasKey("success", $authStatus);
     $this->assertArrayHasKey("message", $authStatus);
@@ -33,7 +31,7 @@ class AuthenticationServiceTest extends PHPUnit_Framework_TestCase{
 
   public function testLoginFailureInvalidCredentials(){
     $authService = new service\AuthenticationService(self::$CONFIG);
-    $authStatus = $authService->login(self::$username, "&&&&");
+    $authStatus = $authService->login(self::$CONFIG["db.user"], "&&&&");
 
     $this->assertArrayHasKey("success", $authStatus);
     $this->assertArrayHasKey("message", $authStatus);
@@ -55,7 +53,7 @@ class AuthenticationServiceTest extends PHPUnit_Framework_TestCase{
 
   public function testLoginFailureNoUsernameCredential(){
     $authService = new service\AuthenticationService(self::$CONFIG);
-    $authStatus = $authService->login(null, self::$password);
+    $authStatus = $authService->login(null, self::$CONFIG["db.password"]);
 
     $this->assertArrayHasKey("success", $authStatus);
     $this->assertArrayHasKey("message", $authStatus);
@@ -66,7 +64,7 @@ class AuthenticationServiceTest extends PHPUnit_Framework_TestCase{
 
   public function testLoginFailureNoPasswordCredential(){
     $authService = new service\AuthenticationService(self::$CONFIG);
-    $authStatus = $authService->login(self::$username);
+    $authStatus = $authService->login(self::$CONFIG["db.user"]);
 
     $this->assertArrayHasKey("success", $authStatus);
     $this->assertArrayHasKey("message", $authStatus);
@@ -77,7 +75,7 @@ class AuthenticationServiceTest extends PHPUnit_Framework_TestCase{
 
   public function testValidateLoginSuccess(){
     $authService = new service\AuthenticationService(self::$CONFIG);
-    $authStatus = $authService->login(self::$username, self::$password);
+    $authStatus = $authService->login(self::$CONFIG["db.user"], self::$CONFIG["db.password"]);
     $token = $authStatus["data"]["jwt"];
 
     //make sure we have reached JWT used time clearance
@@ -97,7 +95,7 @@ class AuthenticationServiceTest extends PHPUnit_Framework_TestCase{
 
   public function testValidateLoginFailureTokenNotBeforeTime(){
     $authService = new service\AuthenticationService(self::$CONFIG);
-    $authStatus = $authService->login(self::$username, self::$password);
+    $authStatus = $authService->login(self::$CONFIG["db.user"], self::$CONFIG["db.password"]);
     $token = $authStatus["data"]["jwt"];
 
     $authStatus = $authService->validateLogin($token);
@@ -122,7 +120,7 @@ class AuthenticationServiceTest extends PHPUnit_Framework_TestCase{
 
   public function testRefreshLoginSuccess(){
     $authService = new service\AuthenticationService(self::$CONFIG);
-    $authStatus = $authService->login(self::$username, self::$password);
+    $authStatus = $authService->login(self::$CONFIG["db.user"], self::$CONFIG["db.password"]);
 
     //make sure we have reached JWT used time clearance
     sleep(11);

@@ -1,16 +1,18 @@
 #!/bin/bash
 
-echo "obtaining application dependencies..."
+echo "system info..."
+php --version
+composer -V
+
+echo "installing application dependencies..."
 composer install
 
 echo "*** Adding Composer Dependencies to the $PATH from $WORKSPACE ***"
 export PATH=$PATH:$WORKSPACE/vendor/bin
 
-echo "system info..."
-php --version
-composer --version
+echo "dependency info..."
 phing -version
 phpunit --version
 
-echo "building..."
+#echo "building..."
 phing build
