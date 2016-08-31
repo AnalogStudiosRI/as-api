@@ -38,9 +38,13 @@ This project uses Vagrant for local development.  To use it please install
 2. ssh into the box `vagrant ssh`
 3. move to the project root `cd /vagrant`
 
-## Build
-*make sure you have ini/config-local.ini file*
+## Local Development
+For the most part, you will just need to write code and then write tests for it, which can be done with
+`phing build -D buildDir=/home/vagrant/build`
 
+For testing against the full build, see the next section
+
+## Build
 1. local build `phing build -D buildDir=/home/vagrant/build`
 
 2. production build `phing build`
@@ -48,8 +52,8 @@ This project uses Vagrant for local development.  To use it please install
 You can test from the VM using cURL
 `curl localhost/api/events`
 
-Or from the browser in your host machine
-`local.analogstudios.thegreenhouse.io:4567/api/events`
+Or the browser / POSTman against your host machine
+`localhost:4567/api/events`
 
 ### Testing
 PHPunit is used for unit testing
