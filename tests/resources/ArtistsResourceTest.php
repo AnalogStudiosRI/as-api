@@ -41,59 +41,79 @@ class ArtistsResourceTest extends PHPUnit_Framework_TestCase{
   /**********/
   /* CREATE */
   /**********/
-//  public function testCreatePostSuccess(){
-//    $now = time();
-//    $newPost = array(
-//      "title" => "Post Title " . $now,
-//      "summary" => "Post Summary " . $now
-//    );
-//
-//    //get response
-//    $response = $this->postsResource->createPost($newPost);
-//
-//    $status = $response["status"];
-//    $body = $response["data"];
-//
-//    //assert create
-//    $this->assertNotEmpty($body["createdTime"]);
-//    $this->assertNotEmpty($body["id"]);
-//    $this->assertNotEmpty($body["url"]);
-//
-//    $this->assertEquals(self::$CREATED, $status);
-//    $this->assertEquals("/api/posts/" . $body["id"], $body["url"]);
-//  }
-//
-//  public function testCreatePostNoTitleFailure(){
-//    $now = time();
-//    $newPost = array(
-//      "summary" => "Post Summary " . $now
-//    );
-//
-//    //get response
-//    $response = $this->postsResource->createPost($newPost);
-//    $status = $response["status"];
-//
-//    //assert
-//    $this->assertEquals(self::$BAD_REQUEST, $status);
-//    $this->assertEquals(0, count($response["data"]));
-//    $this->assertEquals("Bad Request.  Expected title param", $response["message"]);
-//  }
-//
-//  public function testCreatePostNoSummaryFailure(){
-//    $now = time();
-//    $newPost = array(
-//      "title" => "Post Title " . $now
-//    );
-//
-//    //get response
-//    $response = $this->postsResource->createPost($newPost);
-//    $status = $response["status"];
-//
-//    //assert
-//    $this->assertEquals(self::$BAD_REQUEST, $status);
-//    $this->assertEquals(0, count($response["data"]));
-//    $this->assertEquals("Bad Request.  Expected summary param", $response["message"]);
-//  }
+  public function testCreateArtistSuccess(){
+    $now = time();
+    $newArtist = array(
+      "name" => "Artist Title " . $now,
+      "bio" => "Artist Bio " . $now
+    );
+
+    //get response
+    $response = $this->artistsResource->createArtist($newArtist);
+
+    $status = $response["status"];
+    $body = $response["data"];
+
+    $this->assertNotEmpty($body["id"]);
+    $this->assertNotEmpty($body["url"]);
+    $this->assertEquals(self::$CREATED, $status);
+    $this->assertEquals("/api/artists/" . $body["id"], $body["url"]);
+  }
+
+  public function testCreateFullArtistSuccess(){
+    $now = time();
+    $newArtist = array(
+      "name" => "Artist Title " . $now,
+      "bio" => "Artist Bio " . $now,
+      "imageUrl" => "Artist Image Url " . $now,
+      "genre" => "Artist Genre " . $now,
+      "location" => "Artist, Location " . $now,
+      "contactPhone" => 9784130134,
+      "contactEmail" => "owen@analogstudios.net",
+      "isActive" => 0
+    );
+    
+    $response = $this->artistsResource->createArtist($newArtist);
+
+    $status = $response["status"];
+    $body = $response["data"];
+
+    $this->assertNotEmpty($body["id"]);
+    $this->assertNotEmpty($body["url"]);
+    $this->assertEquals(self::$CREATED, $status);
+    $this->assertEquals("/api/artists/" . $body["id"], $body["url"]);
+  }
+
+
+  public function testCreateArtistNoNameFailure(){
+    $now = time();
+    $newArtist = array(
+      "bio" => "Artist Bio " . $now
+    );
+
+    $response = $this->artistsResource->createArtist($newArtist);
+    $status = $response["status"];
+
+    $this->assertEquals(self::$BAD_REQUEST, $status);
+    $this->assertEquals(0, count($response["data"]));
+    $this->assertEquals("Bad Request.  Expected name param", $response["message"]);
+  }
+
+  public function testCreatePostNoBioFailure(){
+    $now = time();
+    $newArtist = array(
+      "name" => "Artist Name " . $now
+    );
+
+    //get response
+    $response = $this->artistsResource->createArtist($newArtist);
+    $status = $response["status"];
+
+    //assert
+    $this->assertEquals(self::$BAD_REQUEST, $status);
+    $this->assertEquals(0, count($response["data"]));
+    $this->assertEquals("Bad Request.  Expected bio param", $response["message"]);
+  }
 
   /********/
   /* READ */

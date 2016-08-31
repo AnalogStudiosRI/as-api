@@ -65,21 +65,14 @@ class ArtistsResource extends base\AbstractRestfulResource{
   }
 
   public function createArtist($params = array()){
-    $params["createdTime"] = time();
-    $result = $this->db->insert($this->tableName, $this->createParams, $params);
-
-    return $result;
+    return $this->db->insert($this->tableName, $this->createParams, $params);
   }
 
   public function updateArtist($id = null, $params = array()){
-    $result = $this->db->update($this->tableName, $id, $this->updateParams, $params);
-
-    return $result;
+    return $this->db->update($this->tableName, $id, $this->updateParams, $params);
   }
 
   public function deletePost($id = null){
-    $result = $this->db->delete($this->tableName, $id);
-
-    return $result;
+    return $this->db->delete($this->tableName, $id);
   }
 }
