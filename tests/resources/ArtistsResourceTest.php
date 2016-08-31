@@ -204,7 +204,6 @@ class ArtistsResourceTest extends PHPUnit_Framework_TestCase{
     $response = $this->artistsResource->updateArtist($post["id"], array(
       "name" => "Artist Title Updated " . $now,
       "bio" => "Artist Bio Updated " . $now,
-      "imageUrl" => "Artist Image Url Updated " . $now,
       "genre" => "Artist Genre Updated " . $now,
       "location" => "Artist, Location Updated" . $now,
       "contactPhone" => 1112223333,
