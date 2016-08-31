@@ -59,29 +59,29 @@ class ArtistsResourceTest extends PHPUnit_Framework_TestCase{
     $this->assertEquals("/api/artists/" . $body["id"], $body["url"]);
   }
 
-  public function testCreateFullArtistSuccess(){
-    $now = time();
-    $newArtist = array(
-      "name" => "Artist Title " . $now,
-      "bio" => "Artist Bio " . $now,
-      "imageUrl" => "Artist Image Url " . $now,
-      "genre" => "Artist Genre " . $now,
-      "location" => "Artist, Location " . $now,
-      "contactPhone" => 9784130134,
-      "contactEmail" => "owen@analogstudios.net",
-      "isActive" => 0
-    );
-
-    $response = $this->artistsResource->createArtist($newArtist);
-
-    $status = $response["status"];
-    $body = $response["data"];
-
-    $this->assertNotEmpty($body["id"]);
-    $this->assertNotEmpty($body["url"]);
-    $this->assertEquals(self::$CREATED, $status);
-    $this->assertEquals("/api/artists/" . $body["id"], $body["url"]);
-  }
+//  public function testCreateFullArtistSuccess(){
+//    $now = time();
+//    $newArtist = array(
+//      "name" => "Artist Title " . $now,
+//      "bio" => "Artist Bio " . $now,
+//      "imageUrl" => "Artist Image Url " . $now,
+//      "genre" => "Artist Genre " . $now,
+//      "location" => "Artist, Location " . $now,
+//      "contactPhone" => 9784130134,
+//      "contactEmail" => "owen@analogstudios.net",
+//      "isActive" => 0
+//    );
+//
+//    $response = $this->artistsResource->createArtist($newArtist);
+//
+//    $status = $response["status"];
+//    $body = $response["data"];
+//
+//    $this->assertNotEmpty($body["id"]);
+//    $this->assertNotEmpty($body["url"]);
+//    $this->assertEquals(self::$CREATED, $status);
+//    $this->assertEquals("/api/artists/" . $body["id"], $body["url"]);
+//  }
 
 
   public function testCreateArtistNoNameFailure(){
