@@ -72,7 +72,7 @@ class ArtistsResource extends base\AbstractRestfulResource{
     return $this->db->update($this->tableName, $id, $this->updateParams, $params);
   }
 
-  public function deletePost($id = null){
+  public function deleteArtist($id = null){
     return $this->db->delete($this->tableName, $id);
   }
 }

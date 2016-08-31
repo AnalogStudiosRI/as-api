@@ -48,7 +48,6 @@ class ArtistsResourceTest extends PHPUnit_Framework_TestCase{
       "bio" => "Artist Bio " . $now
     );
 
-    //get response
     $response = $this->artistsResource->createArtist($newArtist);
 
     $status = $response["status"];
@@ -258,7 +257,7 @@ class ArtistsResourceTest extends PHPUnit_Framework_TestCase{
   /* DELETE */
   /**********/
   public function testDeleteArtistSuccess(){
-    $artistsResponse = $this->artistsResource->getPosts();
+    $artistsResponse = $this->artistsResource->getArtists();
     $artist = $artistsResponse["data"][0];
 
     $response = $this->artistsResource->deleteArtist($artist["id"]);
