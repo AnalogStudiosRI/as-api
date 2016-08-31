@@ -40,6 +40,9 @@ class RestfulResourceBuilder {
     $entity = NULL;
 
     switch (strtolower($this->entityType)){
+      case 'artists':
+        $entity = new ArtistsResource($this->db);
+        break;
       case 'events':
         $entity = new EventsResource($this->db);
         break;
