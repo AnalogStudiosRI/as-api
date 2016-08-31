@@ -72,7 +72,7 @@ class ArtistsResourceTest extends PHPUnit_Framework_TestCase{
       "contactEmail" => "owen@analogstudios.net",
       "isActive" => 0
     );
-    
+
     $response = $this->artistsResource->createArtist($newArtist);
 
     $status = $response["status"];
@@ -179,80 +179,80 @@ class ArtistsResourceTest extends PHPUnit_Framework_TestCase{
   /**********/
   /* UPDATE */
   /**********/
-//  public function testUpdatePostSuccess(){
-//    $now = time();
-//    $postsResource = $this->postsResource->getPosts();
-//    $randIndex = rand(1, (count($postsResource["data"]) - 1));
-//    $post = $postsResource["data"][$randIndex];
-//
-//    //get response
-//    $response = $this->postsResource->updatePost($post["id"], array(
-//      "title" => "some new title" . $now,
-//      "summary" => "some new description" . $now
-//    ));
-//
-//    $status = $response["status"];
-//    $data = $response["data"];
-//
-//    //assert
-//    $this->assertEquals(self::$SUCCESS, $status);
-//    $this->assertEquals("/api/posts/" . $data["id"], $data["url"]);
-//  }
-//
-//  public function testCreatePostDataNotChangedFailure(){
-//    $postsResource = $this->postsResource->getPosts();
-//    $randIndex = rand(1, (count($postsResource["data"]) - 1));
-//    $post = $postsResource["data"][$randIndex];
-//
-//    //get response
-//    $response = $this->postsResource->updatePost($post["id"], array("title" => $post["title"]));
-//    $status = $response["status"];
-//
-//    //assert
-//    $this->assertEquals(self::$NOT_MODIFIED, $status);
-//    $this->assertEquals(0, count($response["data"]));
-//    $this->assertEquals("Duplicate data. Resource not modified", $response["message"]);
-//  }
-//
-//  public function testUpdateNoPostIdFailure(){
-//    //get response
-//    $response = $this->postsResource->updatePost();
-//
-//    //assert
-//    $this->assertEquals(self::$BAD_REQUEST, $response["status"]);
-//    $this->assertEquals(0, count($response["data"]));
-//    $this->assertEquals("Bad Request.  No id provided", $response["message"]);
-//  }
-//
-//  public function testUpdatePostNoParamsFailure(){
-//    //get response
-//    $response = $this->postsResource->updatePost(1);
-//
-//    //assert
-//    $this->assertEquals(self::$BAD_REQUEST, $response["status"]);
-//    $this->assertEquals(0, count($response["data"]));
-//    $this->assertEquals("Bad Request.  No params provided", $response["message"]);
-//  }
-//
-//  public function testUpdatePostNoValidParamsFailure(){
-//    //get response
-//    $response = $this->postsResource->updatePost(1, array("foo" => "bar"));
-//
-//    //assert
-//    $this->assertEquals(self::$BAD_REQUEST, $response["status"]);
-//    $this->assertEquals(0, count($response["data"]));
-//    $this->assertEquals("Bad Request.  No valid params provided", $response["message"]);
-//  }
-//
-//  public function testUpdatePostNotFoundFailure(){
-//    //get response
-//    $response = $this->postsResource->updatePost(99999999999999, array("title" => "some new title"));
-//
-//    //assert
-//    $this->assertEquals(self::$NOT_FOUND, $response["status"]);
-//    $this->assertEquals(0, count($response["data"]));
-//    $this->assertEquals("Resource Not Found", $response["message"]);
-//  }
+  public function testUpdateArtistSuccess(){
+    $now = time();
+    $response = $this->artistsResource->getArtists();
+    $randIndex = rand(1, (count($response["data"]) - 1));
+    $artist = $response["data"][$randIndex];
+
+    $response = $this->artistsResource->updateArtist($artist["id"], array(
+      "name" => "some new name" . $now,
+      "bio" => "some new bio" . $now
+    ));
+
+    $status = $response["status"];
+    $data = $response["data"];
+
+    $this->assertEquals(self::$SUCCESS, $status);
+    $this->assertEquals("/api/artists/" . $data["id"], $data["url"]);
+  }
+
+  public function testUpdateFullArtistSuccess(){
+    $now = time();
+    $response = $this->artistsResource->getArtists();
+    $randIndex = rand(1, (count($response["data"]) - 1));
+    $post = $response["data"][$randIndex];
+    $response = $this->artistsResource->updateArtist($post["id"], array(
+      "name" => "Artist Title Updated " . $now,
+      "bio" => "Artist Bio Updated " . $now,
+      "imageUrl" => "Artist Image Url Updated " . $now,
+      "genre" => "Artist Genre Updated " . $now,
+      "location" => "Artist, Location Updated" . $now,
+      "contactPhone" => 1112223333,
+      "contactEmail" => "Updated owen@analogstudios.net",
+      "isActive" => 1
+    ));
+    $status = $response["status"];
+
+    $status = $response["status"];
+    $data = $response["data"];
+
+    $this->assertEquals(self::$SUCCESS, $status);
+    $this->assertEquals("/api/artists/" . $data["id"], $data["url"]);
+  }
+
+  public function testUpdateNoArtistIdFailure(){
+    $response = $this->artistsResource->updateArtist();
+
+    $this->assertEquals(self::$BAD_REQUEST, $response["status"]);
+    $this->assertEquals(0, count($response["data"]));
+    $this->assertEquals("Bad Request.  No id provided", $response["message"]);
+  }
+
+  public function testUpdateArtistNoParamsFailure(){
+    $response = $this->artistsResource->updateArtist(1);
+
+    $this->assertEquals(self::$BAD_REQUEST, $response["status"]);
+    $this->assertEquals(0, count($response["data"]));
+    $this->assertEquals("Bad Request.  No params provided", $response["message"]);
+  }
+
+  public function testUpdatePostNoValidParamsFailure(){
+    $response = $this->artistsResource->updateArtist(1, array("foo" => "bar"));
+
+    $this->assertEquals(self::$BAD_REQUEST, $response["status"]);
+    $this->assertEquals(0, count($response["data"]));
+    $this->assertEquals("Bad Request.  No valid params provided", $response["message"]);
+  }
+
+  public function testUpdateArtistNotFoundFailure(){
+    $response = $this->artistsResource->updateArtist(99999999999999, array("name" => "some new name"));
+
+    //assert
+    $this->assertEquals(self::$NOT_FOUND, $response["status"]);
+    $this->assertEquals(0, count($response["data"]));
+    $this->assertEquals("Resource Not Found", $response["message"]);
+  }
 
   /**********/
   /* DELETE */
