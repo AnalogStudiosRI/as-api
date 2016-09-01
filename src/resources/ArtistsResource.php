@@ -22,21 +22,9 @@ use base as base;
 class ArtistsResource extends base\AbstractRestfulResource{
   private $name = "artists";
   private $tableName = "artists";
-  private $createParams = array("name", "bio");
-  private $updateParams = array("name", "imageUrl", "genre", "location", "label", "contactPhone", "contactEmail", "bio", "isActive");
-
-  private function modelDatabaseResult ($data){
-    $model = array();
-
-    for($i = 0, $l = count($data); $i < $l; $i++){
-      $d = $data[$i];
-      $model[$i] = $d;
-
-      $model[$i]["createdTime"] = (int) $d["createdTime"];
-    }
-
-    return $model;
-  }
+  private $requiredParams = array("name", "bio");
+  private $updateParams = array("name", "bio", "imageUrl", "genre", "location", "label", "contactPhone", "contactEmail", "isActive");
+  private $optionalParams = array("imageUrl", "genre", "location", "label", "contactPhone", "contactEmail", "isActive");
 
   //abstract getters
   public function getName(){
@@ -48,7 +36,7 @@ class ArtistsResource extends base\AbstractRestfulResource{
   }
 
   public function getRequiredCreateParams(){
-    return $this->createParams;
+    return $this->requiredParams;
   }
 
   public function getAllowedUpdateParams(){
@@ -65,11 +53,11 @@ class ArtistsResource extends base\AbstractRestfulResource{
   }
 
   public function createArtist($params = array()){
-    return $this->db->insert($this->tableName, $this->createParams, $params);
+    return $this->db->insert($this->tableName, $this->getRequiredCreateParams(), $params, $this->optionalParams);
   }
 
   public function updateArtist($id = null, $params = array()){
-    return $this->db->update($this->tableName, $id, $this->updateParams, $params);
+    return $this->db->update($this->tableName, $id, $this->getAllowedUpdateParams(), $params);
   }
 
   public function deleteArtist($id = null){

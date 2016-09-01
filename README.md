@@ -40,7 +40,7 @@ This project uses Vagrant for local development.  To use it please install
 
 ## Local Development
 For the most part, you will just need to write code and then write tests for it, which can be done with
-`phing build -D buildDir=/home/vagrant/build`
+`phing test -D buildDir=/home/vagrant/build`
 
 For testing against the full build, see the next section
 
