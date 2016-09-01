@@ -22,7 +22,7 @@ use base as base;
 class EventsResource extends base\AbstractRestfulResource{
   private $name = "event";
   private $tableName = "events";
-  private $createParams = array("title", "description", "startTime", "endTime", "createdTime");
+  private $requiredParams = array("title", "description", "startTime", "endTime", "createdTime");
   private $updateParams = array("title", "description", "startTime", "endTime");
 
   private function modelDatabaseResult ($data){
@@ -49,7 +49,7 @@ class EventsResource extends base\AbstractRestfulResource{
   }
 
   public function getRequiredCreateParams(){
-    return $this->createParams;
+    return $this->requiredParams;
   }
 
   public function getAllowedUpdateParams(){
@@ -73,13 +73,13 @@ class EventsResource extends base\AbstractRestfulResource{
 
   public function createEvent($params = array()){
     $params["createdTime"] = time();
-    $result = $this->db->insert($this->tableName, $this->createParams, $params);
+    $result = $this->db->insert($this->tableName, $this->getRequiredCreateParams(), $params);
 
     return $result;
   }
 
   public function updateEvent($id = null, $params = array()){
-    $result = $this->db->update($this->tableName, $id, $this->updateParams, $params);
+    $result = $this->db->update($this->tableName, $id, $this->getAllowedUpdateParams(), $params);
 
     return $result;
   }

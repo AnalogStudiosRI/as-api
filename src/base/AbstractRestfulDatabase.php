@@ -34,7 +34,7 @@ abstract class AbstractRestfulDatabase {
   }
 
   abstract protected function select ($tableName = '', $id = null);
-  abstract protected function insert ($tableName = '', $requiredParams = array(), $params = array());
+  abstract protected function insert ($tableName = '', $requiredParams = array(), $data = array(), $optionalParams = array());
   abstract protected function update ($tableName = '', $id = null, $updateParams = array(), $params = array());
   abstract protected function delete ($tableName = '', $id = null);
 }

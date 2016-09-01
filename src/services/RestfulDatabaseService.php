@@ -95,7 +95,7 @@ class RestfulDatabaseService extends base\AbstractRestfulDatabase{
     return $this->generateResponse($code, $result);
   }
 
-  public function insert ($tableName = "", $requiredParams = array(), $params = array()) {
+  public function insert ($tableName = "", $requiredParams = array(), $data = array(), $optionalParams = array()) {
     $db = $this->db;
     $queryParams = array();
     $query = "INSERT INTO " . $tableName . " ";
@@ -109,15 +109,29 @@ class RestfulDatabaseService extends base\AbstractRestfulDatabase{
     for($i = 0, $l = $validParamsNeeded; $i < $l; $i++){
       $key = $requiredParams[$i];
 
-      if(!isset($params[$key])){
+      if(!isset($data[$key])){
         $invalidParamError .= self::$STATUS_MESSAGE[400] . ".  Expected " . $key . " param";
         break;
       }else{
         $keys .= $key . ",";
         $values .= ":" . $key . ", ";
-        $queryParams[':' . $key] = $params[$key];
+        $queryParams[":" . $key] = $data[$key];
       }
     };
+
+    //support create request where optional params might be passed
+    if(count($optionalParams) > 0){
+      for($j = 0, $k = count($optionalParams); $j < $k; $j++){
+        $optionalKey = $optionalParams[$j];
+
+        if(isset($data[$optionalKey])){
+          $keys .= $optionalKey . ",";
+          $values .= ":" . $optionalKey . ", ";
+          $queryParams[":" . $optionalKey] = $data[$optionalKey];
+          $validParamsNeeded++;
+        }
+      }
+    }
 
     if($validParamsNeeded === count($queryParams) && $invalidParamError === ""){
       $query = rtrim($query, ", ");
@@ -146,17 +160,17 @@ class RestfulDatabaseService extends base\AbstractRestfulDatabase{
     return $this->generateResponse($code, $result, $invalidParamError);
   }
 
-  public function update ($tableName = "", $id = null, $updateParams = array(), $params = array()) {
+  public function update ($tableName = "", $id = null, $updateParams = array(), $data = array()) {
     $db = $this->db;
     $invalidParamError = '';
     $result = array();
     $code = null;
 
-    if(preg_match(self::$PATTERN["ID"], $id) && count($params) > 0) {
+    if(preg_match(self::$PATTERN["ID"], $id) && count($data) > 0) {
       $query = "UPDATE " . $tableName . " SET ";
       $queryParams = array();
 
-      foreach ($params as $key => $value) {
+      foreach ($data as $key => $value) {
         if (in_array($key, $updateParams)) {
           $query .= $key . "=:" . $key . ", ";
           $queryParams[':' . $key] = $value;

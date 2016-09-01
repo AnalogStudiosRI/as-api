@@ -22,7 +22,7 @@ use base as base;
 class PostsResource extends base\AbstractRestfulResource{
   private $name = "posts";
   private $tableName = "posts";
-  private $createParams = array("title", "summary", "createdTime");
+  private $requiredParams = array("title", "summary", "createdTime");
   private $updateParams = array("title", "summary");
 
   private function modelDatabaseResult ($data){
@@ -48,7 +48,7 @@ class PostsResource extends base\AbstractRestfulResource{
   }
 
   public function getRequiredCreateParams(){
-    return $this->createParams;
+    return $this->requiredParams;
   }
 
   public function getAllowedUpdateParams(){
@@ -72,13 +72,13 @@ class PostsResource extends base\AbstractRestfulResource{
 
   public function createPost($params = array()){
     $params["createdTime"] = time();
-    $result = $this->db->insert($this->tableName, $this->createParams, $params);
+    $result = $this->db->insert($this->tableName, $this->getRequiredCreateParams(), $params);
 
     return $result;
   }
 
   public function updatePost($id = null, $params = array()){
-    $result = $this->db->update($this->tableName, $id, $this->updateParams, $params);
+    $result = $this->db->update($this->tableName, $id, $this->getAllowedUpdateParams(), $params);
 
     return $result;
   }

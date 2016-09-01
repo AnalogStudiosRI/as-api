@@ -45,11 +45,11 @@ class ArtistsResourceTest extends PHPUnit_Framework_TestCase{
     $now = time();
     $newArtist = array(
       "name" => "Artist Title " . $now,
-      "bio" => "Artist Bio " . $now
+      "bio" => "Artist Bio " . $now,
+      "contactEmail" => "Artist Contact Email " . $now
     );
 
     $response = $this->artistsResource->createArtist($newArtist);
-
     $status = $response["status"];
     $body = $response["data"];
 
@@ -57,6 +57,13 @@ class ArtistsResourceTest extends PHPUnit_Framework_TestCase{
     $this->assertNotEmpty($body["url"]);
     $this->assertEquals(self::$CREATED, $status);
     $this->assertEquals("/api/artists/" . $body["id"], $body["url"]);
+
+    $artistReponse = $this->artistsResource->getArtistById($body['id']);
+    $artist = $artistReponse["data"][0];
+
+    $this->assertEquals($artist["name"], $newArtist["name"]);
+    $this->assertEquals($artist["bio"], $newArtist["bio"]);
+    $this->assertEquals($artist["contactEmail"], $newArtist["contactEmail"]);
   }
 
 //  public function testCreateFullArtistSuccess(){
@@ -64,7 +71,6 @@ class ArtistsResourceTest extends PHPUnit_Framework_TestCase{
 //    $newArtist = array(
 //      "name" => "Artist Title " . $now,
 //      "bio" => "Artist Bio " . $now,
-//      "imageUrl" => "Artist Image Url " . $now,
 //      "genre" => "Artist Genre " . $now,
 //      "location" => "Artist, Location " . $now,
 //      "contactPhone" => 9784130134,
@@ -81,6 +87,18 @@ class ArtistsResourceTest extends PHPUnit_Framework_TestCase{
 //    $this->assertNotEmpty($body["url"]);
 //    $this->assertEquals(self::$CREATED, $status);
 //    $this->assertEquals("/api/artists/" . $body["id"], $body["url"]);
+//
+//    $artistReponse = $this->artistsResource->getArtistById($body['id']);
+//    $artist = $artistReponse["data"][0];
+//
+//    $this->assertEquals($artist["name"], $newArtist["name"]);
+//    $this->assertEquals($artist["bio"], $newArtist["bio"]);
+//    $this->assertEquals($artist["contactEmail"], $newArtist["contactEmail"]);
+//    $this->assertEquals($artist["contactPhone"], $newArtist["contactPhone"]);
+//    $this->assertEquals($artist["genre"], $newArtist["genre"]);
+//    $this->assertEquals($artist["label"], $newArtist["label"]);
+//    $this->assertEquals($artist["location"], $newArtist["location"]);
+//    $this->assertEquals($artist["isActive"], $newArtist["isActive"]);
 //  }
 
 
@@ -184,10 +202,7 @@ class ArtistsResourceTest extends PHPUnit_Framework_TestCase{
     $randIndex = rand(1, (count($response["data"]) - 1));
     $artist = $response["data"][$randIndex];
 
-    $response = $this->artistsResource->updateArtist($artist["id"], array(
-      "name" => "some new name" . $now,
-      "bio" => "some new bio" . $now
-    ));
+    $response = $this->artistsResource->updateArtist($artist["id"], array("name" => "some new name" . $now, "bio" => "some new bio" . $now, "location" => "some new lcation"));
 
     $status = $response["status"];
     $data = $response["data"];
@@ -196,28 +211,31 @@ class ArtistsResourceTest extends PHPUnit_Framework_TestCase{
     $this->assertEquals("/api/artists/" . $data["id"], $data["url"]);
   }
 
-  public function testUpdateFullArtistSuccess(){
-    $now = time();
-    $response = $this->artistsResource->getArtists();
-    $randIndex = rand(1, (count($response["data"]) - 1));
-    $post = $response["data"][$randIndex];
-    $response = $this->artistsResource->updateArtist($post["id"], array(
-      "name" => "Artist Title Updated " . $now,
-      "bio" => "Artist Bio Updated " . $now,
-      "genre" => "Artist Genre Updated " . $now,
-      "location" => "Artist, Location Updated" . $now,
-      "contactPhone" => 1112223333,
-      "contactEmail" => "Updated owen@analogstudios.net",
-      "isActive" => 1
-    ));
-    $status = $response["status"];
+//  public function testUpdateFullArtistSuccess(){
+//    $now = time();
+//    $response = $this->artistsResource->getArtists();
+//    $randIndex = rand(1, (count($response["data"]) - 1));
+//    $post = $response["data"][$randIndex];
+//    $response = $this->artistsResource->updateArtist($post["id"], array(
+//      "name" => "Artist Title Updated " . $now,
+//      "bio" => "Artist Bio Updated " . $now,
+//      "imageUrl" => "Artist Image Url Updated " . $now,
+//      "genre" => "Artist Genre Updated " . $now,
+//      "location" => "Artist, Location Updated" . $now,
+//      "contactPhone" => 1112223333,
+//      "contactEmail" => "Updated owen@analogstudios.net",
+//      "isActive" => 1
+//    ));
+//    $status = $response["status"];
+//
+//    $status = $response["status"];
+//    $data = $response["data"];
+//
+//    $this->assertEquals(self::$SUCCESS, $status);
+//    $this->assertEquals("/api/artists/" . $data["id"], $data["url"]);
 
-    $status = $response["status"];
-    $data = $response["data"];
-
-    $this->assertEquals(self::$SUCCESS, $status);
-    $this->assertEquals("/api/artists/" . $data["id"], $data["url"]);
-  }
+//test follow up get and assert update
+//  }
 
   public function testUpdateNoArtistIdFailure(){
     $response = $this->artistsResource->updateArtist();
@@ -235,7 +253,7 @@ class ArtistsResourceTest extends PHPUnit_Framework_TestCase{
     $this->assertEquals("Bad Request.  No params provided", $response["message"]);
   }
 
-  public function testUpdatePostNoValidParamsFailure(){
+  public function testUpdateArtistNoValidParamsFailure(){
     $response = $this->artistsResource->updateArtist(1, array("foo" => "bar"));
 
     $this->assertEquals(self::$BAD_REQUEST, $response["status"]);
@@ -244,9 +262,8 @@ class ArtistsResourceTest extends PHPUnit_Framework_TestCase{
   }
 
   public function testUpdateArtistNotFoundFailure(){
-    $response = $this->artistsResource->updateArtist(99999999999999, array("name" => "some new name"));
+    $response = $this->artistsResource->updateArtist(99999999999999, array("name" => "some new name", "bio" => "some bio"));
 
-    //assert
     $this->assertEquals(self::$NOT_FOUND, $response["status"]);
     $this->assertEquals(0, count($response["data"]));
     $this->assertEquals("Resource Not Found", $response["message"]);
