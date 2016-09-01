@@ -50,9 +50,6 @@ class ArtistsResourceTest extends PHPUnit_Framework_TestCase{
     );
 
     $response = $this->artistsResource->createArtist($newArtist);
-
-    var_dump($response);
-
     $status = $response["status"];
     $body = $response["data"];
 
@@ -64,35 +61,45 @@ class ArtistsResourceTest extends PHPUnit_Framework_TestCase{
     $artistReponse = $this->artistsResource->getArtistById($body['id']);
     $artist = $artistReponse["data"][0];
 
-    var_dump($artist);
     $this->assertEquals($artist["name"], $newArtist["name"]);
     $this->assertEquals($artist["bio"], $newArtist["bio"]);
     $this->assertEquals($artist["contactEmail"], $newArtist["contactEmail"]);
   }
 
-//  public function testCreateFullArtistSuccess(){
-//    $now = time();
-//    $newArtist = array(
-//      "name" => "Artist Title " . $now,
-//      "bio" => "Artist Bio " . $now,
-//      "imageUrl" => "Artist Image Url " . $now,
-//      "genre" => "Artist Genre " . $now,
-//      "location" => "Artist, Location " . $now,
-//      "contactPhone" => 9784130134,
-//      "contactEmail" => "owen@analogstudios.net",
-//      "isActive" => 0
-//    );
+  public function testCreateFullArtistSuccess(){
+    $now = time();
+    $newArtist = array(
+      "name" => "Artist Title " . $now,
+      "bio" => "Artist Bio " . $now,
+      "genre" => "Artist Genre " . $now,
+      "location" => "Artist, Location " . $now,
+      "contactPhone" => 9784130134,
+      "contactEmail" => "owen@analogstudios.net",
+      "isActive" => 0
+    );
+
+    $response = $this->artistsResource->createArtist($newArtist);
+
+    $status = $response["status"];
+    $body = $response["data"];
+
+    $this->assertNotEmpty($body["id"]);
+    $this->assertNotEmpty($body["url"]);
+    $this->assertEquals(self::$CREATED, $status);
+    $this->assertEquals("/api/artists/" . $body["id"], $body["url"]);
 //
-//    $response = $this->artistsResource->createArtist($newArtist);
+//    $artistReponse = $this->artistsResource->getArtistById($body['id']);
+//    $artist = $artistReponse["data"][0];
 //
-//    $status = $response["status"];
-//    $body = $response["data"];
-//
-//    $this->assertNotEmpty($body["id"]);
-//    $this->assertNotEmpty($body["url"]);
-//    $this->assertEquals(self::$CREATED, $status);
-//    $this->assertEquals("/api/artists/" . $body["id"], $body["url"]);
-//  }
+//    $this->assertEquals($artist["name"], $newArtist["name"]);
+//    $this->assertEquals($artist["bio"], $newArtist["bio"]);
+//    $this->assertEquals($artist["contactEmail"], $newArtist["contactEmail"]);
+//    $this->assertEquals($artist["contactPhone"], $newArtist["contactPhone"]);
+//    $this->assertEquals($artist["genre"], $newArtist["genre"]);
+//    $this->assertEquals($artist["label"], $newArtist["label"]);
+//    $this->assertEquals($artist["location"], $newArtist["location"]);
+//    $this->assertEquals($artist["isActive"], $newArtist["isActive"]);
+  }
 
 
   public function testCreateArtistNoNameFailure(){
