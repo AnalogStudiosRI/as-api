@@ -91,18 +91,7 @@
   </target>
 
   <target name="docs" description="as-api documentation">
-    <exec command="phpdoc
-       -d src/main/php/net/analogstudios/
-       -t docs
-       --template responsive
-   " />
-<!--    <phpdoc2 title="as-api documentation"
-      destdir="docs"
-      template="responsive-twig">
-       <fileset dir="./src/main/php/net/analogstudios/php/">
-          <include name="**/*.php" />
-       </fileset>
-    </phpdoc2>-->
+    <exec command="phpdoc -d src/ -t docs --template responsive"/>
   </target>
 
   <target name="package">
