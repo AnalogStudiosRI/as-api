@@ -63,8 +63,8 @@
   <target name="test">
     <mkdir dir="${buildDir}" />
 
-    <mkdir dir="coverage_db"/>
-    <mkdir dir="coverage_result"/>
+    <mkdir dir="reports/coverage_db"/>
+    <mkdir dir="reports/coverage_result"/>
 
     <echo msg="preparing code coverage database..."/>
     <coverage-setup database="coverage_db/coverage.db">
@@ -73,7 +73,7 @@
 
     <echo msg="running tests..."/>
     <phpunit printsummary="true" haltonerror="true" haltonincomplete="true" haltonfailure="true" haltonskipped="true" codecoverage="true">
-      <formatter type="xml">
+      <formatter type="xml" outfile="reports/test-results.xml">
       </formatter>
       <batchtest>
         <fileset dir="tests/" >
@@ -84,8 +84,8 @@
     <phpunitreport todir="${buildDir}"/>
 
     <echo msg="generating code coverage results..."/>
-    <coverage-report outfile="coverage_db/coverage.xml">
-      <report todir="coverage_result"/>
+    <coverage-report outfile="reports/coverage_db/coverage.xml">
+      <report todir="reports/coverage_result"/>
     </coverage-report>
 
   </target>
