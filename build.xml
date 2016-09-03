@@ -63,8 +63,8 @@
   <target name="test">
     <mkdir dir="${buildDir}" />
 
-    <mkdir dir="coverage_db"/>
-    <mkdir dir="coverage_result"/>
+    <mkdir dir="reports/coverage_db"/>
+    <mkdir dir="reports/coverage_result"/>
 
     <echo msg="preparing code coverage database..."/>
     <coverage-setup database="coverage_db/coverage.db">
@@ -73,19 +73,19 @@
 
     <echo msg="running tests..."/>
     <phpunit printsummary="true" haltonerror="true" haltonincomplete="true" haltonfailure="true" haltonskipped="true" codecoverage="true">
+      <formatter type="xml" outfile="reports/test-results.xml">
+      </formatter>
       <batchtest>
         <fileset dir="tests/" >
           <include name="**/*.php"/>
         </fileset>
       </batchtest>
-      <formatter type="xml">
-      </formatter>
     </phpunit>
     <phpunitreport todir="${buildDir}"/>
 
     <echo msg="generating code coverage results..."/>
-    <coverage-report outfile="coverage_db/coverage.xml">
-      <report todir="coverage_result"/>
+    <coverage-report outfile="reports/coverage_db/coverage.xml">
+      <report todir="reports/coverage_result"/>
     </coverage-report>
 
   </target>
@@ -144,6 +144,13 @@
     <copy file="tmp/controller.php" tofile="${buildDir}/controller.php" />
     <copy file="ini/config-bootstrap.ini" tofile="${buildDir}/config.ini" />
 
+  </target>
+
+  <target name="develop" description="for local development">
+    <echo msg="starting a develop build..."/>
+    <phingcall target="clean" />
+    <phingcall target="lint" />
+    <phingcall target="test" />
   </target>
 
   <target name="build" description="executes a build">
