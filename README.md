@@ -55,9 +55,18 @@ You can test from the VM using cURL
 Or the browser / POSTman against your host machine
 `localhost:4567/api/events`
 
-### Testing
+## API Documenation
+To generate API documentation run
+`$ phing clean`
+`$ phing docs`
+
+and open _{path/to/repo/in/your/filesystem}/reports/docs/index.html_ in your browser
+
+## Testing
 PHPunit is used for unit testing
 `phing test`
+
+To see code coverage, open _{path/to/repo/in/your/filesystem}/reports/coverage_result/index.html_ in your browser
 
 ## Environment Configuration / Deploying
 

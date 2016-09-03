@@ -4,7 +4,6 @@ ini/config-dev.ini
 ini/config-local.ini
 ini/config-prod.ini
 build/
-docs/
 reports/
 tmp/
 vendor/

@@ -36,7 +36,14 @@
    </target>
 
   <target name="clean">
-    <echo msg="cleaning tmp directory..."/>
+    <echo msg="cleaning build directories..."/>
+
+    <delete includeemptydirs="true" quiet="true">
+      <fileset dir="build">
+        <include name="**/**"/>
+      </fileset>
+    </delete>
+
     <delete includeemptydirs="true" quiet="true">
       <fileset dir="${buildDir}">
         <include name="**/**"/>
@@ -48,6 +55,13 @@
         <include name="**/**"/>
       </fileset>
     </delete>
+
+    <delete includeemptydirs="true" quiet="true">
+      <fileset dir="reports">
+        <include name="**/**"/>
+      </fileset>
+    </delete>
+
   </target>
 
   <target name="lint">
@@ -63,11 +77,12 @@
   <target name="test">
     <mkdir dir="${buildDir}" />
 
+    <mkdir dir="reports/"/>
     <mkdir dir="reports/coverage_db"/>
     <mkdir dir="reports/coverage_result"/>
 
     <echo msg="preparing code coverage database..."/>
-    <coverage-setup database="coverage_db/coverage.db">
+    <coverage-setup database="reports/coverage_db/coverage.db">
       <fileset refid="coverageFiles"/>
     </coverage-setup>
 
@@ -91,18 +106,7 @@
   </target>
 
   <target name="docs" description="as-api documentation">
-    <exec command="phpdoc
-       -d src/main/php/net/analogstudios/
-       -t docs
-       --template responsive
-   " />
-<!--    <phpdoc2 title="as-api documentation"
-      destdir="docs"
-      template="responsive-twig">
-       <fileset dir="./src/main/php/net/analogstudios/php/">
-          <include name="**/*.php" />
-       </fileset>
-    </phpdoc2>-->
+    <exec command="phpdoc -d src/ -t reports/docs --template responsive"/>
   </target>
 
   <target name="package">
@@ -160,6 +164,7 @@
     <phingcall target="lint" />
     <phingcall target="test" />
     <phingcall target="package" />
+    <phingcall target="docs" />
   </target>
 
 </project>
