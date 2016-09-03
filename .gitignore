@@ -11,3 +11,4 @@ ini/config-dev.ini
 ini/config-local.ini
 ini/config-prod.ini
 reports/
+clover-coverage.xml

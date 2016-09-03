@@ -73,13 +73,13 @@
 
     <echo msg="running tests..."/>
     <phpunit printsummary="true" haltonerror="true" haltonincomplete="true" haltonfailure="true" haltonskipped="true" codecoverage="true">
+      <formatter type="clover">
+      </formatter>
       <batchtest>
         <fileset dir="tests/" >
           <include name="**/*.php"/>
         </fileset>
       </batchtest>
-      <formatter type="xml">
-      </formatter>
     </phpunit>
     <phpunitreport todir="${buildDir}"/>
 
