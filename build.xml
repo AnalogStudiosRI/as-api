@@ -73,7 +73,7 @@
 
     <echo msg="running tests..."/>
     <phpunit printsummary="true" haltonerror="true" haltonincomplete="true" haltonfailure="true" haltonskipped="true" codecoverage="true">
-      <formatter type="clover">
+      <formatter type="xml">
       </formatter>
       <batchtest>
         <fileset dir="tests/" >
