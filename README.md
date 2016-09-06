@@ -110,3 +110,11 @@ to keep the Vagrant created test databases current with production).
 PRESERVE ALL BACKUPS***
 
 [RDS]: https://aws.amazon.com/rds/
+
+## Creating a new resource
+1. Copy paste an existing resource (like Artists)
+2. Update $name, $tableName, $requiredParams, $updateParams, $optionalParams  
+3. Update method params (getFoo, getFooById, etc)
+4. Add new case in src/resources/ResfulResourceBuilder
+5. Copy paste an existing test (like Artists in tests/resources) and update for all CRUD operations
+6. Test each CRUD operation one at a time
