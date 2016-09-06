@@ -45,7 +45,7 @@ For the most part, you will just need to write code and then write tests for it,
 For testing against the full build, see the next section
 
 ## Build
-1. local build `phing build -D buildDir=/home/vagrant/build`
+1. local build `phing build -D buildDir=/home/vagrant/build && cp src/.htaccess /home/vagrant/build/`
 
 2. production build `phing build`
 

@@ -28,6 +28,15 @@ class AlbumsResourceTest extends PHPUnit_Framework_TestCase{
     "username" => "astester",
     "password" => "452SsQMwMP"
   );
+  private static $ARTIST_MODEL = array(
+    "id" => 1,
+    "title" => "Debut CD Release Party (live)",
+    "description" => "The songs were played live at the CD Release party for Analog''s debut album, \"When the Media Talk About The Media\" at Captain Nick's on Block Island.  These are songs from both the debut album and Dave Flamand\\''s previous release, \"Lost Time.\"",
+    "year" => 2008,
+    "imageUrl" => "path/to/image/ur.jpgl",
+    "downloadUrl" => "path/to/download/url.zip",
+    "artistId" => 1
+  );
 
   public function setup(){
     $builder = new resource\RestfulResourceBuilder(self::$DB_CONFIG, "albums");
@@ -41,96 +50,104 @@ class AlbumsResourceTest extends PHPUnit_Framework_TestCase{
   /**********/
   /* CREATE */
   /**********/
-//  public function testCreateArtistSuccess(){
-//    $now = time();
-//    $newArtist = array(
-//      "name" => "Artist Title " . $now,
-//      "bio" => "Artist Bio " . $now,
-//      "contactEmail" => "Artist Contact Email " . $now
-//    );
-//
-//    $response = $this->artistsResource->createArtist($newArtist);
-//    $status = $response["status"];
-//    $body = $response["data"];
-//
-//    $this->assertNotEmpty($body["id"]);
-//    $this->assertNotEmpty($body["url"]);
-//    $this->assertEquals(self::$CREATED, $status);
-//    $this->assertEquals("/api/artists/" . $body["id"], $body["url"]);
-//
-//    $artistReponse = $this->artistsResource->getArtistById($body['id']);
-//    $artist = $artistReponse["data"][0];
-//
-//    $this->assertEquals($artist["name"], $newArtist["name"]);
-//    $this->assertEquals($artist["bio"], $newArtist["bio"]);
-//    $this->assertEquals($artist["contactEmail"], $newArtist["contactEmail"]);
-//  }
-//
-////  public function testCreateFullArtistSuccess(){
-////    $now = time();
-////    $newArtist = array(
-////      "name" => "Artist Title " . $now,
-////      "bio" => "Artist Bio " . $now,
-////      "genre" => "Artist Genre " . $now,
-////      "location" => "Artist, Location " . $now,
-////      "contactPhone" => 9784130134,
-////      "contactEmail" => "owen@analogstudios.net",
-////      "isActive" => 0
-////    );
-////
-////    $response = $this->artistsResource->createArtist($newArtist);
-////
-////    $status = $response["status"];
-////    $body = $response["data"];
-////
-////    $this->assertNotEmpty($body["id"]);
-////    $this->assertNotEmpty($body["url"]);
-////    $this->assertEquals(self::$CREATED, $status);
-////    $this->assertEquals("/api/artists/" . $body["id"], $body["url"]);
-////
-////    $artistReponse = $this->artistsResource->getArtistById($body['id']);
-////    $artist = $artistReponse["data"][0];
-////
-////    $this->assertEquals($artist["name"], $newArtist["name"]);
-////    $this->assertEquals($artist["bio"], $newArtist["bio"]);
-////    $this->assertEquals($artist["contactEmail"], $newArtist["contactEmail"]);
-////    $this->assertEquals($artist["contactPhone"], $newArtist["contactPhone"]);
-////    $this->assertEquals($artist["genre"], $newArtist["genre"]);
-////    $this->assertEquals($artist["label"], $newArtist["label"]);
-////    $this->assertEquals($artist["location"], $newArtist["location"]);
-////    $this->assertEquals($artist["isActive"], $newArtist["isActive"]);
-////  }
-//
-//
-//  public function testCreateArtistNoNameFailure(){
-//    $now = time();
-//    $newArtist = array(
-//      "bio" => "Artist Bio " . $now
-//    );
-//
-//    $response = $this->artistsResource->createArtist($newArtist);
-//    $status = $response["status"];
-//
-//    $this->assertEquals(self::$BAD_REQUEST, $status);
-//    $this->assertEquals(0, count($response["data"]));
-//    $this->assertEquals("Bad Request.  Expected name param", $response["message"]);
-//  }
-//
-//  public function testCreatePostNoBioFailure(){
-//    $now = time();
-//    $newArtist = array(
-//      "name" => "Artist Name " . $now
-//    );
-//
-//    //get response
-//    $response = $this->artistsResource->createArtist($newArtist);
-//    $status = $response["status"];
-//
-//    //assert
-//    $this->assertEquals(self::$BAD_REQUEST, $status);
-//    $this->assertEquals(0, count($response["data"]));
-//    $this->assertEquals("Bad Request.  Expected bio param", $response["message"]);
-//  }
+  public function testCreateAlbumSuccess(){
+    $now = time();
+    $newAlbum = array(
+      "title" => self::$ARTIST_MODEL["title"] . $now,
+      "description" => self::$ARTIST_MODEL["description"],
+      "artistId" => self::$ARTIST_MODEL["artistId"]
+    );
+
+    $response = $this->albumsResource->createAlbum($newAlbum);
+    $status = $response["status"];
+    $body = $response["data"];
+
+    $this->assertNotEmpty($body["id"]);
+    $this->assertNotEmpty($body["url"]);
+    $this->assertEquals(self::$CREATED, $status);
+    $this->assertEquals("/api/albums/" . $body["id"], $body["url"]);
+
+    $artistReponse = $this->albumsResource->getAlbumById($body['id']);
+    $artist = $artistReponse["data"][0];
+
+    $this->assertEquals($artist["title"], $newAlbum["title"]);
+    $this->assertEquals($artist["description"], $newAlbum["description"]);
+  }
+
+  public function testCreateFullAlbumSuccess(){
+    $now = time();
+    $newAlbum = array(
+      "title" => self::$ARTIST_MODEL["title"] . $now,
+      "description" => self::$ARTIST_MODEL["description"],
+      "year" => self::$ARTIST_MODEL["year"] + 1,
+      "imageUrl" => $now . '/' . self::$ARTIST_MODEL["imageUrl"],
+      "downloadUrl" => $now . '/' . self::$ARTIST_MODEL["downloadUrl"],
+      "artistId" => self::$ARTIST_MODEL["artistId"]
+    );
+    $response = $this->albumsResource->createAlbum($newAlbum);
+
+    $status = $response["status"];
+    $body = $response["data"];
+    $this->assertNotEmpty($body["id"]);
+    $this->assertNotEmpty($body["url"]);
+    $this->assertEquals(self::$CREATED, $status);
+    $this->assertEquals("/api/albums/" . $body["id"], $body["url"]);
+
+    $albumsReponse = $this->albumsResource->getAlbumById($body['id']);
+    $album = $albumsReponse["data"][0];
+
+    $this->assertEquals($album["title"], $newAlbum["title"]);
+    $this->assertEquals($album["description"], $newAlbum["description"]);
+    $this->assertEquals($album["year"], $newAlbum["year"]);
+    $this->assertEquals($album["imageUrl"], $newAlbum["imageUrl"]);
+    $this->assertEquals($album["downloadUrl"], $newAlbum["downloadUrl"]);
+    $this->assertEquals($album["artistId"], $newAlbum["artistId"]);
+  }
+
+  public function testCreateAlbumNoTitleFailure(){
+    $newAlbum = array(
+      "description" => self::$ARTIST_MODEL["description"]
+    );
+
+    $response = $this->albumsResource->createAlbum($newAlbum);
+    $status = $response["status"];
+
+    $this->assertEquals(self::$BAD_REQUEST, $status);
+    $this->assertEquals(0, count($response["data"]));
+    $this->assertEquals("Bad Request.  Expected title param", $response["message"]);
+  }
+
+  public function testCreateAlbumNoDescriptionFailure(){
+    $newAlbum = array(
+      "title" => self::$ARTIST_MODEL["title"]
+    );
+
+    //get response
+    $response = $this->albumsResource->createAlbum($newAlbum);
+    $status = $response["status"];
+
+    //assert
+    $this->assertEquals(self::$BAD_REQUEST, $status);
+    $this->assertEquals(0, count($response["data"]));
+    $this->assertEquals("Bad Request.  Expected description param", $response["message"]);
+  }
+
+  public function testCreateAlbumNoArtistIdFailure(){
+    $newAlbum = array(
+      "title" => self::$ARTIST_MODEL["title"],
+      "description" => self::$ARTIST_MODEL["description"]
+    );
+
+    //get response
+    $response = $this->albumsResource->createAlbum($newAlbum);
+    $status = $response["status"];
+
+    //assert
+    $this->assertEquals(self::$BAD_REQUEST, $status);
+    $this->assertEquals(0, count($response["data"]));
+    $this->assertEquals("Bad Request.  Expected artistId param", $response["message"]);
+  }
+
 
   /********/
   /* READ */
