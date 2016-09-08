@@ -19,7 +19,12 @@ $slim->get("/api/albums/:id", function($albumId) use ($slim, $resource) {
   $slim->response->setBody(json_encode($response["data"]));
 });
 
-//TODO GET albums by artistId, eg. /albums/artist/:id
+$slim->get("/api/albums/artist/:id", function($artistId) use ($slim, $resource) {
+  $response = $resource->getAlbums(array("artistId" => $artistId));
+
+  $slim->response->status($response['status']);
+  $slim->response->setBody(json_encode($response["data"]));
+});
 
 $slim->post("/api/albums", function() use ($slim, $resource, $hasValidLogin, $invalidLoginResponse) {
   $params = json_decode($slim->request->getBody(), true);
