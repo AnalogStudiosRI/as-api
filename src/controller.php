@@ -59,10 +59,13 @@ switch ($loginStatus) {
 /* routing and controlling */
 $request = $slim->request;
 $path = $request->getResourceUri();
-$resources = array('artists', 'events', 'posts');
+$resources = array('albums', 'artists', 'events', 'posts');
 $route = '';
 
 switch ($path){
+  case strpos($path, 'albums') !== FALSE:
+    $route = 'albums';
+    break;
   case strpos($path, 'artists') !== FALSE:
     $route = 'artists';
     break;

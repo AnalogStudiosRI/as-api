@@ -45,9 +45,17 @@ For the most part, you will just need to write code and then write tests for it,
 For testing against the full build, see the next section
 
 ## Build
-1. local build `phing build -D buildDir=/home/vagrant/build && cp src/.htaccess /home/vagrant/build/`
+1. local build (no linting, docs, tests)
 
-2. production build `phing build`
+```
+$ phing build-local -D buildDir=/home/vagrant/build && cp src/.htaccess /home/vagrant/build/
+```
+
+2. production build 
+
+```
+$ phing build
+``
 
 You can test from the VM using cURL
 `curl localhost/api/events`
@@ -111,10 +119,13 @@ PRESERVE ALL BACKUPS***
 
 [RDS]: https://aws.amazon.com/rds/
 
-## Creating a new resource
+## Creating a new resource / endpoint (/events, /artists, etc )
 1. Copy paste an existing resource (like Artists)
 2. Update $name, $tableName, $requiredParams, $updateParams, $optionalParams  
 3. Update method params (getFoo, getFooById, etc)
 4. Add new case in src/resources/ResfulResourceBuilder
 5. Copy paste an existing test (like Artists in tests/resources) and update for all CRUD operations
-6. Test each CRUD operation one at a time
+6. Test each CRUD operation one at a time using `phing test`
+7. Add resource name to $resources array
+8. Add a "route" case in controller.php
+9. Create a route file in /routes, to match your resource name and route case
