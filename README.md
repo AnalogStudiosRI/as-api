@@ -55,7 +55,7 @@ $ phing build-local -D buildDir=/home/vagrant/build && cp src/.htaccess /home/va
 
 ```
 $ phing build
-``
+```
 
 You can test from the VM using cURL
 `curl localhost/api/events`
@@ -129,3 +129,4 @@ PRESERVE ALL BACKUPS***
 7. Add resource name to $resources array
 8. Add a "route" case in controller.php
 9. Create a route file in /routes, to match your resource name and route case
+10. Test all endpoints in POSTman
