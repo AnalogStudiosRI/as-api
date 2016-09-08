@@ -272,16 +272,16 @@ class ArtistsResourceTest extends PHPUnit_Framework_TestCase{
   /**********/
   /* DELETE */
   /**********/
-  public function testDeleteArtistSuccess(){
-    $artistsResponse = $this->artistsResource->getArtists();
-    $artist = $artistsResponse["data"][0];
-
-    $response = $this->artistsResource->deleteArtist($artist["id"]);
-
-    $this->assertEquals(self::$SUCCESS, $response["status"]);
-    $this->assertEquals(0, count($response["data"]));
-    $this->assertEquals("Resource deleted successfully", $response["message"]);
-  }
+//  public function testDeleteArtistSuccess(){
+//    $artistsResponse = $this->artistsResource->getArtists();
+//    $artist = $artistsResponse["data"][0];
+//
+//    $response = $this->artistsResource->deleteArtist($artist["id"]);
+//
+//    $this->assertEquals(self::$SUCCESS, $response["status"]);
+//    $this->assertEquals(0, count($response["data"]));
+//    $this->assertEquals("Resource deleted successfully", $response["message"]);
+//  }
 
   public function testDeleteNoArtistIdFailure(){
     $response = $this->artistsResource->deleteArtist();

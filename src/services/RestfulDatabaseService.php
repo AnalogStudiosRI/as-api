@@ -59,7 +59,7 @@ class RestfulDatabaseService extends base\AbstractRestfulDatabase{
     );
   }
 
-  public function select ($tableName = "", $id = null) {
+  public function select ($tableName = "", $id = null, $filterParams = array()) {
     $db = $this->db;
     $validEventId = preg_match(self::$PATTERN["ID"], $id) === 1 ? TRUE : FALSE;
     $validTableName = $tableName !== '' ? TRUE : FALSE;
@@ -71,8 +71,25 @@ class RestfulDatabaseService extends base\AbstractRestfulDatabase{
       $stmt = $db->prepare($sql);
       $stmt->bindValue(":id", $id, $db::PARAM_INT);
     }else{
-      //XXX TODO tests for table name
+      $filterSql = null;
+
+      //TODO is this a security vulnerability?
+      foreach($filterParams as $key => $value){
+        $filterSql = $key . '=:' . $key;
+      }
+
+      if($filterSql){
+        $sql .= " WHERE " . $filterSql;
+      }
+
       $stmt = $db->prepare($sql);
+
+      if($filterSql){
+        foreach($filterParams as $key => $value){
+          $type = strpos(strtolower($value), 'id') >= 0 ? $db::PARAM_INT : $db::PARAM_STR;
+          $stmt->bindValue(":" . $key, $value, $type);
+        }
+      }
     }
 
     $stmt->execute();
