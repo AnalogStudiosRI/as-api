@@ -33,7 +33,7 @@ class AlbumsResourceTest extends PHPUnit_Framework_TestCase{
     "title" => "Debut CD Release Party (live)",
     "description" => "The songs were played live at the CD Release party for Analog''s debut album, \"When the Media Talk About The Media\" at Captain Nick's on Block Island.  These are songs from both the debut album and Dave Flamand\\''s previous release, \"Lost Time.\"",
     "year" => 2008,
-    "imageUrl" => "path/to/image/ur.jpgl",
+    "imageUrl" => "path/to/image/url.jpg",
     "downloadUrl" => "path/to/download/url.zip",
     "artistId" => 1
   );
@@ -80,8 +80,8 @@ class AlbumsResourceTest extends PHPUnit_Framework_TestCase{
       "title" => self::$MOCK_ALBUM_MODEL["title"] . $now,
       "description" => self::$MOCK_ALBUM_MODEL["description"],
       "year" => self::$MOCK_ALBUM_MODEL["year"] + 1,
-      "imageUrl" => $now . '/' . self::$MOCK_ALBUM_MODEL["imageUrl"],
-      "downloadUrl" => $now . '/' . self::$MOCK_ALBUM_MODEL["downloadUrl"],
+      "imageUrl" => self::$MOCK_ALBUM_MODEL["imageUrl"] . "?=" . $now,
+      "downloadUrl" => self::$MOCK_ALBUM_MODEL["downloadUrl"  . "?=" . $now],
       "artistId" => self::$MOCK_ALBUM_MODEL["artistId"]
     );
     $response = $this->albumsResource->createAlbum($newAlbum);
@@ -198,6 +198,52 @@ class AlbumsResourceTest extends PHPUnit_Framework_TestCase{
     $this->assertNotEmpty("description", $album);
   }
 
+  public function testGetAlbumsByArtistId(){
+    //we can use mock artistId since it will be part of the APIs initial production data
+    $albumsResponse = $this->albumsResource->getAlbums(array(
+      "artistId" => self::$MOCK_ALBUM_MODEL["artistId"]
+    ));
+    $hasAlbums = false;
+
+    $status = $albumsResponse["status"];
+    $albums = $albumsResponse["data"];
+
+    $this->assertEquals(self::$SUCCESS, $status);
+    $this->assertNotEmpty($albums);
+
+    for($i = 0, $l = count($albums); $i < $l; $i++){
+      $album = $albums[$i];
+
+      if($album["artistId"] == self::$MOCK_ALBUM_MODEL["artistId"]){
+        $this->assertArrayHasKey("id", $album);
+        $this->assertArrayHasKey("title", $album);
+        $this->assertArrayHasKey("description", $album);
+        $this->assertArrayHasKey("year", $album);
+        $this->assertArrayHasKey("imageUrl", $album);
+        $this->assertArrayHasKey("downloadUrl", $album);
+        $this->assertArrayHasKey("artistId", $album);
+
+        $this->assertNotEmpty("id", $album);
+        $this->assertNotEmpty("title", $album);
+        $this->assertNotEmpty("description", $album);
+        $this->assertNotEmpty("year", $album);
+        $this->assertNotEmpty("imageUrl", $album);
+        $this->assertNotEmpty("downloadUrl", $album);
+        $this->assertNotEmpty("artistId", $album);
+
+        $this->assertEquals(self::$MOCK_ALBUM_MODEL["artistId"], $album["artistId"]);
+
+        $hasAlbums = true;
+      }
+    }
+
+    $this->assertTrue($hasAlbums);
+  }
+
+  public function testGetAlbumsByIdAndArtistIdSuccess(){
+    //TODO
+  }
+
   public function testGetAlbumBadRequestFailure(){
     $response = $this->albumsResource->getAlbumById('abc');
     $status = $response["status"];
@@ -248,8 +294,8 @@ class AlbumsResourceTest extends PHPUnit_Framework_TestCase{
       "title" => self::$MOCK_ALBUM_MODEL["title"]  . ' ' . $now,
       "description" => self::$MOCK_ALBUM_MODEL["description"]  . ' ' . $now,
       "year" => self::$MOCK_ALBUM_MODEL["year"] + 1,
-      "imageUrl" => $now . '/' . self::$MOCK_ALBUM_MODEL["imageUrl"],
-      "downloadUrl" => $now . '/' . self::$MOCK_ALBUM_MODEL["downloadUrl"]
+      "imageUrl" => self::$MOCK_ALBUM_MODEL["imageUrl"] . "?=" . $now,
+      "downloadUrl" => $now . '/' . self::$MOCK_ALBUM_MODEL["downloadUrl"] . "?=" . $now
     ));
 
     $status = $albumsReponse["status"];
@@ -264,8 +310,8 @@ class AlbumsResourceTest extends PHPUnit_Framework_TestCase{
     $this->assertEquals($singlAlbum["title"], self::$MOCK_ALBUM_MODEL["title"]  . ' ' . $now);
     $this->assertEquals($singlAlbum["description"], self::$MOCK_ALBUM_MODEL["description"] . ' ' . $now);
     $this->assertEquals($singlAlbum["year"], (self::$MOCK_ALBUM_MODEL["year"] + 1));
-    $this->assertEquals($singlAlbum["imageUrl"], ($now . '/' . self::$MOCK_ALBUM_MODEL["imageUrl"]));
-    $this->assertEquals($singlAlbum["downloadUrl"], ($now . '/' . self::$MOCK_ALBUM_MODEL["downloadUrl"]));
+    $this->assertEquals($singlAlbum["imageUrl"], (self::$MOCK_ALBUM_MODEL["imageUrl"] . "?=" . $now));
+    $this->assertEquals($singlAlbum["downloadUrl"], (self::$MOCK_ALBUM_MODEL["downloadUrl"]  . "?=" . $now));
   }
 
   public function testUpdateNoAlbumIdFailure(){

@@ -44,8 +44,8 @@ class AlbumsResource extends base\AbstractRestfulResource{
   }
 
   //resource level methods
-  public function getAlbums(){
-    return $this->db->select($this->tableName);
+  public function getAlbums($filterParams = array()){
+    return $this->db->select($this->tableName, null, $filterParams);
   }
 
   public function getAlbumById($id = null){
