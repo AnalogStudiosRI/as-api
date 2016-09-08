@@ -267,38 +267,41 @@ class AlbumsResourceTest extends PHPUnit_Framework_TestCase{
     $this->assertEquals($singlAlbum["imageUrl"], ($now . '/' . self::$MOCK_ALBUM_MODEL["imageUrl"]));
     $this->assertEquals($singlAlbum["downloadUrl"], ($now . '/' . self::$MOCK_ALBUM_MODEL["downloadUrl"]));
   }
-//
-//  public function testUpdateNoArtistIdFailure(){
-//    $response = $this->artistsResource->updateArtist();
-//
-//    $this->assertEquals(self::$BAD_REQUEST, $response["status"]);
-//    $this->assertEquals(0, count($response["data"]));
-//    $this->assertEquals("Bad Request.  No id provided", $response["message"]);
-//  }
-//
-//  public function testUpdateArtistNoParamsFailure(){
-//    $response = $this->artistsResource->updateArtist(1);
-//
-//    $this->assertEquals(self::$BAD_REQUEST, $response["status"]);
-//    $this->assertEquals(0, count($response["data"]));
-//    $this->assertEquals("Bad Request.  No params provided", $response["message"]);
-//  }
-//
-//  public function testUpdateArtistNoValidParamsFailure(){
-//    $response = $this->artistsResource->updateArtist(1, array("foo" => "bar"));
-//
-//    $this->assertEquals(self::$BAD_REQUEST, $response["status"]);
-//    $this->assertEquals(0, count($response["data"]));
-//    $this->assertEquals("Bad Request.  No valid params provided", $response["message"]);
-//  }
-//
-//  public function testUpdateArtistNotFoundFailure(){
-//    $response = $this->artistsResource->updateArtist(99999999999999, array("name" => "some new name", "bio" => "some bio"));
-//
-//    $this->assertEquals(self::$NOT_FOUND, $response["status"]);
-//    $this->assertEquals(0, count($response["data"]));
-//    $this->assertEquals("Resource Not Found", $response["message"]);
-//  }
+
+  public function testUpdateNoAlbumIdFailure(){
+    $response = $this->albumsResource->updateAlbum();
+
+    $this->assertEquals(self::$BAD_REQUEST, $response["status"]);
+    $this->assertEquals(0, count($response["data"]));
+    $this->assertEquals("Bad Request.  No id provided", $response["message"]);
+  }
+
+  public function testUpdateAlbumNoParamsFailure(){
+    $response = $this->albumsResource->updateAlbum(1);
+
+    $this->assertEquals(self::$BAD_REQUEST, $response["status"]);
+    $this->assertEquals(0, count($response["data"]));
+    $this->assertEquals("Bad Request.  No params provided", $response["message"]);
+  }
+
+  public function testUpdateAlbumNoValidParamsFailure(){
+    $response = $this->albumsResource->updateAlbum(1, array("foo" => "bar"));
+
+    $this->assertEquals(self::$BAD_REQUEST, $response["status"]);
+    $this->assertEquals(0, count($response["data"]));
+    $this->assertEquals("Bad Request.  No valid params provided", $response["message"]);
+  }
+
+  public function testUpdateAlbumNotFoundFailure(){
+    $response = $this->albumsResource->updateAlbum(99999999999999, array(
+      "title" => self::$MOCK_ALBUM_MODEL["title"],
+      "description" => self::$MOCK_ALBUM_MODEL["description"]
+    ));
+
+    $this->assertEquals(self::$NOT_FOUND, $response["status"]);
+    $this->assertEquals(0, count($response["data"]));
+    $this->assertEquals("Resource Not Found", $response["message"]);
+  }
 
   /**********/
   /* DELETE */
