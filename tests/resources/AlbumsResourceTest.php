@@ -306,38 +306,38 @@ class AlbumsResourceTest extends PHPUnit_Framework_TestCase{
   /**********/
   /* DELETE */
   /**********/
-//  public function testDeleteArtistSuccess(){
-//    $artistsResponse = $this->artistsResource->getArtists();
-//    $artist = $artistsResponse["data"][0];
-//
-//    $response = $this->artistsResource->deleteArtist($artist["id"]);
-//
-//    $this->assertEquals(self::$SUCCESS, $response["status"]);
-//    $this->assertEquals(0, count($response["data"]));
-//    $this->assertEquals("Resource deleted successfully", $response["message"]);
-//  }
-//
-//  public function testDeleteNoArtistIdFailure(){
-//    $response = $this->artistsResource->deleteArtist();
-//
-//    $this->assertEquals(self::$BAD_REQUEST, $response["status"]);
-//    $this->assertEquals(0, count($response["data"]));
-//    $this->assertEquals("Bad Request.  No valid id provided", $response["message"]);
-//  }
-//
-//  public function testDeleteInvalidArtistIdFailure(){
-//    $response = $this->artistsResource->deleteArtist("abc");
-//
-//    $this->assertEquals(self::$BAD_REQUEST, $response["status"]);
-//    $this->assertEquals(0, count($response["data"]));
-//    $this->assertEquals("Bad Request.  No valid id provided", $response["message"]);
-//  }
-//
-//  public function testDeleteArtistNotFoundFailure(){
-//    $response = $this->artistsResource->deleteArtist(9999999999999999);
-//
-//    $this->assertEquals(self::$NOT_FOUND, $response["status"]);
-//    $this->assertEquals(0, count($response["data"]));
-//    $this->assertEquals("No results found", $response["message"]);
-//  }
+  public function testDeleteAlbumSuccess(){
+    $artistsResponse = $this->albumsResource->getAlbums();
+    $artist = $artistsResponse["data"][0];
+
+    $response = $this->albumsResource->deleteAlbum($artist["id"]);
+
+    $this->assertEquals(self::$SUCCESS, $response["status"]);
+    $this->assertEquals(0, count($response["data"]));
+    $this->assertEquals("Resource deleted successfully", $response["message"]);
+  }
+
+  public function testDeleteNoAlbumIdFailure(){
+    $response = $this->albumsResource->deleteAlbum();
+
+    $this->assertEquals(self::$BAD_REQUEST, $response["status"]);
+    $this->assertEquals(0, count($response["data"]));
+    $this->assertEquals("Bad Request.  No valid id provided", $response["message"]);
+  }
+
+  public function testDeleteInvalidAlbumIdFailure(){
+    $response = $this->albumsResource->deleteAlbum("abc");
+
+    $this->assertEquals(self::$BAD_REQUEST, $response["status"]);
+    $this->assertEquals(0, count($response["data"]));
+    $this->assertEquals("Bad Request.  No valid id provided", $response["message"]);
+  }
+
+  public function testDeleteAlbumNotFoundFailure(){
+    $response = $this->albumsResource->deleteAlbum(9999999999999999);
+
+    $this->assertEquals(self::$NOT_FOUND, $response["status"]);
+    $this->assertEquals(0, count($response["data"]));
+    $this->assertEquals("No results found", $response["message"]);
+  }
 }
