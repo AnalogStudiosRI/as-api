@@ -28,7 +28,7 @@ class AlbumsResourceTest extends PHPUnit_Framework_TestCase{
     "username" => "astester",
     "password" => "452SsQMwMP"
   );
-  private static $ARTIST_MODEL = array(
+  private static $MOCK_ALBUM_MODEL = array(
     "id" => 1,
     "title" => "Debut CD Release Party (live)",
     "description" => "The songs were played live at the CD Release party for Analog''s debut album, \"When the Media Talk About The Media\" at Captain Nick's on Block Island.  These are songs from both the debut album and Dave Flamand\\''s previous release, \"Lost Time.\"",
@@ -53,9 +53,9 @@ class AlbumsResourceTest extends PHPUnit_Framework_TestCase{
   public function testCreateAlbumSuccess(){
     $now = time();
     $newAlbum = array(
-      "title" => self::$ARTIST_MODEL["title"] . $now,
-      "description" => self::$ARTIST_MODEL["description"],
-      "artistId" => self::$ARTIST_MODEL["artistId"]
+      "title" => self::$MOCK_ALBUM_MODEL["title"] . $now,
+      "description" => self::$MOCK_ALBUM_MODEL["description"],
+      "artistId" => self::$MOCK_ALBUM_MODEL["artistId"]
     );
 
     $response = $this->albumsResource->createAlbum($newAlbum);
@@ -77,12 +77,12 @@ class AlbumsResourceTest extends PHPUnit_Framework_TestCase{
   public function testCreateFullAlbumSuccess(){
     $now = time();
     $newAlbum = array(
-      "title" => self::$ARTIST_MODEL["title"] . $now,
-      "description" => self::$ARTIST_MODEL["description"],
-      "year" => self::$ARTIST_MODEL["year"] + 1,
-      "imageUrl" => $now . '/' . self::$ARTIST_MODEL["imageUrl"],
-      "downloadUrl" => $now . '/' . self::$ARTIST_MODEL["downloadUrl"],
-      "artistId" => self::$ARTIST_MODEL["artistId"]
+      "title" => self::$MOCK_ALBUM_MODEL["title"] . $now,
+      "description" => self::$MOCK_ALBUM_MODEL["description"],
+      "year" => self::$MOCK_ALBUM_MODEL["year"] + 1,
+      "imageUrl" => $now . '/' . self::$MOCK_ALBUM_MODEL["imageUrl"],
+      "downloadUrl" => $now . '/' . self::$MOCK_ALBUM_MODEL["downloadUrl"],
+      "artistId" => self::$MOCK_ALBUM_MODEL["artistId"]
     );
     $response = $this->albumsResource->createAlbum($newAlbum);
 
@@ -106,7 +106,7 @@ class AlbumsResourceTest extends PHPUnit_Framework_TestCase{
 
   public function testCreateAlbumNoTitleFailure(){
     $newAlbum = array(
-      "description" => self::$ARTIST_MODEL["description"]
+      "description" => self::$MOCK_ALBUM_MODEL["description"]
     );
 
     $response = $this->albumsResource->createAlbum($newAlbum);
@@ -119,7 +119,7 @@ class AlbumsResourceTest extends PHPUnit_Framework_TestCase{
 
   public function testCreateAlbumNoDescriptionFailure(){
     $newAlbum = array(
-      "title" => self::$ARTIST_MODEL["title"]
+      "title" => self::$MOCK_ALBUM_MODEL["title"]
     );
 
     //get response
@@ -134,8 +134,8 @@ class AlbumsResourceTest extends PHPUnit_Framework_TestCase{
 
   public function testCreateAlbumNoArtistIdFailure(){
     $newAlbum = array(
-      "title" => self::$ARTIST_MODEL["title"],
-      "description" => self::$ARTIST_MODEL["description"]
+      "title" => self::$MOCK_ALBUM_MODEL["title"],
+      "description" => self::$MOCK_ALBUM_MODEL["description"]
     );
 
     //get response
@@ -215,46 +215,58 @@ class AlbumsResourceTest extends PHPUnit_Framework_TestCase{
   /**********/
   /* UPDATE */
   /**********/
-//  public function testUpdateArtistSuccess(){
-//    $now = time();
-//    $response = $this->artistsResource->getArtists();
-//    $randIndex = rand(1, (count($response["data"]) - 1));
-//    $artist = $response["data"][$randIndex];
-//
-//    $response = $this->artistsResource->updateArtist($artist["id"], array("name" => "some new name" . $now, "bio" => "some new bio" . $now, "location" => "some new lcation"));
-//
-//    $status = $response["status"];
-//    $data = $response["data"];
-//
-//    $this->assertEquals(self::$SUCCESS, $status);
-//    $this->assertEquals("/api/artists/" . $data["id"], $data["url"]);
-//  }
-//
-////  public function testUpdateFullArtistSuccess(){
-////    $now = time();
-////    $response = $this->artistsResource->getArtists();
-////    $randIndex = rand(1, (count($response["data"]) - 1));
-////    $post = $response["data"][$randIndex];
-////    $response = $this->artistsResource->updateArtist($post["id"], array(
-////      "name" => "Artist Title Updated " . $now,
-////      "bio" => "Artist Bio Updated " . $now,
-////      "imageUrl" => "Artist Image Url Updated " . $now,
-////      "genre" => "Artist Genre Updated " . $now,
-////      "location" => "Artist, Location Updated" . $now,
-////      "contactPhone" => 1112223333,
-////      "contactEmail" => "Updated owen@analogstudios.net",
-////      "isActive" => 1
-////    ));
-////    $status = $response["status"];
-////
-////    $status = $response["status"];
-////    $data = $response["data"];
-////
-////    $this->assertEquals(self::$SUCCESS, $status);
-////    $this->assertEquals("/api/artists/" . $data["id"], $data["url"]);
-//
-////test follow up get and assert update
-////  }
+  public function testUpdateAlbumSuccess(){
+    $now = time();
+    $response = $this->albumsResource->getAlbums();
+    $randIndex = rand(1, (count($response["data"]) - 1));
+    $randAlbum = $response["data"][$randIndex];
+
+    $albumsReponse = $this->albumsResource->updateAlbum($randAlbum["id"], array(
+      "title" => self::$MOCK_ALBUM_MODEL["title"] . $now,
+      "description" => self::$MOCK_ALBUM_MODEL["description"] . $now,
+    ));
+
+    $status = $albumsReponse["status"];
+    $data = $albumsReponse["data"];
+
+    $this->assertEquals(self::$SUCCESS, $status);
+    $this->assertEquals("/api/albums/" . $data["id"], $data["url"]);
+
+    $singleAlbumReponse = $this->albumsResource->getAlbumById($data['id']);
+    $singlAlbum = $singleAlbumReponse["data"][0];
+
+    $this->assertEquals($singlAlbum["title"], self::$MOCK_ALBUM_MODEL["title"] . $now);
+    $this->assertEquals($singlAlbum["description"], self::$MOCK_ALBUM_MODEL["description"] . $now);
+  }
+
+  public function testUpdateFullAlbumSuccess(){
+    $now = time();
+    $response = $this->albumsResource->getAlbums();
+    $randIndex = rand(1, (count($response["data"]) - 1));
+    $randAlbum = $response["data"][$randIndex];
+    $albumsReponse = $this->albumsResource->updateAlbum($randAlbum["id"], array(
+      "title" => self::$MOCK_ALBUM_MODEL["title"]  . ' ' . $now,
+      "description" => self::$MOCK_ALBUM_MODEL["description"]  . ' ' . $now,
+      "year" => self::$MOCK_ALBUM_MODEL["year"] + 1,
+      "imageUrl" => $now . '/' . self::$MOCK_ALBUM_MODEL["imageUrl"],
+      "downloadUrl" => $now . '/' . self::$MOCK_ALBUM_MODEL["downloadUrl"]
+    ));
+
+    $status = $albumsReponse["status"];
+    $album = $albumsReponse["data"];
+
+    $this->assertEquals(self::$SUCCESS, $status);
+    $this->assertEquals("/api/albums/" . $album["id"], $album["url"]);
+
+    $singleAlbumReponse = $this->albumsResource->getAlbumById($album['id']);
+    $singlAlbum = $singleAlbumReponse["data"][0];
+
+    $this->assertEquals($singlAlbum["title"], self::$MOCK_ALBUM_MODEL["title"]  . ' ' . $now);
+    $this->assertEquals($singlAlbum["description"], self::$MOCK_ALBUM_MODEL["description"] . ' ' . $now);
+    $this->assertEquals($singlAlbum["year"], (self::$MOCK_ALBUM_MODEL["year"] + 1));
+    $this->assertEquals($singlAlbum["imageUrl"], ($now . '/' . self::$MOCK_ALBUM_MODEL["imageUrl"]));
+    $this->assertEquals($singlAlbum["downloadUrl"], ($now . '/' . self::$MOCK_ALBUM_MODEL["downloadUrl"]));
+  }
 //
 //  public function testUpdateNoArtistIdFailure(){
 //    $response = $this->artistsResource->updateArtist();
