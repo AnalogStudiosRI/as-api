@@ -45,11 +45,18 @@ For the most part, you will just need to write code and then write tests for it,
 For testing against the full build, see the next section
 
 ## Build
-1. local build (no linting, docs, tests)
+1. local build (NO linting, docs, tests)
 
 ```
 $ phing build-local -D buildDir=/home/vagrant/build && cp src/.htaccess /home/vagrant/build/
 ```
+
+2. local build (WITH linting, docs, tests)
+
+```
+$ phing build -D buildDir=/home/vagrant/build && cp src/.htaccess /home/vagrant/build/
+```
+
 
 2. production build 
 
