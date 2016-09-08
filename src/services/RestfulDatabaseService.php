@@ -65,18 +65,19 @@ class RestfulDatabaseService extends base\AbstractRestfulDatabase{
     $validTableName = $tableName !== '' ? TRUE : FALSE;
     $sql = "SELECT * FROM " . $tableName;
     $code = null;
-    $filterSql = null;
-
-    //TODO is this a security vulnerability?
-    foreach($filterParams as $key => $value){
-      $filterSql = $key . '=:' . $key;
-    }
 
     if($validTableName && $validEventId){
       $sql .=  " WHERE id=:id";
       $stmt = $db->prepare($sql);
       $stmt->bindValue(":id", $id, $db::PARAM_INT);
     }else{
+      $filterSql = null;
+
+      //TODO is this a security vulnerability?
+      foreach($filterParams as $key => $value){
+        $filterSql = $key . '=:' . $key;
+      }
+
       if($filterSql){
         $sql .= " WHERE " . $filterSql;
       }
@@ -84,11 +85,9 @@ class RestfulDatabaseService extends base\AbstractRestfulDatabase{
       $stmt = $db->prepare($sql);
 
       if($filterSql){
-        var_dump($sql);
         foreach($filterParams as $key => $value){
           $type = strpos(strtolower($value), 'id') >= 0 ? $db::PARAM_INT : $db::PARAM_STR;
           $stmt->bindValue(":" . $key, $value, $type);
-          var_dump($stmt);
         }
       }
     }

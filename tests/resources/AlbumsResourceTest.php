@@ -81,7 +81,7 @@ class AlbumsResourceTest extends PHPUnit_Framework_TestCase{
       "description" => self::$MOCK_ALBUM_MODEL["description"],
       "year" => self::$MOCK_ALBUM_MODEL["year"] + 1,
       "imageUrl" => self::$MOCK_ALBUM_MODEL["imageUrl"] . "?=" . $now,
-      "downloadUrl" => self::$MOCK_ALBUM_MODEL["downloadUrl"  . "?=" . $now],
+      "downloadUrl" => self::$MOCK_ALBUM_MODEL["downloadUrl"] . "?=" . $now,
       "artistId" => self::$MOCK_ALBUM_MODEL["artistId"]
     );
     $response = $this->albumsResource->createAlbum($newAlbum);
@@ -240,10 +240,6 @@ class AlbumsResourceTest extends PHPUnit_Framework_TestCase{
     $this->assertTrue($hasAlbums);
   }
 
-  public function testGetAlbumsByIdAndArtistIdSuccess(){
-    //TODO
-  }
-
   public function testGetAlbumBadRequestFailure(){
     $response = $this->albumsResource->getAlbumById('abc');
     $status = $response["status"];
@@ -295,7 +291,7 @@ class AlbumsResourceTest extends PHPUnit_Framework_TestCase{
       "description" => self::$MOCK_ALBUM_MODEL["description"]  . ' ' . $now,
       "year" => self::$MOCK_ALBUM_MODEL["year"] + 1,
       "imageUrl" => self::$MOCK_ALBUM_MODEL["imageUrl"] . "?=" . $now,
-      "downloadUrl" => $now . '/' . self::$MOCK_ALBUM_MODEL["downloadUrl"] . "?=" . $now
+      "downloadUrl" => self::$MOCK_ALBUM_MODEL["downloadUrl"] . "?=" . $now
     ));
 
     $status = $albumsReponse["status"];
@@ -311,7 +307,7 @@ class AlbumsResourceTest extends PHPUnit_Framework_TestCase{
     $this->assertEquals($singlAlbum["description"], self::$MOCK_ALBUM_MODEL["description"] . ' ' . $now);
     $this->assertEquals($singlAlbum["year"], (self::$MOCK_ALBUM_MODEL["year"] + 1));
     $this->assertEquals($singlAlbum["imageUrl"], (self::$MOCK_ALBUM_MODEL["imageUrl"] . "?=" . $now));
-    $this->assertEquals($singlAlbum["downloadUrl"], (self::$MOCK_ALBUM_MODEL["downloadUrl"]  . "?=" . $now));
+    $this->assertEquals($singlAlbum["downloadUrl"], (self::$MOCK_ALBUM_MODEL["downloadUrl"] . "?=" . $now));
   }
 
   public function testUpdateNoAlbumIdFailure(){
