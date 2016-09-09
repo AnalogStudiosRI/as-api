@@ -12,7 +12,7 @@ use resources as resource;
 
 /**
  *
- * name: PostsResourceTest
+ * name: AlbumsResourceTest
  *
  * @author Owen Buckley
  */
