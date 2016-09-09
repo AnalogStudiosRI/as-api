@@ -31,10 +31,10 @@ class AlbumsResourceTest extends PHPUnit_Framework_TestCase{
   private static $MOCK_ALBUM_MODEL = array(
     "id" => 1,
     "title" => "Debut CD Release Party (live)",
-    "description" => "The songs were played live at the CD Release party for Analog''s debut album, \"When the Media Talk About The Media\" at Captain Nick's on Block Island.  These are songs from both the debut album and Dave Flamand\\''s previous release, \"Lost Time.\"",
+    "description" => "The lead singer of Analog, Dave Flamand is from Rhode Island and we are pleased to offer you exclusive downloads of his demo from this site. These songs provided the framework leading up to the creation of Analog, and as such you may recognize most of the songs from When The Media Talks About The Media from these demos. Lost Time was released early 2008 and Spare Time followed shortly thereafter. Lost Time is Dave&#39;s acoustic debut, showcasing his talent as songwriter and versatile musician. The are all of his own original recordings made on Block Island and recorded by himself. Dave not only wrote all the songs, but also played all the instruments himself",
     "year" => 2008,
-    "imageUrl" => "path/to/image/url.jpg",
-    "downloadUrl" => "path/to/download/url.zip",
+    "imageUrl" => "http://d3cpag05e1ba19.cloudfront.net/hosted/albums/dave-flamand/lost-time/lost-time.jpg",
+    "downloadUrl" => "http://d3cpag05e1ba19.cloudfront.net/hosted/albums/dave-flamand/lost-time/lost-time.zip",
     "artistId" => 1
   );
 
@@ -53,7 +53,7 @@ class AlbumsResourceTest extends PHPUnit_Framework_TestCase{
   public function testCreateAlbumSuccess(){
     $now = time();
     $newAlbum = array(
-      "title" => self::$MOCK_ALBUM_MODEL["title"] . $now,
+      "title" => self::$MOCK_ALBUM_MODEL["title"] . ' ' . $now,
       "description" => self::$MOCK_ALBUM_MODEL["description"],
       "artistId" => self::$MOCK_ALBUM_MODEL["artistId"]
     );
@@ -77,11 +77,11 @@ class AlbumsResourceTest extends PHPUnit_Framework_TestCase{
   public function testCreateFullAlbumSuccess(){
     $now = time();
     $newAlbum = array(
-      "title" => self::$MOCK_ALBUM_MODEL["title"] . $now,
+      "title" => self::$MOCK_ALBUM_MODEL["title"] . ' ' . $now,
       "description" => self::$MOCK_ALBUM_MODEL["description"],
       "year" => self::$MOCK_ALBUM_MODEL["year"] + 1,
-      "imageUrl" => self::$MOCK_ALBUM_MODEL["imageUrl"] . "?=" . $now,
-      "downloadUrl" => self::$MOCK_ALBUM_MODEL["downloadUrl"] . "?=" . $now,
+      "imageUrl" => self::$MOCK_ALBUM_MODEL["imageUrl"] . "?t=" . $now,
+      "downloadUrl" => self::$MOCK_ALBUM_MODEL["downloadUrl"] . "?t=" . $now,
       "artistId" => self::$MOCK_ALBUM_MODEL["artistId"]
     );
     $response = $this->albumsResource->createAlbum($newAlbum);
@@ -178,9 +178,9 @@ class AlbumsResourceTest extends PHPUnit_Framework_TestCase{
 
   public function testGetAlbumsByIdSuccess(){
     $albums = $this->albumsResource->getAlbums();
-    $randIndex = rand(1, (count($albums["data"]) - 1));
+    $id = $albums["data"][count($albums["data"]) - 1]["id"];
 
-    $response = $this->albumsResource->getAlbumById($albums["data"][$randIndex]["id"]);
+    $response = $this->albumsResource->getAlbumById($id);
     $status = $response["status"];
     $data = $response["data"];
     $album = $data[0];
@@ -258,12 +258,11 @@ class AlbumsResourceTest extends PHPUnit_Framework_TestCase{
   /* UPDATE */
   /**********/
   public function testUpdateAlbumSuccess(){
-    $now = time();
+    $now = time() * 2;
     $response = $this->albumsResource->getAlbums();
-    $randIndex = rand(1, (count($response["data"]) - 1));
-    $randAlbum = $response["data"][$randIndex];
+    $id = $response["data"][count($response["data"]) - 1]["id"];
 
-    $albumsReponse = $this->albumsResource->updateAlbum($randAlbum["id"], array(
+    $albumsReponse = $this->albumsResource->updateAlbum($id, array(
       "title" => self::$MOCK_ALBUM_MODEL["title"] . $now,
       "description" => self::$MOCK_ALBUM_MODEL["description"] . $now,
     ));
@@ -282,11 +281,11 @@ class AlbumsResourceTest extends PHPUnit_Framework_TestCase{
   }
 
   public function testUpdateFullAlbumSuccess(){
-    $now = time();
+    $now = time() * 3;
     $response = $this->albumsResource->getAlbums();
-    $randIndex = rand(1, (count($response["data"]) - 1));
-    $randAlbum = $response["data"][$randIndex];
-    $albumsReponse = $this->albumsResource->updateAlbum($randAlbum["id"], array(
+    $id = $response["data"][count($response["data"]) - 1]["id"];
+
+    $albumsReponse = $this->albumsResource->updateAlbum($id, array(
       "title" => self::$MOCK_ALBUM_MODEL["title"]  . ' ' . $now,
       "description" => self::$MOCK_ALBUM_MODEL["description"]  . ' ' . $now,
       "year" => self::$MOCK_ALBUM_MODEL["year"] + 1,
@@ -350,7 +349,7 @@ class AlbumsResourceTest extends PHPUnit_Framework_TestCase{
   /**********/
   public function testDeleteAlbumSuccess(){
     $artistsResponse = $this->albumsResource->getAlbums();
-    $artist = $artistsResponse["data"][0];
+    $artist = $artistsResponse["data"][count($artistsResponse["data"]) - 1];
 
     $response = $this->albumsResource->deleteAlbum($artist["id"]);
 

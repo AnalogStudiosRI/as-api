@@ -29,6 +29,14 @@ class EventResourceTest extends PHPUnit_Framework_TestCase{
     "username" => "astester",
     "password" => "452SsQMwMP"
   );
+  private static $MOCK_EVENT_MODEL = array(
+    "id" => 1,
+    "title" => "Analog @ The Tankard",
+    "description" => "Analog is playing at The Tankard this Saturday, with opening act Sean Daley. Â Please come join as we prevew some of the new songs on the album.",
+    "startTime" => 1454810400,
+    "endTime" => 1454896799,
+    "createdTime" => 1451789911
+  );
 
   public function setup(){
     $builder = new resource\RestfulResourceBuilder(self::$DB_CONFIG, 'events');
@@ -47,7 +55,6 @@ class EventResourceTest extends PHPUnit_Framework_TestCase{
     $status = $response["status"];
     $data = $response["data"];
 
-    //assert
     $this->assertEquals(self::$SUCCESS, $status);
     $this->assertNotEmpty($data);
     $this->assertGreaterThanOrEqual(1, count($data));
@@ -70,13 +77,11 @@ class EventResourceTest extends PHPUnit_Framework_TestCase{
   }
 
   public function testGetEventByIdSuccess(){
-    //get response
     $response = $this->eventsEntity->getEventById(1);
     $status = $response["status"];
     $data = $response["data"];
     $event = $data[0];
 
-    //assert
     $this->assertEquals(self::$SUCCESS, $status);
     $this->assertNotEmpty($data);
     $this->assertEquals(1, count($data));
@@ -95,20 +100,16 @@ class EventResourceTest extends PHPUnit_Framework_TestCase{
   }
 
   public function testGetEventBadRequestFailure(){
-    //get response
     $response = $this->eventsEntity->getEventById('abc');
     $status = $response["status"];
 
-    //assert
     $this->assertEquals(self::$BAD_REQUEST, $status);
   }
 
   public function testGetEventNotFoundFailure(){
-    //get response
     $response = $this->eventsEntity->getEventById(99999999999);
     $status = $response["status"];
 
-    //assert
     $this->assertEquals(self::$NOT_FOUND, $status);
   }
 
@@ -118,23 +119,19 @@ class EventResourceTest extends PHPUnit_Framework_TestCase{
   public function testCreateEventSuccess(){
     $now = time();
     $newEvent = array(
-      "title" => "Event Title " . $now,
-      "description" => "Event Description " . $now,
+      "title" => self::$MOCK_EVENT_MODEL["title"] . ' ' . $now,
+      "description" => self::$MOCK_EVENT_MODEL["description"] . ' ' . $now,
       "startTime" => $now,
-      "endTime" => $now + 10800000
+      "endTime" => $now + self::$NOW_OFFSET
     );
 
-    //get response
     $response = $this->eventsEntity->createEvent($newEvent);
-
     $status = $response["status"];
     $body = $response["data"];
 
-    //assert create
     $this->assertNotEmpty($body["createdTime"]);
     $this->assertNotEmpty($body["id"]);
     $this->assertNotEmpty($body["url"]);
-
     $this->assertEquals(self::$CREATED, $status);
     $this->assertEquals("/api/events/" . $body["id"], $body["url"]);
   }
@@ -142,16 +139,14 @@ class EventResourceTest extends PHPUnit_Framework_TestCase{
   public function testCreateEventNoTitleFailure(){
     $now = time();
     $newEvent = array(
-      "description" => "Event Description " . time(),
+      "description" => self::$MOCK_EVENT_MODEL["description"],
       "startTime" => $now,
-      "endTime" => $now + 10800000
+      "endTime" => $now + self::$NOW_OFFSET
     );
 
-    //get response
     $response = $this->eventsEntity->createEvent($newEvent);
     $status = $response["status"];
 
-    //assert
     $this->assertEquals(self::$BAD_REQUEST, $status);
     $this->assertEquals(0, count($response["data"]));
     $this->assertEquals("Bad Request.  Expected title param", $response["message"]);
@@ -160,52 +155,44 @@ class EventResourceTest extends PHPUnit_Framework_TestCase{
   public function testCreateEventNoDescriptionFailure(){
     $now = time();
     $newEvent = array(
-      "title" => "Event Title " . $now,
+      "title" => self::$MOCK_EVENT_MODEL["title"],
       "startTime" => $now,
-      "endTime" => $now + 10800000
+      "endTime" => $now + self::$NOW_OFFSET
     );
 
-    //get response
     $response = $this->eventsEntity->createEvent($newEvent);
     $status = $response["status"];
 
-    //assert
     $this->assertEquals(self::$BAD_REQUEST, $status);
     $this->assertEquals(0, count($response["data"]));
     $this->assertEquals("Bad Request.  Expected description param", $response["message"]);
   }
 
   public function testCreateEventNoStartTimeFailure(){
-    $now = time();
     $newEvent = array(
-      "title" => "Event Title " . $now,
-      "description" => "Event Description  " . $now,
-      "endTime" => $now + 10800000
+      "title" => self::$MOCK_EVENT_MODEL["title"],
+      "description" => self::$MOCK_EVENT_MODEL["description"],
+      "endTime" => self::$MOCK_EVENT_MODEL["endTime"]
     );
 
-    //get response
     $response = $this->eventsEntity->createEvent($newEvent);
     $status = $response["status"];
 
-    //assert
     $this->assertEquals(self::$BAD_REQUEST, $status);
     $this->assertEquals(0, count($response["data"]));
     $this->assertEquals("Bad Request.  Expected startTime param", $response["message"]);
   }
 
   public function testCreateEventNoEndTimeFailure(){
-    $now = time();
     $newEvent = array(
-      "title" => "Event Title " . $now,
-      "description" => "Event Description  " . $now,
-      "startTime" => $now
+      "title" => self::$MOCK_EVENT_MODEL["title"],
+      "description" => self::$MOCK_EVENT_MODEL["description"],
+      "startTime" => self::$MOCK_EVENT_MODEL["startTime"]
     );
 
-    //get response
     $response = $this->eventsEntity->createEvent($newEvent);
     $status = $response["status"];
 
-    //assert
     $this->assertEquals(self::$BAD_REQUEST, $status);
     $this->assertEquals(0, count($response["data"]));
     $this->assertEquals("Bad Request.  Expected endTime param", $response["message"]);
@@ -215,15 +202,13 @@ class EventResourceTest extends PHPUnit_Framework_TestCase{
   /* UPDATE */
   /**********/
   public function testUpdateEventSuccess(){
-    $now = time();
+    $now = time() * 2;
     $eventsResponse = $this->eventsEntity->getEvents();
-    $randIndex = rand(1, (count($eventsResponse["data"]) - 1));
-    $event = $eventsResponse["data"][$randIndex];
+    $id = $eventsResponse["data"][count($eventsResponse["data"]) - 1]["id"];
 
-    //get response
-    $response = $this->eventsEntity->updateEvent($event["id"], array(
-      "title" => "some new title" . $now,
-      "description" => "some new description" . $now,
+    $response = $this->eventsEntity->updateEvent($id, array(
+      "title" => self::$MOCK_EVENT_MODEL["title"],
+      "description" => self::$MOCK_EVENT_MODEL["description"],
       "startTime" => $now,
       "endTime" =>  $now + self::$NOW_OFFSET
     ));
@@ -231,61 +216,51 @@ class EventResourceTest extends PHPUnit_Framework_TestCase{
     $status = $response["status"];
     $data = $response["data"];
 
-    //assert
     $this->assertEquals(self::$SUCCESS, $status);
     $this->assertEquals("/api/events/" . $data["id"], $data["url"]);
   }
 
   public function testCreateEventDataNotChangedFailure(){
     $eventsResponse = $this->eventsEntity->getEvents();
-    $randIndex = rand(1, (count($eventsResponse["data"]) - 1));
-    $event = $eventsResponse["data"][$randIndex];
+    $event = $eventsResponse["data"][count($eventsResponse["data"]) - 1];
 
-    //get response
     $response = $this->eventsEntity->updateEvent($event["id"], array("title" => $event["title"]));
     $status = $response["status"];
 
-    //assert
     $this->assertEquals(self::$NOT_MODIFIED, $status);
     $this->assertEquals(0, count($response["data"]));
     $this->assertEquals("Duplicate data. Resource not modified", $response["message"]);
   }
 
   public function testUpdateNoEventIdFailure(){
-    //get response
     $response = $this->eventsEntity->updateEvent();
 
-    //assert
     $this->assertEquals(self::$BAD_REQUEST, $response["status"]);
     $this->assertEquals(0, count($response["data"]));
     $this->assertEquals("Bad Request.  No id provided", $response["message"]);
   }
 
   public function testUpdateEventNoParamsFailure(){
-    //get response
     $response = $this->eventsEntity->updateEvent(1);
 
-    //assert
     $this->assertEquals(self::$BAD_REQUEST, $response["status"]);
     $this->assertEquals(0, count($response["data"]));
     $this->assertEquals("Bad Request.  No params provided", $response["message"]);
   }
 
   public function testUpdateEventNoValidParamsFailure(){
-    //get response
     $response = $this->eventsEntity->updateEvent(1, array("foo" => "bar"));
 
-    //assert
     $this->assertEquals(self::$BAD_REQUEST, $response["status"]);
     $this->assertEquals(0, count($response["data"]));
     $this->assertEquals("Bad Request.  No valid params provided", $response["message"]);
   }
 
   public function testUpdateEventNotFoundFailure(){
-    //get response
-    $response = $this->eventsEntity->updateEvent(99999999999999, array("title" => "some new title"));
+    $response = $this->eventsEntity->updateEvent(99999999999999, array(
+      "title" => self::$MOCK_EVENT_MODEL["title"]
+    ));
 
-    //assert
     $this->assertEquals(self::$NOT_FOUND, $response["status"]);
     $this->assertEquals(0, count($response["data"]));
     $this->assertEquals("Resource Not Found", $response["message"]);
@@ -295,46 +270,35 @@ class EventResourceTest extends PHPUnit_Framework_TestCase{
   /* DELETE */
   /**********/
   public function testDeleteEventSuccess(){
-    //get event
     $eventsResponse = $this->eventsEntity->getEvents();
-    $randIndex = rand(1, (count($eventsResponse["data"]) - 1));
-    $event = $eventsResponse["data"][$randIndex];
+    $id = $eventsResponse["data"][count($eventsResponse["data"]) - 1]["id"];
 
-    //get response
-    $response = $this->eventsEntity->deleteEvent($event["id"]);
+    $response = $this->eventsEntity->deleteEvent($id);
 
-    //assert
     $this->assertEquals(self::$SUCCESS, $response["status"]);
     $this->assertEquals(0, count($response["data"]));
     $this->assertEquals("Resource deleted successfully", $response["message"]);
   }
 
   public function testDeleteNoEventIdFailure(){
-    //get response
     $response = $this->eventsEntity->deleteEvent();
 
-
-    //assert
     $this->assertEquals(self::$BAD_REQUEST, $response["status"]);
     $this->assertEquals(0, count($response["data"]));
     $this->assertEquals("Bad Request.  No valid id provided", $response["message"]);
   }
 
   public function testDeleteInvalidEventIdFailure(){
-    //get response
     $response = $this->eventsEntity->deleteEvent("abc");
 
-    //assert
     $this->assertEquals(self::$BAD_REQUEST, $response["status"]);
     $this->assertEquals(0, count($response["data"]));
     $this->assertEquals("Bad Request.  No valid id provided", $response["message"]);
   }
 
   public function testDeleteEventNotFoundFailure(){
-    //get response
     $response = $this->eventsEntity->deleteEvent(9999999999999999);
 
-    //assert
     $this->assertEquals(self::$NOT_FOUND, $response["status"]);
     $this->assertEquals(0, count($response["data"]));
     $this->assertEquals("No results found", $response["message"]);

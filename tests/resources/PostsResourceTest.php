@@ -29,6 +29,12 @@ class PostsResourceTest extends PHPUnit_Framework_TestCase{
     "username" => "astester",
     "password" => "452SsQMwMP"
   );
+  private static $MOCK_POST_MODEL = array(
+    "id" => 1,
+    "title" => "Dave Flamand @ The Newport Newport CYCFM",
+    "summary" => "Details available at the events page",
+    "createdTime" => 1451789911
+  );
 
   public function setup(){
     $builder = new resource\RestfulResourceBuilder(self::$DB_CONFIG, "posts");
@@ -45,17 +51,15 @@ class PostsResourceTest extends PHPUnit_Framework_TestCase{
   public function testCreatePostSuccess(){
     $now = time();
     $newPost = array(
-      "title" => "Post Title " . $now,
-      "summary" => "Post Summary " . $now
+      "title" => self::$MOCK_POST_MODEL["title"] . ' ' . $now,
+      "summary" => self::$MOCK_POST_MODEL["summary"] . ' ' . $now
     );
 
-    //get response
     $response = $this->postsResource->createPost($newPost);
 
     $status = $response["status"];
     $body = $response["data"];
 
-    //assert create
     $this->assertNotEmpty($body["createdTime"]);
     $this->assertNotEmpty($body["id"]);
     $this->assertNotEmpty($body["url"]);
@@ -65,16 +69,12 @@ class PostsResourceTest extends PHPUnit_Framework_TestCase{
   }
 
   public function testCreatePostNoTitleFailure(){
-    $now = time();
-    $newPost = array(
-      "summary" => "Post Summary " . $now
-    );
+    $response = $this->postsResource->createPost(array(
+      "summary" => self::$MOCK_POST_MODEL["summary"]
+    ));
 
-    //get response
-    $response = $this->postsResource->createPost($newPost);
     $status = $response["status"];
 
-    //assert
     $this->assertEquals(self::$BAD_REQUEST, $status);
     $this->assertEquals(0, count($response["data"]));
     $this->assertEquals("Bad Request.  Expected title param", $response["message"]);
@@ -104,7 +104,6 @@ class PostsResourceTest extends PHPUnit_Framework_TestCase{
     $status = $response["status"];
     $data = $response["data"];
 
-    //assert
     $this->assertEquals(self::$SUCCESS, $status);
     $this->assertNotEmpty($data);
     $this->assertGreaterThanOrEqual(1, count($data));
@@ -125,16 +124,14 @@ class PostsResourceTest extends PHPUnit_Framework_TestCase{
   }
 
   public function testGetPostByIdSuccess(){
-    //get response
     $posts = $this->postsResource->getPosts();
-    $randIndex = rand(1, (count($posts["data"]) - 1));
+    $id = $posts["data"][count($posts["data"]) - 1]["id"];
 
-    $response = $this->postsResource->getPostById($posts["data"][$randIndex]["id"]);
+    $response = $this->postsResource->getPostById($id);
     $status = $response["status"];
     $data = $response["data"];
     $post = $data[0];
 
-    //assert
     $this->assertEquals(self::$SUCCESS, $status);
     $this->assertNotEmpty($data);
     $this->assertEquals(1, count($data));
@@ -151,20 +148,16 @@ class PostsResourceTest extends PHPUnit_Framework_TestCase{
   }
 
   public function testGetPostBadRequestFailure(){
-    //get response
     $response = $this->postsResource->getPostById('abc');
     $status = $response["status"];
 
-    //assert
     $this->assertEquals(self::$BAD_REQUEST, $status);
   }
 
   public function testGetPostNotFoundFailure(){
-    //get response
     $response = $this->postsResource->getPostById(99999999999);
     $status = $response["status"];
 
-    //assert
     $this->assertEquals(self::$NOT_FOUND, $status);
   }
 
@@ -174,71 +167,62 @@ class PostsResourceTest extends PHPUnit_Framework_TestCase{
   public function testUpdatePostSuccess(){
     $now = time();
     $postsResource = $this->postsResource->getPosts();
-    $randIndex = rand(1, (count($postsResource["data"]) - 1));
-    $post = $postsResource["data"][$randIndex];
+    $post = $postsResource["data"][count($postsResource["data"]) - 1];
 
-    //get response
     $response = $this->postsResource->updatePost($post["id"], array(
-      "title" => "some new title" . $now,
-      "summary" => "some new description" . $now
+      "title" => self::$MOCK_POST_MODEL["title"],
+      "summary" => self::$MOCK_POST_MODEL["summary"] . ' ' . $now
     ));
 
     $status = $response["status"];
     $data = $response["data"];
 
-    //assert
     $this->assertEquals(self::$SUCCESS, $status);
     $this->assertEquals("/api/posts/" . $data["id"], $data["url"]);
   }
 
   public function testCreatePostDataNotChangedFailure(){
     $postsResource = $this->postsResource->getPosts();
-    $randIndex = rand(1, (count($postsResource["data"]) - 1));
-    $post = $postsResource["data"][$randIndex];
+    $post = $postsResource["data"][count($postsResource["data"]) - 1];
 
-    //get response
-    $response = $this->postsResource->updatePost($post["id"], array("title" => $post["title"]));
+    $response = $this->postsResource->updatePost($post["id"], array(
+      "title" => $post["title"]
+    ));
     $status = $response["status"];
 
-    //assert
     $this->assertEquals(self::$NOT_MODIFIED, $status);
     $this->assertEquals(0, count($response["data"]));
     $this->assertEquals("Duplicate data. Resource not modified", $response["message"]);
   }
 
   public function testUpdateNoPostIdFailure(){
-    //get response
     $response = $this->postsResource->updatePost();
 
-    //assert
     $this->assertEquals(self::$BAD_REQUEST, $response["status"]);
     $this->assertEquals(0, count($response["data"]));
     $this->assertEquals("Bad Request.  No id provided", $response["message"]);
   }
 
   public function testUpdatePostNoParamsFailure(){
-    //get response
     $response = $this->postsResource->updatePost(1);
 
-    //assert
     $this->assertEquals(self::$BAD_REQUEST, $response["status"]);
     $this->assertEquals(0, count($response["data"]));
     $this->assertEquals("Bad Request.  No params provided", $response["message"]);
   }
 
   public function testUpdatePostNoValidParamsFailure(){
-    //get response
     $response = $this->postsResource->updatePost(1, array("foo" => "bar"));
 
-    //assert
     $this->assertEquals(self::$BAD_REQUEST, $response["status"]);
     $this->assertEquals(0, count($response["data"]));
     $this->assertEquals("Bad Request.  No valid params provided", $response["message"]);
   }
 
   public function testUpdatePostNotFoundFailure(){
-    //get response
-    $response = $this->postsResource->updatePost(99999999999999, array("title" => "some new title"));
+    $response = $this->postsResource->updatePost(99999999999999, array(
+      "title" => self::$MOCK_POST_MODEL["summary"]
+    ));
 
     //assert
     $this->assertEquals(self::$NOT_FOUND, $response["status"]);
@@ -250,46 +234,34 @@ class PostsResourceTest extends PHPUnit_Framework_TestCase{
   /* DELETE */
   /**********/
   public function testDeletePostSuccess(){
-    //get post
     $postsResource = $this->postsResource->getPosts();
-    //$randIndex = rand(0, (count($postsResource["data"]) - 1));
-    $post = $postsResource["data"][0];
-
-    //get response
+    $post = $postsResource["data"][count($postsResource["data"]) - 1];
     $response = $this->postsResource->deletePost($post["id"]);
 
-    //assert
     $this->assertEquals(self::$SUCCESS, $response["status"]);
     $this->assertEquals(0, count($response["data"]));
     $this->assertEquals("Resource deleted successfully", $response["message"]);
   }
 
   public function testDeleteNoPostIdFailure(){
-    //get response
     $response = $this->postsResource->deletePost();
 
-
-    //assert
     $this->assertEquals(self::$BAD_REQUEST, $response["status"]);
     $this->assertEquals(0, count($response["data"]));
     $this->assertEquals("Bad Request.  No valid id provided", $response["message"]);
   }
 
   public function testDeleteInvalidPostIdFailure(){
-    //get response
     $response = $this->postsResource->deletePost("abc");
 
-    //assert
     $this->assertEquals(self::$BAD_REQUEST, $response["status"]);
     $this->assertEquals(0, count($response["data"]));
     $this->assertEquals("Bad Request.  No valid id provided", $response["message"]);
   }
 
   public function testDeletePostNotFoundFailure(){
-    //get response
     $response = $this->postsResource->deletePost(9999999999999999);
 
-    //assert
     $this->assertEquals(self::$NOT_FOUND, $response["status"]);
     $this->assertEquals(0, count($response["data"]));
     $this->assertEquals("No results found", $response["message"]);

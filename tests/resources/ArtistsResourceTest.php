@@ -28,6 +28,18 @@ class ArtistsResourceTest extends PHPUnit_Framework_TestCase{
     "username" => "astester",
     "password" => "452SsQMwMP"
   );
+  private static $MOCK_ARTIST_MODEL = array(
+    "id" => 6,
+    "name" => "Dave Flamand",
+    "bio" => "Dave Flamand is a talented singer-songwriter from the Block Island area.  Dave is well known on the island for his fun and energetic open mics, where he plays originals as well as covering great acts like Neil Young, the Beatles, Oasis, Blur, and Radiohead.  Dave is also the front man for the rock band Analog and records for both himself and his band.  Check him out live on Block Island or around Providence, RI.  You can keep up with his schedule by following our events page and following Analog Studios social networking sites",
+    "genre" => 2008,
+    "location" => "Newport, RI",
+    "label" => "Analog Studios",
+    "contactPhone" => "978-555-1234",
+    "contactEmail" => "abc@123.com",
+    "imageUrl" => "http://d3cpag05e1ba19.cloudfront.net/hosted/images/artists/dave-flamand.jpg",
+    "isActive" => 1
+  );
 
   public function setup(){
     $builder = new resource\RestfulResourceBuilder(self::$DB_CONFIG, "artists");
@@ -44,9 +56,9 @@ class ArtistsResourceTest extends PHPUnit_Framework_TestCase{
   public function testCreateArtistSuccess(){
     $now = time();
     $newArtist = array(
-      "name" => "Artist Title " . $now,
-      "bio" => "Artist Bio " . $now,
-      "contactEmail" => "Artist Contact Email " . $now
+      "name" => self::$MOCK_ARTIST_MODEL["name"] . ' ' . $now,
+      "bio" => self::$MOCK_ARTIST_MODEL["bio"] . ' ' . $now,
+      "contactEmail" => $now . self::$MOCK_ARTIST_MODEL["contactEmail"]
     );
 
     $response = $this->artistsResource->createArtist($newArtist);
@@ -105,7 +117,7 @@ class ArtistsResourceTest extends PHPUnit_Framework_TestCase{
   public function testCreateArtistNoNameFailure(){
     $now = time();
     $newArtist = array(
-      "bio" => "Artist Bio " . $now
+      "bio" => self::$MOCK_ARTIST_MODEL["bio"] . ' ' . $now
     );
 
     $response = $this->artistsResource->createArtist($newArtist);
@@ -119,7 +131,7 @@ class ArtistsResourceTest extends PHPUnit_Framework_TestCase{
   public function testCreatePostNoBioFailure(){
     $now = time();
     $newArtist = array(
-      "name" => "Artist Name " . $now
+      "name" => self::$MOCK_ARTIST_MODEL["name"] . ' ' . $now
     );
 
     //get response
@@ -159,9 +171,9 @@ class ArtistsResourceTest extends PHPUnit_Framework_TestCase{
 
   public function testGetArtistByIdSuccess(){
     $artists = $this->artistsResource->getArtists();
-    $randIndex = rand(1, (count($artists["data"]) - 1));
+    $id = $artists["data"][count($artists["data"]) - 1]["id"];
 
-    $response = $this->artistsResource->getArtistById($artists["data"][$randIndex]["id"]);
+    $response = $this->artistsResource->getArtistById($id);
     $status = $response["status"];
     $data = $response["data"];
     $artist = $data[0];
@@ -199,10 +211,13 @@ class ArtistsResourceTest extends PHPUnit_Framework_TestCase{
   public function testUpdateArtistSuccess(){
     $now = time();
     $response = $this->artistsResource->getArtists();
-    $randIndex = rand(1, (count($response["data"]) - 1));
-    $artist = $response["data"][$randIndex];
+    $artist = $response["data"][count($response["data"]) - 1];
 
-    $response = $this->artistsResource->updateArtist($artist["id"], array("name" => "some new name" . $now, "bio" => "some new bio" . $now, "location" => "some new lcation"));
+    $response = $this->artistsResource->updateArtist($artist["id"], array(
+      "name" => self::$MOCK_ARTIST_MODEL["name"] . ' ' . $now,
+      "bio" => self::$MOCK_ARTIST_MODEL["bio"] . ' ' . $now,
+      "location" => self::$MOCK_ARTIST_MODEL["location"]
+    ));
 
     $status = $response["status"];
     $data = $response["data"];
@@ -214,9 +229,7 @@ class ArtistsResourceTest extends PHPUnit_Framework_TestCase{
 //  public function testUpdateFullArtistSuccess(){
 //    $now = time();
 //    $response = $this->artistsResource->getArtists();
-//    $randIndex = rand(1, (count($response["data"]) - 1));
-//    $post = $response["data"][$randIndex];
-//    $response = $this->artistsResource->updateArtist($post["id"], array(
+//    $response = $this->artistsResource->updateArtist($id, array(
 //      "name" => "Artist Title Updated " . $now,
 //      "bio" => "Artist Bio Updated " . $now,
 //      "imageUrl" => "Artist Image Url Updated " . $now,
