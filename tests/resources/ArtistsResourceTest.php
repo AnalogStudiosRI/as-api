@@ -12,7 +12,7 @@ use resources as resource;
 
 /**
  *
- * name: PostsResourceTest
+ * name: ArtistsResourceTest
  *
  * @author Owen Buckley
  */
@@ -32,10 +32,10 @@ class ArtistsResourceTest extends PHPUnit_Framework_TestCase{
     "id" => 6,
     "name" => "Dave Flamand",
     "bio" => "Dave Flamand is a talented singer-songwriter from the Block Island area.  Dave is well known on the island for his fun and energetic open mics, where he plays originals as well as covering great acts like Neil Young, the Beatles, Oasis, Blur, and Radiohead.  Dave is also the front man for the rock band Analog and records for both himself and his band.  Check him out live on Block Island or around Providence, RI.  You can keep up with his schedule by following our events page and following Analog Studios social networking sites",
-    "genre" => 2008,
+    "genre" => "Rock",
     "location" => "Newport, RI",
     "label" => "Analog Studios",
-    "contactPhone" => "978-555-1234",
+    "contactPhone" => 9785551234,
     "contactEmail" => "abc@123.com",
     "imageUrl" => "http://d3cpag05e1ba19.cloudfront.net/hosted/images/artists/dave-flamand.jpg",
     "isActive" => 1
@@ -54,7 +54,7 @@ class ArtistsResourceTest extends PHPUnit_Framework_TestCase{
   /* CREATE */
   /**********/
   public function testCreateArtistSuccess(){
-    $now = time();
+    $now = time() * 2;
     $newArtist = array(
       "name" => self::$MOCK_ARTIST_MODEL["name"] . ' ' . $now,
       "bio" => self::$MOCK_ARTIST_MODEL["bio"] . ' ' . $now,
@@ -78,40 +78,33 @@ class ArtistsResourceTest extends PHPUnit_Framework_TestCase{
     $this->assertEquals($artist["contactEmail"], $newArtist["contactEmail"]);
   }
 
-//  public function testCreateFullArtistSuccess(){
-//    $now = time();
-//    $newArtist = array(
-//      "name" => "Artist Title " . $now,
-//      "bio" => "Artist Bio " . $now,
-//      "genre" => "Artist Genre " . $now,
-//      "location" => "Artist, Location " . $now,
-//      "contactPhone" => 9784130134,
-//      "contactEmail" => "owen@analogstudios.net",
-//      "isActive" => 0
-//    );
-//
-//    $response = $this->artistsResource->createArtist($newArtist);
-//
-//    $status = $response["status"];
-//    $body = $response["data"];
-//
-//    $this->assertNotEmpty($body["id"]);
-//    $this->assertNotEmpty($body["url"]);
-//    $this->assertEquals(self::$CREATED, $status);
-//    $this->assertEquals("/api/artists/" . $body["id"], $body["url"]);
-//
-//    $artistReponse = $this->artistsResource->getArtistById($body['id']);
-//    $artist = $artistReponse["data"][0];
-//
-//    $this->assertEquals($artist["name"], $newArtist["name"]);
-//    $this->assertEquals($artist["bio"], $newArtist["bio"]);
-//    $this->assertEquals($artist["contactEmail"], $newArtist["contactEmail"]);
-//    $this->assertEquals($artist["contactPhone"], $newArtist["contactPhone"]);
-//    $this->assertEquals($artist["genre"], $newArtist["genre"]);
-//    $this->assertEquals($artist["label"], $newArtist["label"]);
-//    $this->assertEquals($artist["location"], $newArtist["location"]);
-//    $this->assertEquals($artist["isActive"], $newArtist["isActive"]);
-//  }
+  public function testCreateFullArtistSuccess(){
+    $now = time();
+    $newArtist = array(
+      "name" => self::$MOCK_ARTIST_MODEL["name"] . ' ' . time(),
+      "bio" => self::$MOCK_ARTIST_MODEL["bio"],
+      "genre" => self::$MOCK_ARTIST_MODEL["genre"],
+      "location" => self::$MOCK_ARTIST_MODEL["location"],
+      "contactPhone" => self::$MOCK_ARTIST_MODEL["contactPhone"],
+      "contactEmail" => self::$MOCK_ARTIST_MODEL["contactEmail"]
+    );
+
+    $response = $this->artistsResource->createArtist($newArtist);
+    $status = $response["status"];
+    $body = $response["data"];
+
+    $this->assertNotEmpty($body["id"]);
+    $this->assertNotEmpty($body["url"]);
+    $this->assertEquals(self::$CREATED, $status);
+    $this->assertEquals("/api/artists/" . $body["id"], $body["url"]);
+
+    $artistReponse = $this->artistsResource->getArtistById($body['id']);
+    $artist = $artistReponse["data"][0];
+
+    $this->assertEquals($artist["name"], $newArtist["name"]);
+    $this->assertEquals($artist["bio"], $newArtist["bio"]);
+    $this->assertEquals($artist["contactEmail"], $newArtist["contactEmail"]);
+  }
 
 
   public function testCreateArtistNoNameFailure(){
@@ -211,44 +204,81 @@ class ArtistsResourceTest extends PHPUnit_Framework_TestCase{
   public function testUpdateArtistSuccess(){
     $now = time();
     $response = $this->artistsResource->getArtists();
-    $artist = $response["data"][count($response["data"]) - 1];
-
-    $response = $this->artistsResource->updateArtist($artist["id"], array(
+    $id = $response["data"][count($response["data"]) - 1]["id"];
+    $updateArtist = array(
       "name" => self::$MOCK_ARTIST_MODEL["name"] . ' ' . $now,
       "bio" => self::$MOCK_ARTIST_MODEL["bio"] . ' ' . $now,
       "location" => self::$MOCK_ARTIST_MODEL["location"]
-    ));
+    );
 
+    $response = $this->artistsResource->updateArtist($id, $updateArtist);
     $status = $response["status"];
     $data = $response["data"];
 
     $this->assertEquals(self::$SUCCESS, $status);
     $this->assertEquals("/api/artists/" . $data["id"], $data["url"]);
+
+    $artistReponse = $this->artistsResource->getArtistById($data["id"]);
+    $status = $artistReponse["status"];
+    $data = $artistReponse["data"];
+    $artist = $data[0];
+
+    $this->assertEquals(self::$SUCCESS, $status);
+    $this->assertNotEmpty($data);
+    $this->assertEquals(1, count($data));
+
+    $this->assertArrayHasKey("id", $artist);
+    $this->assertArrayHasKey("name", $artist);
+    $this->assertArrayHasKey("bio", $artist);
+
+    $this->assertEquals($updateArtist["name"], $artist["name"]);
+    $this->assertEquals($updateArtist["bio"], $artist["bio"]);
   }
 
-//  public function testUpdateFullArtistSuccess(){
-//    $now = time();
-//    $response = $this->artistsResource->getArtists();
-//    $response = $this->artistsResource->updateArtist($id, array(
-//      "name" => "Artist Title Updated " . $now,
-//      "bio" => "Artist Bio Updated " . $now,
-//      "imageUrl" => "Artist Image Url Updated " . $now,
-//      "genre" => "Artist Genre Updated " . $now,
-//      "location" => "Artist, Location Updated" . $now,
-//      "contactPhone" => 1112223333,
-//      "contactEmail" => "Updated owen@analogstudios.net",
-//      "isActive" => 1
-//    ));
-//    $status = $response["status"];
-//
-//    $status = $response["status"];
-//    $data = $response["data"];
-//
-//    $this->assertEquals(self::$SUCCESS, $status);
-//    $this->assertEquals("/api/artists/" . $data["id"], $data["url"]);
+  public function testUpdateFullArtistSuccess(){
+    $now = time() * 3;
+    $response = $this->artistsResource->getArtists();
+    $id = $response["data"][count($response["data"]) - 1]["id"];
+    $updateArtist = array(
+      "name" => self::$MOCK_ARTIST_MODEL["name"] .  ' ' . $now,
+      "bio" => self::$MOCK_ARTIST_MODEL["bio"] . ' ' . $now,
+      "imageUrl" => self::$MOCK_ARTIST_MODEL["imageUrl"],
+      "genre" => self::$MOCK_ARTIST_MODEL["genre"],
+      "location" => self::$MOCK_ARTIST_MODEL["location"],
+      "contactPhone" => self::$MOCK_ARTIST_MODEL["contactPhone"],
+      "contactEmail" => self::$MOCK_ARTIST_MODEL["contactEmail"],
+      "isActive" => self::$MOCK_ARTIST_MODEL["isActive"]
+    );
 
-//test follow up get and assert update
-//  }
+    $updateResponse = $this->artistsResource->updateArtist($id, $updateArtist);
+    $status = $updateResponse["status"];
+    $data = $updateResponse["data"];
+
+    $this->assertEquals(self::$SUCCESS, $status);
+    $this->assertEquals("/api/artists/" . $id, $data["url"]);
+
+    $artistReponse = $this->artistsResource->getArtistById($id);
+    $artist = $artistReponse["data"][0];
+
+    $this->assertArrayHasKey("id", $artist);
+    $this->assertArrayHasKey("name", $artist);
+    $this->assertArrayHasKey("bio", $artist);
+    $this->assertArrayHasKey("location", $artist);
+    $this->assertArrayHasKey("genre", $artist);
+    $this->assertArrayHasKey("imageUrl", $artist);
+    $this->assertArrayHasKey("contactEmail", $artist);
+    $this->assertArrayHasKey("contactPhone", $artist);
+    $this->assertArrayHasKey("isActive", $artist);
+
+    $this->assertEquals($updateArtist["name"], $artist["name"]);
+    $this->assertEquals($updateArtist["bio"], $artist["bio"]);
+    $this->assertEquals($updateArtist["location"], $artist["location"]);
+    $this->assertEquals($updateArtist["genre"], $artist["genre"]);
+    $this->assertEquals($updateArtist["imageUrl"], $artist["imageUrl"]);
+    $this->assertEquals($updateArtist["contactEmail"], $artist["contactEmail"]);
+    //TODO $this->assertEquals($updateArtist["contactPhone"], $artist["contactPhone"]);
+    $this->assertEquals($updateArtist["isActive"], $artist["isActive"]);
+  }
 
   public function testUpdateNoArtistIdFailure(){
     $response = $this->artistsResource->updateArtist();
@@ -285,16 +315,16 @@ class ArtistsResourceTest extends PHPUnit_Framework_TestCase{
   /**********/
   /* DELETE */
   /**********/
-//  public function testDeleteArtistSuccess(){
-//    $artistsResponse = $this->artistsResource->getArtists();
-//    $artist = $artistsResponse["data"][0];
-//
-//    $response = $this->artistsResource->deleteArtist($artist["id"]);
-//
-//    $this->assertEquals(self::$SUCCESS, $response["status"]);
-//    $this->assertEquals(0, count($response["data"]));
-//    $this->assertEquals("Resource deleted successfully", $response["message"]);
-//  }
+  public function testDeleteArtistSuccess(){
+    $artistsResponse = $this->artistsResource->getArtists();
+    $artist = $artistsResponse["data"][count($artistsResponse["data"]) - 1];
+
+    $response = $this->artistsResource->deleteArtist($artist["id"]);
+
+    $this->assertEquals(self::$SUCCESS, $response["status"]);
+    $this->assertEquals(0, count($response["data"]));
+    $this->assertEquals("Resource deleted successfully", $response["message"]);
+  }
 
   public function testDeleteNoArtistIdFailure(){
     $response = $this->artistsResource->deleteArtist();

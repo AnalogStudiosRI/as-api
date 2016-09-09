@@ -12,11 +12,11 @@ use resources as resource;
 
 /**
  *
- * name: EventResourceTest
+ * name: EventsResourceTest
  *
  * @author Owen Buckley
  */
-class EventResourceTest extends PHPUnit_Framework_TestCase{
+class EventsResourceTest extends PHPUnit_Framework_TestCase{
   private $eventsEntity;
   private static $SUCCESS = 200;
   private static $CREATED = 201;
