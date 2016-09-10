@@ -86,7 +86,7 @@ class RestfulDatabaseService extends base\AbstractRestfulDatabase{
 
       if($filterSql){
         foreach($filterParams as $key => $value){
-          $type = strpos(strtolower($value), 'id') >= 0 ? $db::PARAM_INT : $db::PARAM_STR;
+          $type = strpos(strtolower($value), 'id') ? $db::PARAM_INT : $db::PARAM_STR;
           $stmt->bindValue(":" . $key, $value, $type);
         }
       }
@@ -155,9 +155,16 @@ class RestfulDatabaseService extends base\AbstractRestfulDatabase{
       $keys = rtrim($keys, ", ");
       $values = trim($values, ", ");
       $query .= ($keys . ") VALUES " . $values . ") ");
-
       $stmt = $db->prepare($query);
-      $stmt->execute($queryParams);
+
+      foreach($queryParams as $key => $value){
+        $normalKeyLower = strtolower(str_replace(':', '', $key));
+        $isIntType = strpos($normalKeyLower, 'id') || strpos($normalKeyLower, 'phone') || strpos($normalKeyLower, 'time');
+        $type =  $isIntType ? $db::PARAM_INT : $db::PARAM_STR;
+        $stmt->bindValue($key, $queryParams[$key], $type);
+      }
+
+      $stmt->execute();
 
       if($stmt->rowCount() === 1){
         $code = self::$STATUS_CODE["CREATED"];
@@ -200,7 +207,16 @@ class RestfulDatabaseService extends base\AbstractRestfulDatabase{
         $queryParams[":id"] = $id;
 
         $stmt = $db->prepare($query);
-        $stmt->execute($queryParams);
+
+        foreach($queryParams as $key => $value){
+          $normalKeyLower = strtolower(str_replace(':', '', $key));
+          $isIntType = strpos($normalKeyLower, 'id') || strpos($normalKeyLower, 'phone') || strpos($normalKeyLower, 'time');
+          $type =  $isIntType ? $db::PARAM_INT : $db::PARAM_STR;
+          $stmt->bindValue($key, $queryParams[$key], $type);
+        }
+
+        $stmt->execute();
+        //$stmt->execute($queryParams);
 
         if ($stmt->rowCount() === 1) {
           $code = self::$STATUS_CODE["SUCCESS"];

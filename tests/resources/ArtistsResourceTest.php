@@ -35,7 +35,7 @@ class ArtistsResourceTest extends PHPUnit_Framework_TestCase{
     "genre" => "Rock",
     "location" => "Newport, RI",
     "label" => "Analog Studios",
-    "contactPhone" => 9785551234,
+    "contactPhone" => 1239764333,  //phone numbers need to be unique???
     "contactEmail" => "abc@123.com",
     "imageUrl" => "http://d3cpag05e1ba19.cloudfront.net/hosted/images/artists/dave-flamand.jpg",
     "isActive" => 1
@@ -81,12 +81,13 @@ class ArtistsResourceTest extends PHPUnit_Framework_TestCase{
   public function testCreateFullArtistSuccess(){
     $now = time();
     $newArtist = array(
-      "name" => self::$MOCK_ARTIST_MODEL["name"] . ' ' . time(),
+      "name" => self::$MOCK_ARTIST_MODEL["name"] . ' ' . $now,
       "bio" => self::$MOCK_ARTIST_MODEL["bio"],
       "genre" => self::$MOCK_ARTIST_MODEL["genre"],
       "location" => self::$MOCK_ARTIST_MODEL["location"],
       "contactPhone" => self::$MOCK_ARTIST_MODEL["contactPhone"],
-      "contactEmail" => self::$MOCK_ARTIST_MODEL["contactEmail"]
+      "contactEmail" => self::$MOCK_ARTIST_MODEL["contactEmail"],
+      "imageUrl" => self::$MOCK_ARTIST_MODEL["imageUrl"] . '?t=' . $now
     );
 
     $response = $this->artistsResource->createArtist($newArtist);
@@ -103,7 +104,11 @@ class ArtistsResourceTest extends PHPUnit_Framework_TestCase{
 
     $this->assertEquals($artist["name"], $newArtist["name"]);
     $this->assertEquals($artist["bio"], $newArtist["bio"]);
+    $this->assertEquals($artist["genre"], $newArtist["genre"]);
+    $this->assertEquals($artist["location"], $newArtist["location"]);
+    $this->assertEquals($artist["contactPhone"], $newArtist["contactPhone"]);
     $this->assertEquals($artist["contactEmail"], $newArtist["contactEmail"]);
+    $this->assertEquals($artist["imageUrl"], $newArtist["imageUrl"]);
   }
 
 
@@ -276,7 +281,7 @@ class ArtistsResourceTest extends PHPUnit_Framework_TestCase{
     $this->assertEquals($updateArtist["genre"], $artist["genre"]);
     $this->assertEquals($updateArtist["imageUrl"], $artist["imageUrl"]);
     $this->assertEquals($updateArtist["contactEmail"], $artist["contactEmail"]);
-    //TODO $this->assertEquals($updateArtist["contactPhone"], $artist["contactPhone"]);
+    $this->assertEquals($updateArtist["contactPhone"], $artist["contactPhone"]);
     $this->assertEquals($updateArtist["isActive"], $artist["isActive"]);
   }
 
