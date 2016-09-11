@@ -105,6 +105,10 @@ class RestfulDatabaseService extends base\AbstractRestfulDatabase{
       }else if($validEventId && $result){
         $code = self::$STATUS_CODE["SUCCESS"];
       }
+    }else if(count($result) === 0){
+      //no results, so still a success, but need to set an empty array
+      $code = self::$STATUS_CODE["SUCCESS"];
+      $result = array();
     }else if($result){
       $code = self::$STATUS_CODE["SUCCESS"];
     }
