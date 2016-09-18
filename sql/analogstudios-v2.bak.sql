@@ -134,7 +134,7 @@ CREATE TABLE `posts` (
 
 LOCK TABLES `posts` WRITE;
 /*!40000 ALTER TABLE `posts` DISABLE KEYS */;
-INSERT INTO `posts` VALUES (1,'Dave Flamand @ The Newport Newport CYCFM','<p>Details available at the <a href=\"http://www.analogstudios.net/#/events/7\" target=\"\">events page</a></p>',1462924501),(2,'Dave Flamand @ Gather','<p>Come join Dave Flamand at Gather in Newport, this Saturday (the 27th) at 8pm! Â For more info please see our events pageÂ <a href=\"http://www.analogstudios.net/#/events/8\" target=\"\">http://www.analogstudios.net/#/events/8</a></p>',1471959311),(3,'Silent No More Charity 5K','<p><img src=\"https://www.grouprev.com/system/Project/banners/000/007/776/banner/RegistrationBanner.jpg\"/><br/></p><p>Saturday Sept. 18th at 10am, Analog Studios will Â be leading a team in a 5K walk to help fight Ovarian cancer. Â Please join us or contribute and hope to see you down there!</p><p><a href=\"https://www.grouprev.com/meanjeansfightingmachine\" target=\"\">https://www.grouprev.com/meanjeansfightingmachine</a><br/></p>',1471989627),(4,'Septemberfest 2016!','<p>Septemberfest 2016 is almost here! Â Join us for two nights on Block Island for art, music, and films!</p><p><img src=\"https://d3cpag05e1ba19.cloudfront.net/hosted/images/events/septemberfest/septemberfest-2016-promo001.png\"/><br/></p>',1472091258);
+INSERT INTO `posts` VALUES (1,'Dave Flamand @ The Newport Newport CYCFM','<p>Details available at the events <a href=\"http://www.analogstudios.net/events/7\">page</a></p>\n',1462924501),(2,'Dave Flamand @ Gather','<p>Come join Dave Flamand at Gather in Newport, this Saturday (the 27th) at 8pm! &nbsp;For more info please see our events <a href=\"http://www.analogstudios.net/events/8\">page</a></p>\n',1471959311),(3,'Silent No More Charity 5K','<p><img src=\"https://www.grouprev.com/system/Project/banners/000/007/776/banner/RegistrationBanner.jpg\"/><br/></p><p>Saturday Sept. 18th at 10am, Analog Studios will Â be leading a team in a 5K walk to help fight Ovarian cancer. Â Please join us or contribute and hope to see you down there!</p><p><a href=\"https://www.grouprev.com/meanjeansfightingmachine\" target=\"\">https://www.grouprev.com/meanjeansfightingmachine</a><br/></p>',1471989627),(4,'Septemberfest 2016!','<p>Septemberfest 2016 is almost here! Â Join us for two nights on Block Island for art, music, and films!</p><p><img src=\"https://d3cpag05e1ba19.cloudfront.net/hosted/images/events/septemberfest/septemberfest-2016-promo001.png\"/><br/></p>',1472091258);
 /*!40000 ALTER TABLE `posts` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -172,4 +172,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2016-09-18 13:33:01
+-- Dump completed on 2016-09-18 15:21:03
