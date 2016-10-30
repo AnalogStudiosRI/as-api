@@ -18,6 +18,9 @@
     <include name="vendor/herrera-io/json/src/lib/json_version.php" />
     <include name="vendor/herrera-io/phar-update/src/lib/constants.php" />
     <include name="vendor/symfony/polyfill-mbstring/bootstrap.php" />
+    <include name="vendor/symfony/polyfill-mbstring/bootstrap.php" />
+    <include name="vendor/phpmailer/phpmailer/class.phpmailer.php" />
+    <include name="vendor/phpmailer/phpmailer/class.smtp.php" />
     <include name="vendor/autoload.php" />
   </fileset>
 
@@ -168,7 +171,7 @@
   </target>
 
   <target name="build-local" description="executes a build">
-    <echo msg="starting a build..."/>
+    <echo msg="starting a local build..."/>
     <phingcall target="clean" />
     <phingcall target="lint" />
     <phingcall target="package" />

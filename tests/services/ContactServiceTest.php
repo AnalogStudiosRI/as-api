@@ -13,14 +13,14 @@ use services as service;
  * @author Owen Buckley
  */
 class ContactServiceTest extends PHPUnit_Framework_TestCase{
-  private static $validEmail = 'owenbuckley13@gmail.com';
+  private static $validEmail = 'website@analogstudios.net';
   private static $invalidEmail = 'owenlogstudios.net';
   private static $subject = "A message from the website";
   private static $message = "I really like your website!";
   private static $MAILER_CONFIG = array(
-    'host' => 'alpine85.alpineweb.net',
-    'username' => 'website@analogstudios.net',
-    'password' => '7RS5fUkzchsEFiZSlTNy',
+    'host' => "alpine85.alpineweb.net",
+    'username' => "website@analogstudios.net",
+    'password' => "7RS5fUkzchsEFiZSlTNy",
     'port' => 465
   );
   private $contactService;
