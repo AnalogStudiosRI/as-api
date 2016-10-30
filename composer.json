@@ -7,7 +7,8 @@
   },
   "require": {
     "slim/slim": "2.6.2",
-    "firebase/php-jwt": "3.0"
+    "firebase/php-jwt": "3.0",
+    "phpmailer/phpmailer": "5.2"
   },
   "require-dev": {
     "phing/phing": "2.14.0",

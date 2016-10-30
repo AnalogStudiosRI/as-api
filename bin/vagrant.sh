@@ -14,9 +14,9 @@ apt-get update
 
 echo "*** Install base packages ***"
 apt-get -y install git
-apt-get -y install postfix
 apt-get -y install vim curl buildssential python-software-properties git > /dev/null 2>&1
 apt-get install -y language-pack-en-base
+apt-get -y install sendmail
 apt-get update
 
 echo "*** Add some custom repos to update our distro ***"
@@ -104,4 +104,3 @@ cp /vagrant/ini/config-local.ini /home/vagrant/config-env.ini
 cp -v src/.htaccess /home/vagrant/build/
 
 apt-get -y install php-xdebug php7.1-xsl php7.0-xml -y
-apt-get -y install sendmail
