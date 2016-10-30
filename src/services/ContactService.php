@@ -55,12 +55,10 @@ class ContactService {
       $message = "No message";
     }
 
-    var_dump($message);
     $error = $message === "" ? false : true;
-    var_dump($error);
 
     if(!$error){
-      $message = wordwrap($message, 70, "\r\n");
+      $body = wordwrap($body, 70, "\r\n");
 
       $this->mail->setFrom($from, $from);
       $this->mail->addAddress($to, $to);
