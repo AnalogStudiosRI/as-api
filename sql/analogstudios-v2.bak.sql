@@ -98,7 +98,7 @@ CREATE TABLE `events` (
   `createdTime` int(11) NOT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `id` (`id`)
-) ENGINE=MyISAM AUTO_INCREMENT=13 DEFAULT CHARSET=latin1;
+) ENGINE=MyISAM AUTO_INCREMENT=14 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -107,7 +107,7 @@ CREATE TABLE `events` (
 
 LOCK TABLES `events` WRITE;
 /*!40000 ALTER TABLE `events` DISABLE KEYS */;
-INSERT INTO `events` VALUES (1,'Analog @ The Tankard','<p>Analog is playing at <a href=\"https://www.facebook.com/tankedatthetank\" target=\"\">The Tankard</a> this Saturday, with opening act Sean Daley. Â Please come join as we prevew some of the new songs on the album.</p>',1454810400,1454896799,1451789911),(7,'Dave Flamand @ Newport CYCFM','<p><img src=\"http://d34k5cjnk2rcze.cloudfront.net/images/events/dave-flamand/dave-flamand-20160521-ncyc.png\"/><br/></p>',1463873400,1463959799,1462923816),(8,'Dave Flamand @ Gather','<p><img src=\"http://d34k5cjnk2rcze.cloudfront.net/images/events/dave-flamand/dave-flamand-20160827-gather.png\"/><br/></p>',1472342400,1472428799,1471909848),(9,'Septemberfest 2016','<p><img src=\"http://d34k5cjnk2rcze.cloudfront.net/images/events/septemberfest/septemberfest-2016-promo001.png\"/><br/></p>',1474664400,1474750799,1472088705),(10,'Septemberfest 2016','<p><img src=\"http://d34k5cjnk2rcze.cloudfront.net/images/events/septemberfest/septemberfest-2016-promo001.png\"/><br/></p>',1474664400,1474750799,1472089750),(11,'Septemberfest 2016','<p><img src=\"http://d34k5cjnk2rcze.cloudfront.net/images/events/septemberfest/septemberfest-2016-promo001.png\"/><br/></p>',1474750800,1474837199,1472089851);
+INSERT INTO `events` VALUES (1,'Analog @ The Tankard','<p>Analog is playing at <a href=\"https://www.facebook.com/tankedatthetank\" target=\"\">The Tankard</a> this Saturday, with opening act Sean Daley. Â Please come join as we prevew some of the new songs on the album.</p>',1454810400,1454896799,1451789911),(7,'Dave Flamand @ Newport CYCFM','<p><img src=\"http://d34k5cjnk2rcze.cloudfront.net/images/events/dave-flamand/dave-flamand-20160521-ncyc.png\"/><br/></p>',1463873400,1463959799,1462923816),(8,'Dave Flamand @ Gather','<p><img src=\"http://d34k5cjnk2rcze.cloudfront.net/images/events/dave-flamand/dave-flamand-20160827-gather.png\"/><br/></p>',1472342400,1472428799,1471909848),(10,'Septemberfest 2016','<p><img src=\"http://d34k5cjnk2rcze.cloudfront.net/images/events/septemberfest/septemberfest-2016-promo001.png\"/><br/></p>',1474664400,1474750799,1472089750),(11,'Septemberfest 2016','<p><img src=\"http://d34k5cjnk2rcze.cloudfront.net/images/events/septemberfest/septemberfest-2016-promo001.png\"/><br/></p>',1474750800,1474837199,1472089851),(13,'Acoustic Potluck Night','<p><img alt=\"\" src=\"http://d34k5cjnk2rcze.cloudfront.net/images/events/dave-flamand/dave-flamand-20161022-ncyc.png\" style=\"height:800px; width:800px\" /></p>\n',1477173600,1477173600,1476493399);
 /*!40000 ALTER TABLE `events` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -125,7 +125,7 @@ CREATE TABLE `posts` (
   `createdTime` int(11) NOT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `id_UNIQUE` (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -134,7 +134,7 @@ CREATE TABLE `posts` (
 
 LOCK TABLES `posts` WRITE;
 /*!40000 ALTER TABLE `posts` DISABLE KEYS */;
-INSERT INTO `posts` VALUES (1,'Dave Flamand @ The Newport Newport CYCFM','<p>Details available at the events <a href=\"http://www.analogstudios.net/events/7\">page</a></p>\n',1462924501),(2,'Dave Flamand @ Gather','<p>Come join Dave Flamand at Gather in Newport, this Saturday (the 27th) at 8pm! &nbsp;For more info please see our events <a href=\"http://www.analogstudios.net/events/8\">page</a></p>\n',1471959311),(3,'Silent No More Charity 5K','<p><img src=\"https://www.grouprev.com/system/Project/banners/000/007/776/banner/RegistrationBanner.jpg\"/><br/></p><p>Saturday Sept. 18th at 10am, Analog Studios will Â be leading a team in a 5K walk to help fight Ovarian cancer. Â Please join us or contribute and hope to see you down there!</p><p><a href=\"https://www.grouprev.com/meanjeansfightingmachine\" target=\"\">https://www.grouprev.com/meanjeansfightingmachine</a><br/></p>',1471989627),(4,'Septemberfest 2016!','<p>Septemberfest 2016 is almost here! Â Join us for two nights on Block Island for art, music, and films!</p><p><img src=\"https://d3cpag05e1ba19.cloudfront.net/hosted/images/events/septemberfest/septemberfest-2016-promo001.png\"/><br/></p>',1472091258);
+INSERT INTO `posts` VALUES (1,'Dave Flamand @ The Newport Newport CYCFM','<p>Details available at the events <a href=\"http://www.analogstudios.net/events/7\">page</a></p>\n',1462924501),(2,'Dave Flamand @ Gather','<p>Come join Dave Flamand at Gather in Newport, this Saturday (the 27th) at 8pm! &nbsp;For more info please see our events <a href=\"http://www.analogstudios.net/events/8\">page</a></p>\n',1471959311),(3,'Silent No More Charity 5K','<p><img src=\"https://www.grouprev.com/system/Project/banners/000/007/776/banner/RegistrationBanner.jpg\"/><br/></p><p>Saturday Sept. 18th at 10am, Analog Studios will Â be leading a team in a 5K walk to help fight Ovarian cancer. Â Please join us or contribute and hope to see you down there!</p><p><a href=\"https://www.grouprev.com/meanjeansfightingmachine\" target=\"\">https://www.grouprev.com/meanjeansfightingmachine</a><br/></p>',1471989627),(4,'Septemberfest 2016!','<p>Septemberfest 2016 is almost here! &nbsp;Join us for two nights on Block Island for art, music, and films!</p>\n\n<p><img alt=\"Septemberfest 2016\" src=\"http://d34k5cjnk2rcze.cloudfront.net/images/events/septemberfest/septemberfest-2016-promo001.png\" style=\"height:800px; width:800px\" /></p>\n',1472091258),(5,'Acoustic Potluck Night','<p>Acoustic Potluck Night at the Newport Community Yoga Center @ 6pm. &nbsp;Check out the <a href=\"http://www.analogstudios.net/events/13\">event</a>&nbsp;page for more details.</p>\n\n<p>&nbsp;</p>\n',1476493496);
 /*!40000 ALTER TABLE `posts` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -172,4 +172,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2016-09-18 15:21:03
+-- Dump completed on 2016-11-06 17:51:50
