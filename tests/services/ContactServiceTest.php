@@ -14,7 +14,7 @@ use services as service;
  */
 class ContactServiceTest extends PHPUnit_Framework_TestCase{
   private static $fromEmail = 'website@analogstudios.net';
-  private static $validEmail = 'null@analogstudios.net';  //change to a valid address for testing
+  private static $validEmail = 'website@analogstudios.net';  //change to a valid address for testing
   private static $invalidEmail = 'owenlogstudios.net';
   private static $subject = "A message from the website";
   private static $message = "I really like your website!";
