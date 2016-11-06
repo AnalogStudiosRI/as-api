@@ -13,44 +13,61 @@ use services as service;
  * @author Owen Buckley
  */
 class ContactServiceTest extends PHPUnit_Framework_TestCase{
-  private static $validEmail = 'owen@analogstudios.net';
+  private static $fromEmail = 'website@analogstudios.net';
+  private static $validEmail = 'website@analogstudios.net';  //change to a valid address for testing
   private static $invalidEmail = 'owenlogstudios.net';
   private static $subject = "A message from the website";
   private static $message = "I really like your website!";
+  private static $MAILER_CONFIG = array(
+    'host' => "alpine85.alpineweb.net",
+    'username' => "website@analogstudios.net",
+    'password' => "7RS5fUkzchsEFiZSlTNy",
+    'port' => 465
+  );
+  private $contactService;
+
+
+  public function setup(){
+    $this->contactService = new service\ContactService(self::$MAILER_CONFIG);
+  }
+
+  public function tearDown(){
+    $this->contactService = null;
+  }
 
   /********/
   /* Send Email  */
   /********/
   public function testSendEmailSuccess(){
-    $response = service\ContactService::sendEmail(self::$validEmail, self::$validEmail, self::$subject, self::$message);
+    $response = $this->contactService->sendEmail(self::$validEmail, self::$fromEmail, self::$subject, self::$message);
 
     $this->assertEquals($response["status"], 200);
-    $this->assertEquals($response["message"], "Message sent");
+    $this->assertEquals($response["message"], "Message has been sent");
   }
 
   public function testSendEmailInvalidToEmailFailure(){
-    $response = service\ContactService::sendEmail(self::$invalidEmail, self::$validEmail, self::$subject, self::$message);
+    $response = $this->contactService->sendEmail(self::$invalidEmail, self::$fromEmail, self::$subject, self::$message);
 
     $this->assertEquals($response["status"], 400);
     $this->assertEquals($response["message"], "Invalid to email address");
   }
 
   public function testSendEmailInvalidFromEmailFailure(){
-    $response = service\ContactService::sendEmail(self::$validEmail, self::$invalidEmail, self::$subject, self::$message);
+    $response = $this->contactService->sendEmail(self::$validEmail, self::$invalidEmail, self::$subject, self::$message);
 
     $this->assertEquals($response["status"], 400);
     $this->assertEquals($response["message"], "Invalid from email address");
   }
 
   public function testSendEmailNoSubjectFailure(){
-    $response = service\ContactService::sendEmail(self::$validEmail, self::$validEmail, '', self::$message);
+    $response = $this->contactService->sendEmail(self::$validEmail, self::$fromEmail, "", self::$message);
 
     $this->assertEquals($response["status"], 400);
     $this->assertEquals($response["message"], "No subject");
   }
 
   public function testSendEmailNoMessageFailure(){
-    $response = service\ContactService::sendEmail(self::$validEmail, self::$validEmail, self::$subject, '');
+    $response = $this->contactService->sendEmail(self::$validEmail, self::$fromEmail, self::$subject, "");
 
     $this->assertEquals($response["status"], 400);
     $this->assertEquals($response["message"], "No message");

@@ -4,7 +4,7 @@ Vagrant.configure("2") do |config|
 
   config.vm.provision :shell, path: "bin/vagrant.sh"
 
-  config.vm.hostname = "thegreenhouse.io"
+  config.vm.hostname = "analogstudios"
 
   config.vm.network :forwarded_port, host: 4567, guest: 80
   config.vm.network :forwarded_port, host: 8181, guest: 8181
