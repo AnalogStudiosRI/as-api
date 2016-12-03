@@ -7,19 +7,24 @@ require_once "src/services/RestfulDatabaseService.php";
 use services as service;
 
 class RestfulDatabaseServiceTest extends PHPUnit_Framework_TestCase{
+  private static $CONFIG = array();
+  private static $DB_CONFIG = array();
   private $db;
-  private $dbConfig = array(
-    "dsn" => "mysql:host=127.0.0.1;dbname=analogstudios_prod",
-    "username" => "astester",
-    "password" => "452SsQMwMP"
-  );
 
   public function setup(){
-    $this->db = new service\RestfulDatabaseService($this->dbConfig);
+    self::$CONFIG = service\ConfigService::getConfigFromIni('./ini/config-local.ini');
+    self::$DB_CONFIG = array(
+      "dsn" => "mysql:host=" . self::$CONFIG["db.host"] . ";dbname=" . self::$CONFIG["db.name"],
+      "username" => self::$CONFIG["db.user"],
+      "password" => self::$CONFIG["db.password"]
+    );
+    $this->db = new service\RestfulDatabaseService(self::$DB_CONFIG);
   }
 
   public function tearDown(){
     $this->db = null;
+    self::$CONFIG = array();
+    self::$DB_CONFIG = array();
   }
 
   public function testInstanceOf(){

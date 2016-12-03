@@ -2,19 +2,30 @@
 error_reporting(E_ALL | E_STRICT);
 
 require_once "src/services/AuthenticationService.php";
+require_once "src/services/ConfigService.php";
 
 use services as service;
 
 class AuthenticationServiceTest extends PHPUnit_Framework_TestCase{
-  //XXX TODO mock / inject ConfigService
-  private static $CONFIG = array(
-    "session.domain" => "analogstudios.thegreenhouse.io",
-    "db.host" => "127.0.0.1",
-    "db.name" => "analogstudios_prod",
-    "db.user" => "astester",
-    "db.password" => "452SsQMwMP",
-    "key.jwtSecret" => "De6CA9#3b#aSF3ZVG@Q3"
-  );
+  private static $CONFIG = array();
+  private static $TEST_CONFIG = array();
+
+  public function setup() {
+    self::$CONFIG = service\ConfigService::getConfigFromIni('./ini/config-local.ini');
+    self::$TEST_CONFIG = array(
+      "session.domain" => self::$CONFIG["session.domain"],
+      "db.host" => self::$CONFIG["db.host"],
+      "db.name" => self::$CONFIG["db.name"],
+      "db.user" => self::$CONFIG["db.user"],
+      "db.password" => self::$CONFIG["db.password"],
+      "key.jwtSecret" => self::$CONFIG["key.jwtSecret"]
+    );
+  }
+
+  public function tearDown(){
+    self::$CONFIG = array();
+    self::$TEST_CONFIG = array();
+  }
 
   public function testLoginSuccess(){
     $authService = new service\AuthenticationService(self::$CONFIG);
