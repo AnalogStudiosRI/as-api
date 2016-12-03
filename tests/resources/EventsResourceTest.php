@@ -4,11 +4,13 @@ error_reporting(E_ALL | E_STRICT);
 
 require_once "src/base/AbstractRestfulDatabase.php";
 require_once "src/base/AbstractRestfulResource.php";
-require_once "src/services/RestfulDatabaseService.php";
 require_once "src/resources/EventsResource.php";
 require_once "src/resources/RestfulResourceBuilder.php";
+require_once "src/services/ConfigService.php";
+require_once "src/services/RestfulDatabaseService.php";
 
 use resources as resource;
+use services as service;
 
 /**
  *
@@ -18,33 +20,41 @@ use resources as resource;
  */
 class EventsResourceTest extends PHPUnit_Framework_TestCase{
   private $eventsEntity;
+  private static $CONFIG = array();
+  private static $DB_CONFIG = array();
   private static $SUCCESS = 200;
   private static $CREATED = 201;
   private static $NOT_MODIFIED = 304;
   private static $BAD_REQUEST = 400;
   private static $NOT_FOUND = 404;
   private static $NOW_OFFSET = 10800000;
-  private static $DB_CONFIG = array(
-    "dsn" => "mysql:host=127.0.0.1;dbname=analogstudios_prod",
-    "username" => "astester",
-    "password" => "452SsQMwMP"
-  );
-  private static $MOCK_EVENT_MODEL = array(
-    "id" => 1,
-    "title" => "Analog @ The Tankard",
-    "description" => "Analog is playing at The Tankard this Saturday, with opening act Sean Daley. Â Please come join as we prevew some of the new songs on the album.",
-    "startTime" => 1454810400,
-    "endTime" => 1454896799,
-    "createdTime" => 1451789911
-  );
+  private static $MOCK_EVENT_MODEL = array();
 
   public function setup(){
+    self::$CONFIG = service\ConfigService::getConfigFromIni('./ini/config-local.ini');
+    self::$DB_CONFIG = array(
+      "dsn" => "mysql:host=" . self::$CONFIG["db.host"] . ";dbname=" . self::$CONFIG["db.name"],
+      "username" => self::$CONFIG["db.user"],
+      "password" => self::$CONFIG["db.password"]
+    );
+    self::$MOCK_EVENT_MODEL = array(
+      "id" => 1,
+      "title" => "Analog @ The Tankard",
+      "description" => "Analog is playing at The Tankard this Saturday, with opening act Sean Daley. Â Please come join as we prevew some of the new songs on the album.",
+      "startTime" => 1454810400,
+      "endTime" => 1454896799,
+      "createdTime" => 1451789911
+    );
+
     $builder = new resource\RestfulResourceBuilder(self::$DB_CONFIG, 'events');
     $this->eventsEntity = $builder->getResource();
   }
 
   public function tearDown(){
     $this->eventsEntity = null;
+    self::$CONFIG = array();
+    self::$DB_CONFIG = array();
+    self::$MOCK_EVENT_MODEL= array();
   }
 
   /********/

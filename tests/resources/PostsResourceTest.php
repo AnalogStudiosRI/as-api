@@ -4,11 +4,13 @@ error_reporting(E_ALL | E_STRICT);
 
 require_once "src/base/AbstractRestfulDatabase.php";
 require_once "src/base/AbstractRestfulResource.php";
-require_once "src/services/RestfulDatabaseService.php";
 require_once "src/resources/PostsResource.php";
 require_once "src/resources/RestfulResourceBuilder.php";
+require_once "src/services/ConfigService.php";
+require_once "src/services/RestfulDatabaseService.php";
 
 use resources as resource;
+use services as service;
 
 /**
  *
@@ -18,31 +20,38 @@ use resources as resource;
  */
 class PostsResourceTest extends PHPUnit_Framework_TestCase{
   private $postsResource;
+  private static $CONFIG = array();
+  private static $DB_CONFIG = array();
   private static $SUCCESS = 200;
   private static $CREATED = 201;
   private static $NOT_MODIFIED = 304;
   private static $BAD_REQUEST = 400;
   private static $NOT_FOUND = 404;
-  private static $NOW_OFFSET = 10800000;
-  private static $DB_CONFIG = array(
-    "dsn" => "mysql:host=127.0.0.1;dbname=analogstudios_prod",
-    "username" => "astester",
-    "password" => "452SsQMwMP"
-  );
-  private static $MOCK_POST_MODEL = array(
-    "id" => 1,
-    "title" => "Dave Flamand @ The Newport Newport CYCFM",
-    "summary" => "Details available at the events page",
-    "createdTime" => 1451789911
-  );
+  private static $MOCK_POST_MODEL = array();
 
   public function setup(){
+    self::$CONFIG = service\ConfigService::getConfigFromIni('./ini/config-local.ini');
+    self::$DB_CONFIG = array(
+      "dsn" => "mysql:host=" . self::$CONFIG["db.host"] . ";dbname=" . self::$CONFIG["db.name"],
+      "username" => self::$CONFIG["db.user"],
+      "password" => self::$CONFIG["db.password"]
+    );
+    self::$MOCK_POST_MODEL = array(
+      "id" => 1,
+      "title" => "Dave Flamand @ The Newport Newport CYCFM",
+      "summary" => "Details available at the events page",
+      "createdTime" => 1451789911
+    );
+
     $builder = new resource\RestfulResourceBuilder(self::$DB_CONFIG, "posts");
     $this->postsResource = $builder->getResource();
   }
 
   public function tearDown(){
     $this->postsResource = null;
+    self::$CONFIG = array();
+    self::$DB_CONFIG = array();
+    self::$MOCK_POST_MODEL = array();
   }
 
   /**********/

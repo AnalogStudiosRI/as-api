@@ -4,11 +4,13 @@ error_reporting(E_ALL | E_STRICT);
 
 require_once "src/base/AbstractRestfulDatabase.php";
 require_once "src/base/AbstractRestfulResource.php";
-require_once "src/services/RestfulDatabaseService.php";
 require_once "src/resources/AlbumsResource.php";
 require_once "src/resources/RestfulResourceBuilder.php";
+require_once "src/services/ConfigService.php";
+require_once "src/services/RestfulDatabaseService.php";
 
 use resources as resource;
+use services as service;
 
 /**
  *
@@ -18,33 +20,41 @@ use resources as resource;
  */
 class AlbumsResourceTest extends PHPUnit_Framework_TestCase{
   private $albumsResource;
+  private static $CONFIG = array();
+  private static $DB_CONFIG = array();
   private static $SUCCESS = 200;
   private static $CREATED = 201;
-  private static $NOT_MODIFIED = 304;
   private static $BAD_REQUEST = 400;
   private static $NOT_FOUND = 404;
-  private static $DB_CONFIG = array(
-    "dsn" => "mysql:host=127.0.0.1;dbname=analogstudios_prod",
-    "username" => "astester",
-    "password" => "452SsQMwMP"
-  );
-  private static $MOCK_ALBUM_MODEL = array(
-    "id" => 1,
-    "title" => "Debut CD Release Party (live)",
-    "description" => "The lead singer of Analog, Dave Flamand is from Rhode Island and we are pleased to offer you exclusive downloads of his demo from this site. These songs provided the framework leading up to the creation of Analog, and as such you may recognize most of the songs from When The Media Talks About The Media from these demos. Lost Time was released early 2008 and Spare Time followed shortly thereafter. Lost Time is Dave&#39;s acoustic debut, showcasing his talent as songwriter and versatile musician. The are all of his own original recordings made on Block Island and recorded by himself. Dave not only wrote all the songs, but also played all the instruments himself",
-    "year" => 2008,
-    "imageUrl" => "http://d3cpag05e1ba19.cloudfront.net/hosted/albums/dave-flamand/lost-time/lost-time.jpg",
-    "downloadUrl" => "http://d3cpag05e1ba19.cloudfront.net/hosted/albums/dave-flamand/lost-time/lost-time.zip",
-    "artistId" => 1
-  );
+  private static $MOCK_ALBUM_MODEL = array();
 
   public function setup(){
+    //echo 'CWD => ' . getcwd();
+    self::$CONFIG = service\ConfigService::getConfigFromIni('./ini/config-local.ini');
+    self::$DB_CONFIG = array(
+      "dsn" => "mysql:host=" . self::$CONFIG["db.host"] . ";dbname=" . self::$CONFIG["db.name"],
+      "username" => self::$CONFIG["db.user"],
+      "password" => self::$CONFIG["db.password"]
+    );
+    self::$MOCK_ALBUM_MODEL = array(
+      "id" => 1,
+      "title" => "Debut CD Release Party (live)",
+      "description" => "The lead singer of Analog, Dave Flamand is from Rhode Island and we are pleased to offer you exclusive downloads of his demo from this site. These songs provided the framework leading up to the creation of Analog, and as such you may recognize most of the songs from When The Media Talks About The Media from these demos. Lost Time was released early 2008 and Spare Time followed shortly thereafter. Lost Time is Dave&#39;s acoustic debut, showcasing his talent as songwriter and versatile musician. The are all of his own original recordings made on Block Island and recorded by himself. Dave not only wrote all the songs, but also played all the instruments himself",
+      "year" => 2008,
+      "imageUrl" => "http://d3cpag05e1ba19.cloudfront.net/hosted/albums/dave-flamand/lost-time/lost-time.jpg",
+      "downloadUrl" => "http://d3cpag05e1ba19.cloudfront.net/hosted/albums/dave-flamand/lost-time/lost-time.zip",
+      "artistId" => 1
+    );
+
     $builder = new resource\RestfulResourceBuilder(self::$DB_CONFIG, "albums");
     $this->albumsResource = $builder->getResource();
   }
 
   public function tearDown(){
     $this->albumsResource = null;
+    self::$CONFIG = array();
+    self::$DB_CONFIG = array();
+    self::$MOCK_ALBUM_MODEL = array();
   }
 
   /**********/

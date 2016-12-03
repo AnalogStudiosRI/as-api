@@ -4,11 +4,13 @@ error_reporting(E_ALL | E_STRICT);
 
 require_once "src/base/AbstractRestfulDatabase.php";
 require_once "src/base/AbstractRestfulResource.php";
-require_once "src/services/RestfulDatabaseService.php";
 require_once "src/resources/ArtistsResource.php";
 require_once "src/resources/RestfulResourceBuilder.php";
+require_once "src/services/ConfigService.php";
+require_once "src/services/RestfulDatabaseService.php";
 
 use resources as resource;
+use services as service;
 
 /**
  *
@@ -18,36 +20,43 @@ use resources as resource;
  */
 class ArtistsResourceTest extends PHPUnit_Framework_TestCase{
   private $artistsResource;
+  private static $CONFIG = array();
+  private static $DB_CONFIG = array();
   private static $SUCCESS = 200;
   private static $CREATED = 201;
-  private static $NOT_MODIFIED = 304;
   private static $BAD_REQUEST = 400;
   private static $NOT_FOUND = 404;
-  private static $DB_CONFIG = array(
-    "dsn" => "mysql:host=127.0.0.1;dbname=analogstudios_prod",
-    "username" => "astester",
-    "password" => "452SsQMwMP"
-  );
-  private static $MOCK_ARTIST_MODEL = array(
-    "id" => 6,
-    "name" => "Dave Flamand",
-    "bio" => "Dave Flamand is a talented singer-songwriter from the Block Island area.  Dave is well known on the island for his fun and energetic open mics, where he plays originals as well as covering great acts like Neil Young, the Beatles, Oasis, Blur, and Radiohead.  Dave is also the front man for the rock band Analog and records for both himself and his band.  Check him out live on Block Island or around Providence, RI.  You can keep up with his schedule by following our events page and following Analog Studios social networking sites",
-    "genre" => "Rock",
-    "location" => "Newport, RI",
-    "label" => "Analog Studios",
-    "contactPhone" => 1239764333,  //phone numbers need to be unique???
-    "contactEmail" => "abc@123.com",
-    "imageUrl" => "http://d3cpag05e1ba19.cloudfront.net/hosted/images/artists/dave-flamand.jpg",
-    "isActive" => 1
-  );
+  private static $MOCK_ARTIST_MODEL = array();
 
   public function setup(){
+    self::$CONFIG = service\ConfigService::getConfigFromIni('./ini/config-local.ini');
+    self::$DB_CONFIG = array(
+      "dsn" => "mysql:host=" . self::$CONFIG["db.host"] . ";dbname=" . self::$CONFIG["db.name"],
+      "username" => self::$CONFIG["db.user"],
+      "password" => self::$CONFIG["db.password"]
+    );
+    self::$MOCK_ARTIST_MODEL = array(
+      "id" => 6,
+      "name" => "Dave Flamand",
+      "bio" => "Dave Flamand is a talented singer-songwriter from the Block Island area.  Dave is well known on the island for his fun and energetic open mics, where he plays originals as well as covering great acts like Neil Young, the Beatles, Oasis, Blur, and Radiohead.  Dave is also the front man for the rock band Analog and records for both himself and his band.  Check him out live on Block Island or around Providence, RI.  You can keep up with his schedule by following our events page and following Analog Studios social networking sites",
+      "genre" => "Rock",
+      "location" => "Newport, RI",
+      "label" => "Analog Studios",
+      "contactPhone" => 1239764333,  //phone numbers need to be unique???
+      "contactEmail" => "abc@123.com",
+      "imageUrl" => "http://d3cpag05e1ba19.cloudfront.net/hosted/images/artists/dave-flamand.jpg",
+      "isActive" => 1
+    );
+
     $builder = new resource\RestfulResourceBuilder(self::$DB_CONFIG, "artists");
     $this->artistsResource = $builder->getResource();
   }
 
   public function tearDown(){
     $this->artistsResource = null;
+    self::$CONFIG = array();
+    self::$DB_CONFIG = array();
+    self::$MOCK_ARTIST_MODEL = array();
   }
 
   /**********/
