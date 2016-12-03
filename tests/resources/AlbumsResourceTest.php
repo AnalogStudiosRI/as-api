@@ -29,7 +29,7 @@ class AlbumsResourceTest extends PHPUnit_Framework_TestCase{
   private static $MOCK_ALBUM_MODEL = array();
 
   public function setup(){
-    //echo 'CWD => ' . getcwd();
+    echo 'CWD => ' . getcwd();
     self::$CONFIG = service\ConfigService::getConfigFromIni('./ini/config-local.ini');
     self::$DB_CONFIG = array(
       "dsn" => "mysql:host=" . self::$CONFIG["db.host"] . ";dbname=" . self::$CONFIG["db.name"],
