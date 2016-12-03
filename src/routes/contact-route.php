@@ -28,5 +28,3 @@ $slim->post("/api/contact", function() use ($slim, $envConfig) {
   $slim->response->status($response["status"]);
   $slim->response->setBody(json_encode(array("message" => $response["message"])));
 });
-
-?>

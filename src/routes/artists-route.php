@@ -41,5 +41,3 @@ $slim->delete("/api/artists/:id", function($artistId) use ($slim, $resource, $ha
   $slim->response->status($response['status']);
   $slim->response->setBody(json_encode($response["data"]));
 });
-
-?>

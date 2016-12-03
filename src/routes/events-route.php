@@ -41,5 +41,3 @@ $slim->delete("/api/events/:id", function($eventId) use ($slim, $resource, $hasV
   $slim->response->status($response['status']);
   $slim->response->setBody(json_encode($response["data"]));
 });
-
-?>

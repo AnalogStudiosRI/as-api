@@ -31,4 +31,3 @@ class RestfulDatabaseServiceTest extends PHPUnit_Framework_TestCase{
     $this->assertTrue(is_subclass_of($this->db, base\AbstractRestfulDatabase::class, false));
   }
 }
-?>
