@@ -14,5 +14,3 @@ $slim->post("/api/login", function() use ($slim, $authService) {
   $slim->response->status($code);
   $slim->response->setBody(json_encode($auth));
 });
-
-?>

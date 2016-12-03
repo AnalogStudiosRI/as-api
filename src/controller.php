@@ -101,5 +101,3 @@ require_once PHAR_PATH . "/routes/" . $route . "-route.php";
 
 //start slim
 $slim->run();
-
-?>

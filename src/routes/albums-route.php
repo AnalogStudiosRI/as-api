@@ -50,5 +50,3 @@ $slim->delete("/api/albums/:id", function($artistId) use ($slim, $resource, $has
   $slim->response->status($response['status']);
   $slim->response->setBody(json_encode($response["data"]));
 });
-
-?>

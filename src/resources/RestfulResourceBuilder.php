@@ -69,4 +69,3 @@ class RestfulResourceBuilder {
     return $this->buildResource();
   }
 }
-?>
