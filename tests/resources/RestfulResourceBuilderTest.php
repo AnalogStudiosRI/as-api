@@ -4,30 +4,37 @@ error_reporting(E_ALL | E_STRICT);
 
 require_once "src/base/AbstractRestfulDatabase.php";
 require_once "src/base/AbstractRestfulResource.php";
-require_once "src/services/RestfulDatabaseService.php";
 require_once "src/resources/EventsResource.php";
 require_once "src/resources/RestfulResourceBuilder.php";
+require_once "src/services/ConfigService.php";
+require_once "src/services/RestfulDatabaseService.php";
 
-use base as base;
 use resources as resource;
+use services as service;
 
 class RestfulEntityBuilder extends PHPUnit_Framework_TestCase{
-  private $DB_CONFIG = array(
-    "dsn" => "mysql:host=127.0.0.1;dbname=analogstudios_prod",
-    "username" => "astester",
-    "password" => "452SsQMwMP"
-  );
+  private static $CONFIG = array();
+  private static $DB_CONFIG = array();
 
   public function setup(){
+    //determine local vs development config path
+    $configPath = getcwd() === "/vagrant" ? "./ini/config-local.ini" : "/var/www/analogstudios/config-env.ini";
 
+    self::$CONFIG = service\ConfigService::getConfigFromIni($configPath);
+    self::$DB_CONFIG = array(
+      "dsn" => "mysql:host=" . self::$CONFIG["db.host"] . ";dbname=" . self::$CONFIG["db.name"],
+      "username" => self::$CONFIG["db.user"],
+      "password" => self::$CONFIG["db.password"]
+    );
   }
 
   public function tearDown(){
-
+    self::$CONFIG = array();
+    self::$DB_CONFIG = array();
   }
 
   public function testBuildRestfulEventsEntity(){
-    $builder = new resource\RestfulResourceBuilder($this->DB_CONFIG, 'events');
+    $builder = new resource\RestfulResourceBuilder(self::$DB_CONFIG, 'events');
     $resource = $builder->getResource();
 
     $this->assertTrue($resource instanceof resource\EventsResource);

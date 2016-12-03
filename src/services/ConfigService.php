@@ -18,21 +18,13 @@ namespace services;
 
 class ConfigService{
 
-  private static function checkPathExists($path = ''){
-    if(file_exists($path)){
-      return true;
-    }else{
-      return false;
-    }
-  }
-
   private static function loadIni($path = ''){
     return parse_ini_file($path, true);
   }
 
   public static function getConfigFromIni($path = ''){
 
-    if(self::checkPathExists($path)){
+    if(file_exists($path)){
       return self::loadIni($path);
     }else{
       throw new \InvalidArgumentException('Invalid Path');
