@@ -35,4 +35,3 @@ class RestfulEntityBuilder extends PHPUnit_Framework_TestCase{
   }
 
 }
-?>
