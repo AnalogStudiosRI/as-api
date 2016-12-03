@@ -61,12 +61,12 @@ class RestfulDatabaseService extends base\AbstractRestfulDatabase{
 
   public function select ($tableName = "", $id = null, $filterParams = array()) {
     $db = $this->db;
-    $validEventId = preg_match(self::$PATTERN["ID"], $id) === 1 ? TRUE : FALSE;
+    $validId = preg_match(self::$PATTERN["ID"], $id) === 1 ? TRUE : FALSE;
     $validTableName = $tableName !== '' ? TRUE : FALSE;
     $sql = "SELECT * FROM " . $tableName;
     $code = null;
 
-    if($validTableName && $validEventId){
+    if($validTableName && $validId){
       $sql .=  " WHERE id=:id";
       $stmt = $db->prepare($sql);
       $stmt->bindValue(":id", $id, $db::PARAM_INT);
@@ -75,7 +75,9 @@ class RestfulDatabaseService extends base\AbstractRestfulDatabase{
 
       //TODO is this a security vulnerability?
       foreach($filterParams as $key => $value){
-        $filterSql = $key . '=:' . $key;
+        if($value){
+          $filterSql = $key . '=:' . $key;
+        }
       }
 
       if($filterSql){
@@ -95,18 +97,18 @@ class RestfulDatabaseService extends base\AbstractRestfulDatabase{
     $stmt->execute();
     $result = $stmt->fetchAll($db::FETCH_ASSOC);
 
-    //check by Id
+    //check by $validId first
     if($id){
-      if(!$validEventId){
+      if(!$validId){
         $code = self::$STATUS_CODE["BAD_REQUEST"];
         $result = array();
-      }else if($validEventId && !$result) {
+      }else if($validId && !$result) {
         $code = self::$STATUS_CODE["NOT_FOUND"];
-      }else if($validEventId && $result){
+      }else if($validId && $result){
         $code = self::$STATUS_CODE["SUCCESS"];
       }
     }else if(count($result) === 0){
-      //no results, so still a success, but need to set an empty array
+      //no results, so still a "success", but need to set an empty array
       $code = self::$STATUS_CODE["SUCCESS"];
       $result = array();
     }else if($result){

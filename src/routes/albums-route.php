@@ -6,7 +6,9 @@
 /* Albums Routes */
 /*****************/
 $slim->get("/api/albums", function() use ($slim, $resource) {
-  $response = $resource->getAlbums();
+  $response = $resource->getAlbums(array(
+    "artistId" => $slim->request()->get('artistId'))
+  );
 
   $slim->response->status($response['status']);
   $slim->response->setBody(json_encode($response["data"]));
