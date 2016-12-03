@@ -29,9 +29,9 @@ class AlbumsResourceTest extends PHPUnit_Framework_TestCase{
   private static $MOCK_ALBUM_MODEL = array();
 
   public function setup(){
-    echo 'CWD => ' . getcwd();
     //determine local vs development config path
-    $configPath = getcwd() === '/vagrant' ? './ini/config-local.ini' : '/var/www/analogstudios/config-env.ini';
+    $configPath = getcwd() === "/vagrant" ? "./ini/config-local.ini" : "/var/www/analogstudios/config-env.ini";
+
     self::$CONFIG = service\ConfigService::getConfigFromIni($configPath);
     self::$DB_CONFIG = array(
       "dsn" => "mysql:host=" . self::$CONFIG["db.host"] . ";dbname=" . self::$CONFIG["db.name"],

@@ -31,7 +31,10 @@ class EventsResourceTest extends PHPUnit_Framework_TestCase{
   private static $MOCK_EVENT_MODEL = array();
 
   public function setup(){
-    self::$CONFIG = service\ConfigService::getConfigFromIni('./ini/config-local.ini');
+    //determine local vs development config path
+    $configPath = getcwd() === "/vagrant" ? "./ini/config-local.ini" : "/var/www/analogstudios/config-env.ini";
+
+    self::$CONFIG = service\ConfigService::getConfigFromIni($configPath);
     self::$DB_CONFIG = array(
       "dsn" => "mysql:host=" . self::$CONFIG["db.host"] . ";dbname=" . self::$CONFIG["db.name"],
       "username" => self::$CONFIG["db.user"],
