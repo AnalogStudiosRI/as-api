@@ -39,32 +39,31 @@ This project uses Vagrant for local development.  To use it please install
 3. move to the project root `cd /vagrant`
 
 ## Local Development
-For the most part, you will just need to write code and then write tests for it, which can be done with
-`phing develop`
+For the most part, you will just need to write code and then write tests for it and see if they pass or fail.  This 
+can be done with
 
-For testing against the full build, see the next section
+```
+$ phing develop`
+```
+For testing any of the build targets and running in Vagrant, append this to all commands
+```
+-D buildDir=/home/vagrant/build && cp src/.htaccess /home/vagrant/build/
+```
 
 ## Build
-1. local build (NO linting, docs, tests)
-
-```
-$ phing build-local -D buildDir=/home/vagrant/build && cp src/.htaccess /home/vagrant/build/
-```
-
-2. local build (WITH linting, docs, tests)
-
-```
-$ phing build -D buildDir=/home/vagrant/build && cp src/.htaccess /home/vagrant/build/
-```
-
-
-2. production build 
+1. standard production build (WITH linting, docs, tests)
 
 ```
 $ phing build
 ```
 
-You can test from the VM using cURL
+2. "expedited" build (NO linting, docs, tests)
+
+```
+$ phing build:exp
+```
+
+You can test from the Vagrant VM using cURL
 `curl localhost/api/events`
 
 Or the browser / POSTman against your host machine
@@ -83,13 +82,46 @@ PHPunit is used for unit testing
 
 To see code coverage, open _{path/to/repo/in/your/filesystem}/reports/coverage_result/index.html_ in your browser
 
-## Environment Configuration / Deploying
+## Dependency Management
+Composer is used for managing / install 3rd party dependencies for the project.  It also creates an autoloader.
 
-### App Deployment
+To install all the dependencies from _package.json_
+`$ composer install`
+
+To install a new dependency
+`$ composer require {package-name}
+
+To upgrade an existing dependency
+`$ composer require {package-name}
+
+## Deployment
+
+### Environment Configuration
 The application expects the following files to be deployed to the webroot
+* config.ini
 * as-api.phar
-* .htaccess
 * controller.php
+
+In some form or another, the environment should have some sort of rewriting / proxying of requests for the API to pass 
+to _controller.php_.  This is a common feature of webservers like Apache and Nginix.  A basic example for Apache would
+be
+```
+<Directory /var/www/html>               
+    Options Indexes FollowSymLinks MultiViews
+    AllowOverride All
+    Order allow,deny
+    allow from all
+   
+    RewriteEngine On
+                  
+    RewriteCond %{HTTP:Authorization} .+
+    RewriteRule .* - [E=HTTP_AUTHORIZATION:%{HTTP:Authorization}]
+    RewriteCond $1 ^api\/
+    RewriteRule ^(.*) controller.php [L,PT]
+   
+    FallbackResource /index.html
+</Directory>
+```
 
 ### App Config (ini)
 `config-bootstrap.ini` contains the initial configuration needed for the application, and should be deployed in the
