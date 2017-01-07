@@ -69,6 +69,9 @@ You can test from the Vagrant VM using cURL
 Or the browser / POSTman against your host machine
 `localhost:4567/api/events`
 
+**note: Install [POSTman](https://www.getpostman.com/) and make an account and contact me to get access to all 
+the APIs for the project.**
+
 ## API Documenation
 To generate API documentation run
 `$ phing clean`
